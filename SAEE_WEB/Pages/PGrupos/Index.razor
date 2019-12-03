@@ -1,0 +1,75 @@
+﻿@page "/indice-grupos"
+@using SAEE_WEB.Data
+
+
+
+
+<h3>Grupos</h3>
+<text>@DATOSNULL </text>
+@if (grupos == null)
+{
+    <text> Cargando... </text>
+}
+else if (grupos.Count == 0)
+{
+    <text> No hay grupos en la base de datos</text>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Grupo</th>
+                <th>Año</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grupo in grupos)
+            {
+            <tr>
+
+                <td>@grupo.Grupo</td>
+                <td>@grupo.Anio</td>
+                <td>
+                    <a class="btn btn-success">Editar</a>
+                    <a class="btn btn-danger">Borrar</a>
+                </td>
+
+            </tr>
+
+            }
+
+        </tbody>
+
+
+    </table>
+
+
+}
+@code{
+    private IEnumerable<Grupos> gruposIE;
+    public List<Grupos> grupos;
+    public String DATOSNULL = "";
+    SAEE_WEB.Data.GruposController gruposController = new SAEE_WEB.Data.GruposController();
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarGrupos();
+
+    }
+    async Task CargarGrupos()
+    {
+        gruposIE = await gruposController.GetGrupos();
+        if (gruposIE == null)
+        {
+            DATOSNULL = "gruposIR null";
+        }
+        else {grupos= gruposIE.ToList();}
+        // grupos = await Http.GetJsonAsync<Grupos[]>
+        //("/api/Grupos/");
+
+
+    }
+
+    }
+
