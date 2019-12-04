@@ -1,0 +1,18 @@
+﻿@page "/profesores"
+@inject ProfesoresServices ServicioProfesores
+
+<h3>Administración de profesores</h3>
+
+@code {
+    Profesores[] profesores { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarProfesores();
+    }
+
+    private async Task CargarProfesores()
+    {
+        profesores = await ServicioProfesores.GetProfesores();
+    }
+}

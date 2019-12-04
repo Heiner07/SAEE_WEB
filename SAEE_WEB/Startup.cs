@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SAEE_WEB.Areas.Identity;
 using SAEE_WEB.Data;
+using SAEE_WEB.Models;
 
 namespace SAEE_WEB
 {
@@ -36,10 +37,14 @@ namespace SAEE_WEB
                     Configuration.GetConnectionString("DefaultConnection")));
             services.AddDefaultIdentity<IdentityUser>()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<BDSAEEContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("DefaultConnection")));
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<ProfesoresServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
