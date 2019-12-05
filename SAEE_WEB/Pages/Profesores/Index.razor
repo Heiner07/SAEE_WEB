@@ -1,18 +1,31 @@
 ﻿@page "/profesores"
-@inject ProfesoresServices ServicioProfesores
 
 <h3>Administración de profesores</h3>
 
+<p>
+    <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+</p>
+@if (MostrarPanelAgregar)
+{
+    <Create />
+}
+<br />
+<List />
+
 @code {
-    Profesores[] profesores { get; set; }
+    Boolean MostrarPanelAgregar = false;
+    String TextoBotonAgregar = "Agregar profesor";
 
-    protected override async Task OnInitializedAsync()
+    void AbrirCerrarFormAgregar()
     {
-        await CargarProfesores();
-    }
-
-    private async Task CargarProfesores()
-    {
-        profesores = await ServicioProfesores.GetProfesores();
+        MostrarPanelAgregar = !MostrarPanelAgregar;
+        if (MostrarPanelAgregar)
+        {
+            TextoBotonAgregar = "Ocultar Panel";
+        }
+        else
+        {
+            TextoBotonAgregar = "Agregar profesor";
+        }
     }
 }

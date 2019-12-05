@@ -23,6 +23,14 @@ namespace SAEE_WEB.Data
             return await _context.Profesores.ToArrayAsync();
         }
 
+        public async Task<Profesores> PostProfesores(Profesores profesor)
+        {
+            _context.Profesores.Add(profesor);
+            await _context.SaveChangesAsync();
+
+            return await Task.FromResult(profesor);
+        }
+
         private bool ProfesoresExists(int id)
         {
             return _context.Profesores.Any(e => e.Id == id);

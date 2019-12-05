@@ -1,0 +1,51 @@
+﻿@inject ProfesoresServices ServicioProfesores
+
+@if (profesores == null)
+{
+    <text>Cargando profesores...</text>
+}
+else if (profesores.Length == 0)
+{
+    <text>No hay profesores</text>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cédula</th>
+                <th>Correo</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var profesor in profesores)
+            {
+                <tr>
+                    <td>@profesor.Nombre @profesor.PrimerApellido @profesor.SegundoApellido</td>
+                    <td>@profesor.Cedula</td>
+                    <td>@profesor.Correo</td>
+                    <td>
+                        <a class="btn btn-success">Editar</a>
+                        <a class="btn btn-danger">Borrar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    Profesores[] profesores { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarProfesores();
+    }
+
+    async Task CargarProfesores()
+    {
+        profesores = await ServicioProfesores.GetProfesores();
+    }
+}
