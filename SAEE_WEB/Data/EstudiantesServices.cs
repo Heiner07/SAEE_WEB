@@ -80,5 +80,10 @@ namespace SAEE_WEB.Data
             }
             return true;
         }
+        public async Task<Boolean> RollbackEstudiantes(Estudiantes estudiante)
+        {
+            context.Entry(estudiante).CurrentValues.SetValues(context.Entry(estudiante).OriginalValues);
+            return await Task.FromResult(true);
+        }
     }
 }

@@ -57,7 +57,7 @@
     private IEnumerable<Grupos> gruposIE;
     public List<Grupos> grupos;
     public String DATOSNULL = "";
-    SAEE_WEB.Data.GruposController gruposController = new SAEE_WEB.Data.GruposController();
+   // SAEE_WEB.Data.GruposController gruposController = new SAEE_WEB.Data.GruposController();
     protected override async Task OnInitializedAsync()
     {
         await CargarGrupos();
@@ -65,7 +65,7 @@
     }
     async Task CargarGrupos()
     {
-        gruposIE = await gruposController.GetGrupos();
+       // gruposIE = await gruposController.GetGrupos();
         if (gruposIE == null)
         {
             DATOSNULL = "gruposIR null";

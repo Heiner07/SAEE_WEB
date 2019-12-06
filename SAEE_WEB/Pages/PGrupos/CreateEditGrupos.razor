@@ -14,7 +14,7 @@
     @if (modoGuardar)
     {
         <button type="submit" class="btn btn-success" name="btn1" @onclick="@(() => modificarGrupo(nuevoGrupo))">Guardar Grupo</button>
-        <button type="submit" class="btn btn-success" @onclick="@(() => cancelar())">Cancelar</button>
+        <button type="submit" class="btn btn-success" @onclick="@RevertirCambios">Cancelar</button>
     }
     else
     {
@@ -56,5 +56,12 @@
         modoGuardar = false;
         nuevoGrupo.Grupo = "";
 
+    }
+    async Task RevertirCambios()
+    {
+        await gruposServices.RollbackGrupos(nuevoGrupo);
+        //await CerrarEditar.InvokeAsync(null);
+        modoGuardar = false;
+        //nuevoGrupo.Grupo = "";
     }
 }

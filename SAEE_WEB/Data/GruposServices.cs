@@ -80,7 +80,11 @@ namespace SAEE_WEB.Data
                 return false;
             }return true;
         }
-
+        public async Task<Boolean> RollbackGrupos(Grupos grupo)
+        {
+            context.Entry(grupo).CurrentValues.SetValues(context.Entry(grupo).OriginalValues);
+            return await Task.FromResult(true);
+        }
         private bool GruposExists(int id)
         {
             return context.Grupos.Any(e => e.Id == id);
