@@ -2,10 +2,10 @@
 @inject NavigationManager Navigation
 
 <div class="modal" tabindex="-1" style="display:block" role="dialog">
-  <div class="modal-dialog modal-dialog-scrollable" role="document">
+  <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-body">
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CerrarEditar">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
               <span aria-hidden="true">&times;</span>
           </button>
           <Form OnValidSubmit="EditarProfesor" Titulo="Editando profesor" TextoBoton="Guardar" Profesor="@Profesor" />
@@ -22,5 +22,11 @@
     {
         await ServicioProfesores.PutProfesores(Profesor);
         Navigation.NavigateTo("profesores", true);
+    }
+
+    async Task RevertirCambios()
+    {
+        await ServicioProfesores.RollbackProfesores(Profesor);
+        await CerrarEditar.InvokeAsync(null);
     }
 }

@@ -10,30 +10,32 @@ else if (profesores.Length == 0)
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Cédula</th>
-                <th>Correo</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var profesor in profesores)
-            {
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@profesor.Nombre @profesor.PrimerApellido @profesor.SegundoApellido</td>
-                    <td>@profesor.Cedula</td>
-                    <td>@profesor.Correo</td>
-                    <td>
-                        <button class="btn btn-success" @onclick="(()=>MostrarPanelEditar(profesor))">Editar</button>
-                        <button class="btn btn-danger" @onclick="(()=>MostrarPanelBorrar(profesor))">Borrar</button>
-                    </td>
+                    <th>Nombre</th>
+                    <th>Cédula</th>
+                    <th>Correo</th>
+                    <th></th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var profesor in profesores)
+                {
+                    <tr>
+                        <td>@profesor.Nombre @profesor.PrimerApellido @profesor.SegundoApellido</td>
+                        <td>@profesor.Cedula</td>
+                        <td>@profesor.Correo</td>
+                        <td>
+                            <button class="btn btn-success" @onclick="(()=>MostrarPanelEditar(profesor))">Editar</button>
+                            <button class="btn btn-danger" @onclick="(()=>MostrarPanelBorrar(profesor))">Borrar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 @if (mostrarEditar)
 {
