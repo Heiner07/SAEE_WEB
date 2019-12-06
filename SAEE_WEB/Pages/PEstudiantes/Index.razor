@@ -1,0 +1,31 @@
+﻿@page "/indice-estudiantes"
+
+<h3>Administración de estudiantes</h3>
+
+<p>
+    <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+</p>
+@if (MostrarPanelAgregar)
+{
+    <Create />
+}
+<br />
+<List />
+
+@code {
+    Boolean MostrarPanelAgregar = false;
+    String TextoBotonAgregar = "Agregar estudiante";
+
+    void AbrirCerrarFormAgregar()
+    {
+        MostrarPanelAgregar = !MostrarPanelAgregar;
+        if (MostrarPanelAgregar)
+        {
+            TextoBotonAgregar = "Ocultar Panel";
+        }
+        else
+        {
+            TextoBotonAgregar = "Agregar estudiante";
+        }
+    }
+}

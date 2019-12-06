@@ -1,0 +1,26 @@
+﻿@inject EstudiantesServices estudiantesServices
+@inject NavigationManager Navigation
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CerrarEditar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <Form OnValidSubmit="EditarEstudiante" Titulo="Editando estudiante" TextoBoton="Guardar" Estudiante="@Estudiante" />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Estudiantes Estudiante { get; set; }
+    [Parameter] public EventCallback CerrarEditar { get; set; }
+
+    async Task EditarEstudiante()
+    {
+        await estudiantesServices.EditarEstudiante(Estudiante);
+        Navigation.NavigateTo("indice-estudiantes", true);
+    }
+}
