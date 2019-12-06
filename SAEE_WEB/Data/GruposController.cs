@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAEE_WEB.Models;
@@ -15,14 +14,12 @@ namespace SAEE_WEB.Data
     {
 
         BDSAEEContext _context = new BDSAEEContext();
-
-        // GET: api/Grupos
         [HttpGet]
-        public Task<IEnumerable<Grupos>> GetGrupos()
+        public Task<IEnumerable<Grupos>> Get()
         {
-            
             return Task.FromResult<IEnumerable<Grupos>>(_context.Grupos); 
         }
+        
 
         // GET: api/Grupos/5
         [HttpGet("{id}")]

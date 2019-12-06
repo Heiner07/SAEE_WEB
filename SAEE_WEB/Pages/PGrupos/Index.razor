@@ -1,11 +1,10 @@
 ﻿@page "/indice-grupos"
-@using SAEE_WEB.Data
-
-
-
-
+@inject GruposController gruposController
 <h3>Grupos</h3>
-<text>@DATOSNULL </text>
+
+
+<text> @DATOSNULL </text>
+
 @if (grupos == null)
 {
     <text> Cargando... </text>
@@ -27,16 +26,16 @@ else
         <tbody>
             @foreach (var grupo in grupos)
             {
-            <tr>
+                <tr>
 
-                <td>@grupo.Grupo</td>
-                <td>@grupo.Anio</td>
-                <td>
-                    <a class="btn btn-success">Editar</a>
-                    <a class="btn btn-danger">Borrar</a>
-                </td>
+                    <td>@grupo.Grupo</td>
+                    <td>@grupo.Anio</td>
+                    <td>
+                        <a class="btn btn-success">Editar</a>
+                        <a class="btn btn-danger">Borrar</a>
+                    </td>
 
-            </tr>
+                </tr>
 
             }
 
@@ -48,10 +47,13 @@ else
 
 }
 @code{
+
+   
     private IEnumerable<Grupos> gruposIE;
     public List<Grupos> grupos;
     public String DATOSNULL = "";
-    SAEE_WEB.Data.GruposController gruposController = new SAEE_WEB.Data.GruposController();
+    //  GruposController gruposController = new GruposController();
+    Grupos nuevoGrupo = new Grupos();
     protected override async Task OnInitializedAsync()
     {
         await CargarGrupos();
@@ -59,17 +61,24 @@ else
     }
     async Task CargarGrupos()
     {
-        gruposIE = await gruposController.GetGrupos();
+        gruposIE = await gruposController.Get();
         if (gruposIE == null)
         {
             DATOSNULL = "gruposIR null";
         }
-        else {grupos= gruposIE.ToList();}
+        else { grupos = gruposIE.ToList(); }
         // grupos = await Http.GetJsonAsync<Grupos[]>
         //("/api/Grupos/");
 
 
     }
 
+    protected async Task crearGrupo()
+    {
+        nuevoGrupo.Anio = 2019;
+       // await gruposController.PutGrupos(nuevoGrupo.Id, nuevoGrupo);
+        await CargarGrupos();
     }
+
+}
 
