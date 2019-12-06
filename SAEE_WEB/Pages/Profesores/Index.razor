@@ -1,31 +1,31 @@
 ﻿@page "/profesores"
+<div class="container">
+    <h3>Administración de profesores</h3>
 
-<h3>Administración de profesores</h3>
-
-<p>
-    <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
-</p>
-@if (MostrarPanelAgregar)
-{
-    <Create />
-}
-<br />
-<List />
-
-@code {
-    Boolean MostrarPanelAgregar = false;
-    String TextoBotonAgregar = "Agregar profesor";
-
-    void AbrirCerrarFormAgregar()
+    <p>
+        <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+    </p>
+    @if (MostrarPanelAgregar)
     {
-        MostrarPanelAgregar = !MostrarPanelAgregar;
-        if (MostrarPanelAgregar)
+        <Create />
+    }
+    <br />
+    <List />
+</div>
+    @code {
+        Boolean MostrarPanelAgregar = false;
+        String TextoBotonAgregar = "Agregar profesor";
+
+        void AbrirCerrarFormAgregar()
         {
-            TextoBotonAgregar = "Ocultar Panel";
-        }
-        else
-        {
-            TextoBotonAgregar = "Agregar profesor";
+            MostrarPanelAgregar = !MostrarPanelAgregar;
+            if (MostrarPanelAgregar)
+            {
+                TextoBotonAgregar = "Ocultar Panel";
+            }
+            else
+            {
+                TextoBotonAgregar = "Agregar profesor";
+            }
         }
     }
-}

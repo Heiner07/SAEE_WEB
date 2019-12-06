@@ -1,87 +1,88 @@
 ﻿@inject ProfesoresServices ServicioProfesores
 
-@if (profesores == null)
-{
-    <text>Cargando profesores...</text>
-}
-else if (profesores.Length == 0)
-{
-    <text>No hay profesores</text>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Cédula</th>
-                <th>Correo</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var profesor in profesores)
+        @if (profesores == null)
+        {
+            <text>Cargando profesores...</text>
+        }
+        else if (profesores.Length == 0)
+        {
+            <text>No hay profesores</text>
+        }
+        else
+        {
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Cédula</th>
+                            <th>Correo</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var profesor in profesores)
+                        {
+                            <tr>
+                                <td>@profesor.Nombre @profesor.PrimerApellido @profesor.SegundoApellido</td>
+                                <td>@profesor.Cedula</td>
+                                <td>@profesor.Correo</td>
+                                <td>
+                                    <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(profesor))">Editar</button>
+                                    <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(profesor))">Borrar</button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                </div>
+                }
+                @if (mostrarEditar)
+                {
+                    <Edit Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
+                }
+                @if (mostrarBorrar)
+                {
+                    <Delete Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
+                }
+
+            @code {
+                Profesores[] profesores { get; set; }
+                Profesores profesorEditar;
+                Boolean mostrarEditar = false;
+                Boolean mostrarBorrar = false;
+            [Parameter] public EventCallback Editar { get; set; }
+            [Parameter] public EventCallback Borrar { get; set; }
+
+            protected override async Task OnInitializedAsync()
             {
-                <tr>
-                    <td>@profesor.Nombre @profesor.PrimerApellido @profesor.SegundoApellido</td>
-                    <td>@profesor.Cedula</td>
-                    <td>@profesor.Correo</td>
-                    <td>
-                        <button class="btn btn-success" @onclick="(()=>MostrarPanelEditar(profesor))">Editar</button>
-                        <button class="btn btn-danger" @onclick="(()=>MostrarPanelBorrar(profesor))">Borrar</button>
-                    </td>
-                </tr>
+                await CargarProfesores();
             }
-        </tbody>
-    </table>
-}
-@if (mostrarEditar)
-{
-    <Edit Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
-}
-@if (mostrarBorrar)
-{
-    <Delete Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
-}
 
+            async Task CargarProfesores()
+            {
+                profesores = await ServicioProfesores.GetProfesores();
+            }
 
-@code {
-    Profesores[] profesores { get; set; }
-    Profesores profesorEditar;
-    Boolean mostrarEditar = false;
-    Boolean mostrarBorrar = false;
-    [Parameter] public EventCallback Editar { get; set; }
-    [Parameter] public EventCallback Borrar { get; set; }
+            void MostrarPanelEditar(Profesores profesor)
+            {
+                profesorEditar = profesor;
+                mostrarEditar = true;
+            }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await CargarProfesores();
-    }
+            void OcultarPanelEditar()
+            {
+                mostrarEditar = false;
+            }
 
-    async Task CargarProfesores()
-    {
-        profesores = await ServicioProfesores.GetProfesores();
-    }
+            void MostrarPanelBorrar(Profesores profesor)
+            {
+                profesorEditar = profesor;
+                mostrarBorrar = true;
+            }
 
-    void MostrarPanelEditar(Profesores profesor)
-    {
-        profesorEditar = profesor;
-        mostrarEditar = true;
-    }
-
-    void OcultarPanelEditar()
-    {
-        mostrarEditar = false;
-    }
-
-    void MostrarPanelBorrar(Profesores profesor)
-    {
-        profesorEditar = profesor;
-        mostrarBorrar = true;
-    }
-
-    void OcultarPanelBorrar()
-    {
-        mostrarBorrar = false;
-    }
-}
+            void OcultarPanelBorrar()
+            {
+                mostrarBorrar = false;
+            }
+            }

@@ -1,10 +1,10 @@
-﻿@page "/indice-grupos"
+﻿@page "/evaluaciones"
 @using SAEE_WEB.Data
 
 
 
     <div class="container">
-        <h3>Grupos</h3>
+        <h3>Evaluaciones</h3>
         <text>@DATOSNULL </text>
         @if (grupos == null)
         {
@@ -12,7 +12,7 @@
         }
         else if (grupos.Count == 0)
         {
-            <text> No hay grupos en la base de datos</text>
+            <text> No hay evaluaciones en la base de datos</text>
 
         }
         else
