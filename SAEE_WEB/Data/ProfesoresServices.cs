@@ -31,6 +31,14 @@ namespace SAEE_WEB.Data
             return await Task.FromResult(profesor);
         }
 
+        public async Task<Boolean> PutProfesores(Profesores profesor)
+        {
+            _context.Entry(profesor).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            return await Task.FromResult(true);
+        }
+
         private bool ProfesoresExists(int id)
         {
             return _context.Profesores.Any(e => e.Id == id);

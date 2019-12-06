@@ -27,17 +27,25 @@ else
                     <td>@profesor.Cedula</td>
                     <td>@profesor.Correo</td>
                     <td>
-                        <a class="btn btn-success">Editar</a>
-                        <a class="btn btn-danger">Borrar</a>
+                        <button class="btn btn-success" @onclick="(()=>MostrarPanelEditar(profesor))">Editar</button>
+                        <button class="btn btn-danger">Borrar</button>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 }
+@if (mostrarEditar)
+{
+    <Edit Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
+}
 
 @code {
     Profesores[] profesores { get; set; }
+    Profesores profesorEditar;
+    Boolean mostrarEditar = false;
+    [Parameter] public EventCallback Editar { get; set; }
+    [Parameter] public EventCallback Borrar { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -47,5 +55,16 @@ else
     async Task CargarProfesores()
     {
         profesores = await ServicioProfesores.GetProfesores();
+    }
+
+    void MostrarPanelEditar(Profesores profesor)
+    {
+        profesorEditar = profesor;
+        mostrarEditar = true;
+    }
+
+    void OcultarPanelEditar()
+    {
+        mostrarEditar = false;
     }
 }

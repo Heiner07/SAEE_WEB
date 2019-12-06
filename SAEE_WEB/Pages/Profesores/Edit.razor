@@ -1,0 +1,26 @@
+﻿@inject ProfesoresServices ServicioProfesores
+@inject NavigationManager Navigation
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+  <div class="modal-dialog modal-dialog-scrollable" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CerrarEditar">
+              <span aria-hidden="true">&times;</span>
+          </button>
+          <Form OnValidSubmit="EditarProfesor" Titulo="Editando profesor" TextoBoton="Guardar" Profesor="@Profesor" />
+      </div>
+    </div>
+  </div>
+</div>
+
+@code {
+    [Parameter] public Profesores Profesor { get; set; }
+    [Parameter] public EventCallback CerrarEditar { get; set; }
+
+    async Task EditarProfesor()
+    {
+        await ServicioProfesores.PutProfesores(Profesor);
+        Navigation.NavigateTo("profesores", true);
+    }
+}
