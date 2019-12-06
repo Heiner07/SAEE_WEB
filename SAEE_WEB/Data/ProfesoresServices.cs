@@ -39,6 +39,14 @@ namespace SAEE_WEB.Data
             return await Task.FromResult(true);
         }
 
+        public async Task<Boolean> DeleteProfesores(Profesores profesor)
+        {
+            _context.Remove(profesor);
+            await _context.SaveChangesAsync();
+
+            return await Task.FromResult(true);
+        }
+
         private bool ProfesoresExists(int id)
         {
             return _context.Profesores.Any(e => e.Id == id);

@@ -28,7 +28,7 @@ else
                     <td>@profesor.Correo</td>
                     <td>
                         <button class="btn btn-success" @onclick="(()=>MostrarPanelEditar(profesor))">Editar</button>
-                        <button class="btn btn-danger">Borrar</button>
+                        <button class="btn btn-danger" @onclick="(()=>MostrarPanelBorrar(profesor))">Borrar</button>
                     </td>
                 </tr>
             }
@@ -39,11 +39,17 @@ else
 {
     <Edit Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
 }
+@if (mostrarBorrar)
+{
+    <Delete Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
+}
+
 
 @code {
     Profesores[] profesores { get; set; }
     Profesores profesorEditar;
     Boolean mostrarEditar = false;
+    Boolean mostrarBorrar = false;
     [Parameter] public EventCallback Editar { get; set; }
     [Parameter] public EventCallback Borrar { get; set; }
 
@@ -66,5 +72,16 @@ else
     void OcultarPanelEditar()
     {
         mostrarEditar = false;
+    }
+
+    void MostrarPanelBorrar(Profesores profesor)
+    {
+        profesorEditar = profesor;
+        mostrarBorrar = true;
+    }
+
+    void OcultarPanelBorrar()
+    {
+        mostrarBorrar = false;
     }
 }
