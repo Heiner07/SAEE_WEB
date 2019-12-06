@@ -1,0 +1,87 @@
+﻿@inject EstudiantesServices estudiantesServices
+
+@if (estudiantes == null)
+{
+    <text>Cargando estudiantes...</text>
+}
+else if (estudiantes.Count == 0)
+{
+    <text>No hay estudiantes</text>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Cédula</th>
+                <th>Pin</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var estudiante in estudiantes)
+            {
+                <tr>
+                    <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                    <td>@estudiante.Cedula</td>
+                    <td>PIN</td>
+                    <td>
+                        <button class="btn btn-success" @onclick="(()=>MostrarPanelEditar(estudiante))">Editar</button>
+                        <button class="btn btn-danger" @onclick="(()=>MostrarPanelBorrar(estudiante))">Borrar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@if (mostrarEditar)
+{
+    <Edit Estudiante="@estudianteEditar" CerrarEditar="@OcultarPanelEditar" />
+}
+@if (mostrarBorrar)
+{
+    <Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" />
+}
+
+
+@code {
+    public List<Estudiantes> estudiantes;
+    Estudiantes estudianteEditar;
+    Boolean mostrarEditar = false;
+    Boolean mostrarBorrar = false;
+    [Parameter] public EventCallback Editar { get; set; }
+    [Parameter] public EventCallback Borrar { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEstudiantes();
+    }
+
+    async Task CargarEstudiantes()
+    {
+        estudiantes = await estudiantesServices.GetEstudiantes();
+    }
+
+    void MostrarPanelEditar(Estudiantes estudiante)
+    {
+        estudianteEditar = estudiante;
+        mostrarEditar = true;
+    }
+
+    void OcultarPanelEditar()
+    {
+        mostrarEditar = false;
+    }
+
+    void MostrarPanelBorrar(Estudiantes estudiante)
+    {
+        estudianteEditar = estudiante;
+        mostrarBorrar = true;
+    }
+
+    void OcultarPanelBorrar()
+    {
+        mostrarBorrar = false;
+    }
+}

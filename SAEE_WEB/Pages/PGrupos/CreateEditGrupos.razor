@@ -1,0 +1,60 @@
+﻿@inject GruposServices gruposServices
+@inject NavigationManager navegar
+
+
+<EditForm Context="formContext" Model="@nuevoGrupo">
+    <div class="form-group">
+        <label>Grupo:</label>
+        <div>
+            <InputText @bind-Value="@nuevoGrupo.Grupo" />
+            <ValidationMessage For="@(()=>nuevoGrupo.Grupo)" />
+        </div>
+    </div>
+
+    @if (modoGuardar)
+    {
+        <button type="submit" class="btn btn-success" name="btn1" @onclick="@(() => modificarGrupo(nuevoGrupo))">Guardar Grupo</button>
+        <button type="submit" class="btn btn-success" @onclick="@(() => cancelar())">Cancelar</button>
+    }
+    else
+    {
+        <button type="submit" class="btn btn-success" name="btn1" @onclick="@(() => crearGrupo())">Crear Grupo</button>
+    }
+    <DataAnnotationsValidator />
+</EditForm>
+@code {
+    [Parameter] public Grupos nuevoGrupo { get; set; }
+    [Parameter] public EventCallback CerrarEliminar { get; set; }
+    [Parameter] public Boolean modoGuardar { get; set; }
+    [Parameter] public String msjError { get; set; }
+    [Parameter] public Boolean MostrarError { get; set; }
+    DateTime fechaActual = DateTime.Today;
+
+
+    protected async Task modificarGrupo(Grupos grupo)
+    {
+        Boolean exito = await gruposServices.EditarGrupo(nuevoGrupo);
+        if (exito)
+        {
+            navegar.NavigateTo("indice-grupos", true);
+        }else { msjError = "No se pudo crear este grupo."; MostrarError = true; }
+
+    }
+
+    protected async Task crearGrupo()
+    {
+        nuevoGrupo.Anio = fechaActual.Year;
+        Boolean exito = await gruposServices.PutGrupo(nuevoGrupo);
+        if (exito)
+        {
+            navegar.NavigateTo("indice-grupos", true);
+        }else { msjError = "No se pudo crear este grupo."; MostrarError = true; }
+
+    }
+
+    void cancelar() {
+        modoGuardar = false;
+        nuevoGrupo.Grupo = "";
+
+    }
+}

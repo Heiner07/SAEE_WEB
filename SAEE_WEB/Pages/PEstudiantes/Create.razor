@@ -1,0 +1,14 @@
+﻿@inject EstudiantesServices estudiantesServices
+@inject NavigationManager Navigation
+
+<Form OnValidSubmit="AgregarEstudiante" Titulo="Agregando estudiante" TextoBoton="Agregar" Estudiante="@estudiante" />
+
+@code {
+    Estudiantes estudiante = new Estudiantes();
+
+    async Task AgregarEstudiante(){
+        
+        await estudiantesServices.PutEstudiante(estudiante);
+        Navigation.NavigateTo("indice-estudiantes", true);
+    }
+}
