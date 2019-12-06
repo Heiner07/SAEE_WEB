@@ -18,6 +18,11 @@ namespace SAEE_WEB.Data
             _context = context;
         }
 
+        public async Task<Profesores> GetProfesores(int id)
+        {
+            return await _context.Profesores.FirstOrDefaultAsync(x => x.Id == id);
+        }
+
         public async Task<Profesores[]> GetProfesores()
         {
             return await _context.Profesores.ToArrayAsync();
@@ -44,6 +49,12 @@ namespace SAEE_WEB.Data
             _context.Remove(profesor);
             await _context.SaveChangesAsync();
 
+            return await Task.FromResult(true);
+        }
+
+        public async Task<Boolean> RollbackProfesores(Profesores profesor)
+        {
+            _context.Entry(profesor).CurrentValues.SetValues(_context.Entry(profesor).OriginalValues);
             return await Task.FromResult(true);
         }
 

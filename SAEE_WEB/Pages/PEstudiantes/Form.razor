@@ -1,0 +1,34 @@
+﻿<div class="card-body border rounded">
+    <h4>@Titulo</h4>
+    <EditForm Model="@Estudiante" OnValidSubmit="@OnValidSubmit">
+        <div class="form-group">
+            <label for="InputCedula"><strong>Cédula</strong></label>
+            <input class="form-control" type="text" placeholder="Cédula" @bind="Estudiante.Cedula" id="InputCedula" />
+            <ValidationMessage For="@(() => Estudiante.Cedula)" />
+        </div>
+        <div class="form-group">
+            <label for="InputNombre"><strong>Nombre</strong></label>
+            <input class="form-control" type="text" placeholder="Nombre" @bind="Estudiante.Nombre" id="InputNombre" />
+            <ValidationMessage For="@(() => Estudiante.Nombre)" />
+        </div>
+        <div class="form-group">
+            <label for="InputPrimerApellido"><strong>Primer apellido</strong></label>
+            <input class="form-control" type="text" placeholder="Primer apellido" @bind="Estudiante.PrimerApellido" id="InputPrimerApellido" />
+            <ValidationMessage For="@(() => Estudiante.PrimerApellido)" />
+        </div>
+        <div class="form-group">
+            <label for="InputSegundoApellido"><strong>Segundo apellido</strong></label>
+            <input class="form-control" type="text" placeholder="Segundo apellido" @bind="Estudiante.SegundoApellido" id="InputSegundoApellido" />
+            <ValidationMessage For="@(() => Estudiante.SegundoApellido)" />
+        </div>
+        <button type="submit" class="btn btn-success">@TextoBoton</button>
+        <DataAnnotationsValidator />
+    </EditForm>
+</div>
+
+@code {
+    [Parameter] public Estudiantes Estudiante { get; set; }
+    [Parameter] public String Titulo { get; set; }
+    [Parameter] public String TextoBoton { get; set; }
+    [Parameter] public EventCallback OnValidSubmit { get; set; }
+}

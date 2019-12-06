@@ -1,81 +1,108 @@
 ﻿@page "/indice-grupos"
-@using SAEE_WEB.Data
+@inject GruposServices gruposServices
+@inject NavigationManager  navegar
+
+<h3>Grupos</h3>
+@if (mostrarError)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>ERROR!</strong> @msjError
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError=false)">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
 
 
 
-    <div class="container">
-        <h3>Grupos</h3>
-        <text>@DATOSNULL </text>
-        @if (grupos == null)
-        {
-            <text> Cargando... </text>
-        }
-        else if (grupos.Count == 0)
-        {
-            <text> No hay grupos en la base de datos</text>
+<h3>Grupos</h3>
+<text>@DATOSNULL </text>
+@if (grupos == null)
+{
+    <text> Cargando... </text>
+}
+else if (grupos.Count == 0)
+{
+    <text> No hay grupos en la base de datos</text>
 
-        }
-        else
-        {
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Grupo</th>
-                            <th scope="col">Año</th>
-                            <th scope="col"> Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var grupo in grupos)
-                        {
-                            <tr>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Grupo</th>
+                <th>Año</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grupo in grupos)
+            {
+            <tr>
 
-                                <td >@grupo.Grupo</td>
-                                <td >@grupo.Anio</td>
-                                <td >
-                                    <button class="btn btn-outline-info">Editar</button>
-                                    <button class="btn btn-outline-danger">Borrar</button>
-                                </td>
+                <td>@grupo.Grupo</td>
+                <td>@grupo.Anio</td>
+                <td>
+                    <a class="btn btn-success">Editar</a>
+                    <a class="btn btn-danger">Borrar</a>
+                </td>
 
-                            </tr>
+            </tr>
 
                         }
 
                     </tbody>
 
 
-                </table>
-
-            </div>
-
+    </table>
 
 
 }
-</div>
 @code{
-    private IEnumerable<Grupos> gruposIE;
+
     public List<Grupos> grupos;
-    public String DATOSNULL = "";
-    SAEE_WEB.Data.GruposController gruposController = new SAEE_WEB.Data.GruposController();
+    Grupos editarGrupo = new Grupos();
+    Grupos eliminarGrupo = new Grupos();
+    Boolean modoGuardar = false;
+    Boolean mostrarBorrar = false;
+    Boolean mostrarError = false;
+    String msjError = "";
     protected override async Task OnInitializedAsync()
     {
+
         await CargarGrupos();
 
     }
     async Task CargarGrupos()
     {
-        gruposIE = await gruposController.GetGrupos();
-        if (gruposIE == null)
+        grupos = await gruposServices.GetGrupos();
+    }
+
+    
+    
+    protected async Task cambiarEdicion(Grupos grupo, Boolean estado)
+    {
+        if (estado)
         {
-            DATOSNULL = "gruposIR null";
+            editarGrupo = await gruposServices.GetGrupo(grupo.Id);
+            modoGuardar = true;
+
         }
-        else {grupos= gruposIE.ToList();}
-        // grupos = await Http.GetJsonAsync<Grupos[]>
-        //("/api/Grupos/");
+ 
+    }
 
+    void MostrarPanelBorrar(Grupos grupo)
+    {
+        eliminarGrupo = grupo;
+        mostrarBorrar = true;
+    }
+
+    void OcultarPanelBorrar()
+    {
+        mostrarBorrar = false;
 
     }
 
-    }
+
+}
 
