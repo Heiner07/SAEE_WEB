@@ -12,20 +12,20 @@
     <br />
     <List />
 </div>
-    @code {
-        Boolean MostrarPanelAgregar = false;
-        String TextoBotonAgregar = "Agregar profesor";
+@code {
+    Boolean MostrarPanelAgregar = false;
+    String TextoBotonAgregar = "Agregar profesor";
 
-        void AbrirCerrarFormAgregar()
+    void AbrirCerrarFormAgregar()
+    {
+        MostrarPanelAgregar = !MostrarPanelAgregar;
+        if (MostrarPanelAgregar)
         {
-            MostrarPanelAgregar = !MostrarPanelAgregar;
-            if (MostrarPanelAgregar)
-            {
-                TextoBotonAgregar = "Ocultar Panel";
-            }
-            else
-            {
-                TextoBotonAgregar = "Agregar profesor";
-            }
+            TextoBotonAgregar = "Ocultar Panel";
+        }
+        else
+        {
+            TextoBotonAgregar = "Agregar profesor";
         }
     }
+}
