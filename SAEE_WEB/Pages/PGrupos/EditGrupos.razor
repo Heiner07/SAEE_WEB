@@ -1,0 +1,70 @@
+﻿@inject GruposServices gruposServices
+@inject NavigationManager navegar
+
+<style>
+    input[type=text], select {
+        width: 20%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <EditForm Model="@grupo">
+                    <h1>Editando Grupo</h1>
+                    <label for="InputGrupo"><strong>Grupo</strong></label>
+                    <p>
+                        <input type="text" placeholder="Grupo" @bind="grupo.Grupo" id="InputGrupo" />
+                        <ValidationMessage For="@(() => grupo.Grupo)" />
+                    </p>
+                    <p>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="@(() => modificarGrupo(grupo))">Guardar</button>
+
+                        <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="@RevertirCambios">Cancelar</button>
+                    </p>
+                    <DataAnnotationsValidator />
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Grupos grupo { get; set; }
+    [Parameter] public EventCallback CerrarEditar { get; set; }
+    [Parameter] public Boolean MostrarError { get; set; }
+    [Parameter] public String msjError { get; set; }
+
+
+    protected async Task modificarGrupo(Grupos grupo)
+    {
+        if (grupo.Grupo != null)
+        {
+            Boolean exito = await gruposServices.EditarGrupo(grupo);
+            if (exito)
+            {
+                navegar.NavigateTo("indice-grupos", true);
+            }
+            else { msjError = "No se pudo crear este grupo."; MostrarError = true; }
+        }
+
+    }
+    async Task RevertirCambios()
+    {
+        await gruposServices.RollbackGrupos(grupo);
+        await CerrarEditar.InvokeAsync(null);
+    }
+}
+
+

@@ -16,5 +16,6 @@ namespace SAEE_WEB.Models
         public string PrimerApellido { get; set; }
         [Required(ErrorMessage = "El apellido es requerido")]
         public string SegundoApellido { get; set; }
+        public String Pin { get; set; }
     }
 }

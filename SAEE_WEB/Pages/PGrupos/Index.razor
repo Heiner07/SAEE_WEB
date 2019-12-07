@@ -2,7 +2,7 @@
 @inject GruposServices gruposServices
 @inject NavigationManager  navegar
     <div class="container">
-        <h3>Grupos</h3>
+        <h3>Administración de Grupos</h3>
         @if (mostrarError)
         {
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
@@ -14,63 +14,81 @@
         }
 
 
+        <p>
+            <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+        </p>
+        @if (MostrarPanelAgregar)
+        {
+            <CreateGrupos nuevoGrupo="@nuevoGrupo" MostrarError="@mostrarError" />
 
-<h3>Grupos</h3>
+        }
 
 
-@if (grupos == null)
-{
-    <text> Cargando... </text>
-}
-else if (grupos.Count == 0)
-{
-    <text> No hay grupos en la base de datos</text>
+
+        @if (grupos == null)
+        {
+            <text> Cargando... </text>
+        }
+        else if (grupos.Count == 0)
+        {
+            <text> No hay grupos en la base de datos</text>
 
         }
         else
         {
-            <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Grupo</th>
-                            <th scope="col">Año</th>
-                            <th scope="col"> Opciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var grupo in grupos)
-                        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Grupo</th>
+                        <th>Año</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var grupo in grupos)
+                    {
                         <tr>
 
                             <td>@grupo.Grupo</td>
                             <td>@grupo.Anio</td>
                             <td>
-                                <button class="btn btn-outline-info">Editar</button>
-                                <button class="btn btn-outline-danger">Borrar</button>
+                                <button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>
+                                <button class="btn btn-outline-danger" @onclick="@(() => MostrarPanelBorrar(grupo))">Borrar</button>
                             </td>
 
                         </tr>
 
-                        }
+                    }
 
-                    </tbody>
+                </tbody>
 
 
-                </table>
+            </table>
+        }
+        @if (mostrarBorrar)
+        {
+            <DeleteGrupos grupo="@eliminarGrupo" CerrarEliminar="@OcultarPanelBorrar" MostrarError="@mostrarError" />
+        }
 
-                </div>
-                }
-            </div>
-            @code{
+
+        @if (mostrarEditar)
+        {
+            <EditGrupos grupo="@editarGrupo" CerrarEditar="@cerrarEditar" MostrarError="@mostrarError" msjError="@msjError" />
+        }
+        </div>
+
+        @code{
 
             public List<Grupos> grupos;
             Grupos editarGrupo = new Grupos();
+            Grupos nuevoGrupo = new Grupos();
             Grupos eliminarGrupo = new Grupos();
-            Boolean modoGuardar = false;
             Boolean mostrarBorrar = false;
             Boolean mostrarError = false;
+            Boolean mostrarEditar = false;
             String msjError = "";
+            Boolean MostrarPanelAgregar = false;
+            String TextoBotonAgregar = "Agregar Grupo";
             protected override async Task OnInitializedAsync()
             {
 
@@ -84,14 +102,13 @@ else if (grupos.Count == 0)
 
 
 
-            protected async Task cambiarEdicion(Grupos grupo, Boolean estado)
+            protected async Task cambiarEdicion(Grupos grupo)
             {
-                if (estado)
-                {
-                    editarGrupo = await gruposServices.GetGrupo(grupo.Id);
-                    modoGuardar = true;
 
-                }
+                editarGrupo = await gruposServices.GetGrupo(grupo.Id);
+                mostrarEditar = true;
+
+
 
             }
 
@@ -107,6 +124,25 @@ else if (grupos.Count == 0)
 
             }
 
+            void cerrarEditar()
+            {
+                mostrarEditar = false;
 
             }
+
+            void AbrirCerrarFormAgregar()
+            {
+                MostrarPanelAgregar = !MostrarPanelAgregar;
+                if (MostrarPanelAgregar)
+                {
+                    TextoBotonAgregar = "Ocultar Panel";
+                }
+                else
+                {
+                    TextoBotonAgregar = "Agregar Grupo";
+                }
+            }
+
+
+        }
 

@@ -85,5 +85,20 @@ namespace SAEE_WEB.Data
             context.Entry(estudiante).CurrentValues.SetValues(context.Entry(estudiante).OriginalValues);
             return await Task.FromResult(true);
         }
+        public string GenerarContrasenia() {
+            Random rdn = new Random();
+            string caracteres = "1234567890";
+            int longitud = caracteres.Length;
+            char letra;
+            int longitudContrasenia = 5;
+            string contraseniaAleatoria = string.Empty;
+            for (int i = 0; i < longitudContrasenia; i++)
+            {
+                letra = caracteres[rdn.Next(longitud)];
+                contraseniaAleatoria += letra.ToString();
+            }
+            return contraseniaAleatoria;
+        }
+
     }
 }

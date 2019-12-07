@@ -54,6 +54,9 @@ namespace SAEE_WEB.Models
                 entity.Property(e => e.SegundoApellido)
                     .IsRequired()
                     .HasMaxLength(100);
+                entity.Property(e => e.Pin)
+                    .IsRequired()
+                    .HasMaxLength(10);
             });
 
             modelBuilder.Entity<Grupos>(entity =>
