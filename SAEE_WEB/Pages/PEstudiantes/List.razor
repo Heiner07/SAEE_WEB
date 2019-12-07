@@ -10,78 +10,80 @@ else if (estudiantes.Count == 0)
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Cédula</th>
-                <th>Pin</th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var estudiante in estudiantes)
-            {
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
-                    <td>@estudiante.Cedula</td>
-                    <td>PIN</td>
-                    <td>
-                        <button class="btn btn-success" @onclick="(()=>MostrarPanelEditar(estudiante))">Editar</button>
-                        <button class="btn btn-danger" @onclick="(()=>MostrarPanelBorrar(estudiante))">Borrar</button>
-                    </td>
+                    <th>Nombre</th>
+                    <th>Cédula</th>
+                    <th>Pin</th>
+                    <th>Opciones</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-}
-@if (mostrarEditar)
-{
-    <Edit Estudiante="@estudianteEditar" CerrarEditar="@OcultarPanelEditar" />
-}
-@if (mostrarBorrar)
-{
-    <Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" />
-}
+            </thead>
+            <tbody>
+                @foreach (var estudiante in estudiantes)
+                {
+                    <tr>
+                        <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                        <td>@estudiante.Cedula</td>
+                        <td>PIN</td>
+                        <td>
+                            <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(estudiante))">Editar</button>
+                            <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(estudiante))">Borrar</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        </div>
+        }
+        @if (mostrarEditar)
+        {
+            <Edit Estudiante="@estudianteEditar" CerrarEditar="@OcultarPanelEditar" />
+        }
+        @if (mostrarBorrar)
+        {
+            <Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" />
+        }
 
 
-@code {
+        @code {
     public List<Estudiantes> estudiantes;
-    Estudiantes estudianteEditar;
-    Boolean mostrarEditar = false;
-    Boolean mostrarBorrar = false;
-    [Parameter] public EventCallback Editar { get; set; }
-    [Parameter] public EventCallback Borrar { get; set; }
+        Estudiantes estudianteEditar;
+        Boolean mostrarEditar = false;
+        Boolean mostrarBorrar = false;
+        [Parameter] public EventCallback Editar { get; set; }
+        [Parameter] public EventCallback Borrar { get; set; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        await CargarEstudiantes();
-    }
+        protected override async Task OnInitializedAsync()
+        {
+            await CargarEstudiantes();
+        }
 
-    async Task CargarEstudiantes()
-    {
-        estudiantes = await estudiantesServices.GetEstudiantes();
-    }
+        async Task CargarEstudiantes()
+        {
+            estudiantes = await estudiantesServices.GetEstudiantes();
+        }
 
-    void MostrarPanelEditar(Estudiantes estudiante)
-    {
-        estudianteEditar = estudiante;
-        mostrarEditar = true;
-    }
+        void MostrarPanelEditar(Estudiantes estudiante)
+        {
+            estudianteEditar = estudiante;
+            mostrarEditar = true;
+        }
 
-    void OcultarPanelEditar()
-    {
-        mostrarEditar = false;
-    }
+        void OcultarPanelEditar()
+        {
+            mostrarEditar = false;
+        }
 
-    void MostrarPanelBorrar(Estudiantes estudiante)
-    {
-        estudianteEditar = estudiante;
-        mostrarBorrar = true;
-    }
+        void MostrarPanelBorrar(Estudiantes estudiante)
+        {
+            estudianteEditar = estudiante;
+            mostrarBorrar = true;
+        }
 
-    void OcultarPanelBorrar()
-    {
-        mostrarBorrar = false;
-    }
-}
+        void OcultarPanelBorrar()
+        {
+            mostrarBorrar = false;
+        }
+        }
