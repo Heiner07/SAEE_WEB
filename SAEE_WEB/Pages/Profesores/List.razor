@@ -31,7 +31,7 @@ else
             <tbody>
                 @foreach (var profesor in profesores)
                 {
-                    if (profesor.Nombre.StartsWith(TextoBuscar))
+                    if (profesor.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
                     {
                         <tr>
                             <td>@profesor.Nombre @profesor.PrimerApellido @profesor.SegundoApellido</td>
