@@ -22,6 +22,7 @@ namespace SAEE_WEB.Models
         public string PrimerApellido { get; set; }
         [Required(ErrorMessage = "El segundo apellido es requerido")]
         public string SegundoApellido { get; set; }
+        [StringLength(10, ErrorMessage = "Máximo 10 caracteres")]
         public string Pin { get; set; }
 
         public virtual Profesores IdProfesorNavigation { get; set; }

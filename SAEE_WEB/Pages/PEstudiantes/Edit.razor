@@ -20,6 +20,10 @@
 
     async Task EditarEstudiante()
     {
+        if (Estudiante.Pin == null) { 
+            Estudiante.Pin = estudiantesServices.GenerarContrasenia();
+        
+        }
         await estudiantesServices.EditarEstudiante(Estudiante);
         Navigation.NavigateTo("indice-estudiantes", true);
     }
