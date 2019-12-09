@@ -1,0 +1,15 @@
+﻿@inject ProfesoresServices ServicioProfesores
+@inject NavigationManager Navigation
+
+<Form OnValidSubmit="AgregarCurso" Titulo="Agregando curso" TextoBoton="Agregar" Curso="@curso" />
+
+@code {
+    Profesores curso = new Profesores();
+
+    async Task AgregarCurso()
+    {
+        curso.Administrador = false;
+        await ServicioProfesores.PostProfesores(curso);
+        Navigation.NavigateTo("cursos", true);
+    }
+}

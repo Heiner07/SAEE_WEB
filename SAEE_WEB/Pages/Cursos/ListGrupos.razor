@@ -1,0 +1,51 @@
+﻿@inject GruposServices gruposServices
+@inject NavigationManager  navegar
+
+@if (grupos == null)
+{
+    <text> Cargando... </text>
+}
+else if (grupos.Count == 0)
+{
+    <text> No hay grupos en la base de datos</text>
+
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Grupo</th>
+                <th>Año</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grupo in grupos)
+            {
+                <tr>
+                    <td>@grupo.Grupo</td>
+                    <td>@grupo.Anio</td>
+                    <td>
+                        @*<button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>*@
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    public List<Grupos> grupos;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await CargarGrupos();
+
+    }
+
+    async Task CargarGrupos()
+    {
+        grupos = await gruposServices.GetGrupos();
+    }
+}
