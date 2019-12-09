@@ -1,78 +1,45 @@
 ﻿@page "/evaluaciones"
-@inject GruposServices gruposServices
 
-
-
+@{ var list = new List<string> { ".NET", "Python", "Java" }; }
 <div class="container">
     <h3>Evaluaciones</h3>
-    @if (grupos == null)
-    {
-        <text> Cargando... </text>
-    }
-    else if (grupos.Count == 0)
-    {
-        <text> No hay evaluaciones en la base de datos</text>
-
-    }
-    else
-    {
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">Grupo</th>
-                        <th scope="col">Año</th>
-                        <th scope="col"> Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var grupo in grupos)
-                    {
-                        <tr>
-
-                            <td>@grupo.Grupo</td>
-                            <td>@grupo.Anio</td>
-                            <td>
-                                <button class="btn btn-outline-info">Editar</button>
-                                <button class="btn btn-outline-danger">Borrar</button>
-                            </td>
-
-                        </tr>
-
-                    }
-
-                </tbody>
-
-
-            </table>
-
+    <form class="form-inline" action="/">
+        <div class="form-group">
+            <Dropdown TItem="string" OnSelected="@OnSelected">
+                <InitialTip>Grupo</InitialTip>
+                <ChildContent>
+                    <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
+                    <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
+                    <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                </ChildContent>
+            </Dropdown>
         </div>
-
-
-
-    }
+        <div class="form-group">
+            <Dropdown TItem="string" OnSelected="@OnSelected">
+                <InitialTip>Curso</InitialTip>
+                <ChildContent>
+                    <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
+                    <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
+                    <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                </ChildContent>
+            </Dropdown>
+        </div>
+        <div class="form-group">
+            <Dropdown TItem="string" OnSelected="@OnSelected">
+                <InitialTip>Periodo</InitialTip>
+                <ChildContent>
+                    <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
+                    <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
+                    <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                </ChildContent>
+            </Dropdown>
+        </div>
+    </form>
 </div>
 @code{
-    private IEnumerable<Grupos> gruposIE;
-    public List<Grupos> grupos;
-    public String DATOSNULL = "";
-    protected override async Task OnInitializedAsync()
+    private void OnSelected(string selection)
     {
-        await CargarGrupos();
-
-    }
-    async Task CargarGrupos()
-    {
-        gruposIE = await gruposServices.GetGrupos();
-        if (gruposIE == null)
-        {
-            DATOSNULL = "gruposIR null";
-        }
-        else { grupos = gruposIE.ToList(); }
-        // grupos = await Http.GetJsonAsync<Grupos[]>
-        //("/api/Grupos/");
-
-
+        Console.WriteLine(selection);
     }
 
 }

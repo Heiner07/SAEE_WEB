@@ -15,7 +15,6 @@ namespace SAEE_WEB
     {
         public static void Main(string[] args)
         {
-            
             CreateHostBuilder(args).Build().Run();
         }
 
@@ -23,8 +22,7 @@ namespace SAEE_WEB
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseStartup<Startup>()
-                    .UseSetting(WebHostDefaults.DetailedErrorsKey, "true");
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }

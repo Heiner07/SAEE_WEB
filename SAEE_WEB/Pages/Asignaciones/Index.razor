@@ -1,0 +1,88 @@
+﻿@page "/asignaciones"
+@{ var list = new List<string> { ".NET", "Python", "Java" }; }
+    <div class="container">
+        <h3>Asignaciones</h3>
+        <form class="form-inline" action="/">
+            <div class="form-group">
+                <Dropdown TItem="string" OnSelected="@OnSelected">
+                    <InitialTip>Grupo</InitialTip>
+                    <ChildContent>
+                        <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <Dropdown TItem="string" OnSelected="@OnSelected">
+                    <InitialTip>Curso</InitialTip>
+                    <ChildContent>
+                        <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <Dropdown TItem="string" OnSelected="@OnSelected">
+                    <InitialTip>Rubro</InitialTip>
+                    <ChildContent>
+                        <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                    </ChildContent>
+                </Dropdown>
+            </div>
+        </form>
+        <p></p>
+        <div class="card-body border rounded">
+            <form>
+                <div class="form-group">
+                    <label for="InputCedula"><strong>Nombre</strong></label>
+                    <input class="form-control" type="text" placeholder="Nombre" id="InputCedula" />
+
+                </div>
+                <div class="form-group">
+                    <label for="InputNombre"><strong>Descripcion</strong></label>
+                    <input class="form-control" type="text" placeholder="Descripcion" id="InputNombre" />
+
+                </div>
+                <div class="form-group">
+                    <Dropdown TItem="string" OnSelected="@OnSelected">
+                        <InitialTip>Estado</InitialTip>
+                        <ChildContent>
+                            <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
+                            <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
+                            <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                        </ChildContent>
+                    </Dropdown>
+                </div>
+                <div class="form-group">
+                    <label for="InputSegundoApellido"><strong>Fecha</strong></label>
+                    <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputSegundoApellido" />
+
+                </div>
+                <div class="form-group">
+                    <label for="InputCorreo"><strong>Puntos</strong></label>
+                    <input class="form-control" type="number" placeholder="Puntos" id="InputCorreo" />
+
+                </div>
+                <div class="form-group">
+                    <label for="InputCorreo"><strong>Porcentaje</strong></label>
+                    <input class="form-control" type="number" placeholder="Porcentaje" id="InputCorreo" />
+
+                </div>
+                <button type="submit" class="btn btn-success">Crear</button>
+
+            </form>
+        </div>
+    </div>
+@code {
+    private void OnSelected(string selection)
+    {
+        Console.WriteLine(selection);
+    }
+
+}
+
+

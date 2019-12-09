@@ -1,8 +1,6 @@
 ﻿using System;
-using System.IO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.Extensions.Configuration;
 
 namespace SAEE_WEB.Models
 {
@@ -18,18 +16,16 @@ namespace SAEE_WEB.Models
         }
 
         public virtual DbSet<Estudiantes> Estudiantes { get; set; }
+        public virtual DbSet<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
         public virtual DbSet<Grupos> Grupos { get; set; }
         public virtual DbSet<Profesores> Profesores { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            var builder = new ConfigurationBuilder()
-            .SetBasePath(Directory.GetCurrentDirectory())
-            .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-            IConfigurationRoot configuration = builder.Build();
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer(configuration.GetConnectionString("DefaultConnection"));
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Server=tcp:dbsaee.database.windows.net,1433;Initial Catalog=BDSAEE;Persist Security Info=False;User ID=saee;Password=Proyecto123#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
@@ -37,8 +33,6 @@ namespace SAEE_WEB.Models
         {
             modelBuilder.Entity<Estudiantes>(entity =>
             {
-                entity.ToTable("estudiantes");
-
                 entity.Property(e => e.Cedula)
                     .IsRequired()
                     .HasMaxLength(25);
@@ -47,6 +41,10 @@ namespace SAEE_WEB.Models
                     .IsRequired()
                     .HasMaxLength(100);
 
+                entity.Property(e => e.Pin)
+                    .IsRequired()
+                    .HasMaxLength(10);
+
                 entity.Property(e => e.PrimerApellido)
                     .IsRequired()
                     .HasMaxLength(100);
@@ -54,18 +52,48 @@ namespace SAEE_WEB.Models
                 entity.Property(e => e.SegundoApellido)
                     .IsRequired()
                     .HasMaxLength(100);
-                entity.Property(e => e.Pin)
-                    .IsRequired()
-                    .HasMaxLength(10);
+
+                entity.HasOne(d => d.IdProfesorNavigation)
+                    .WithMany(p => p.Estudiantes)
+                    .HasForeignKey(d => d.IdProfesor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Estudiant__IdPro__73BA3083");
+            });
+
+            modelBuilder.Entity<EstudiantesXgrupos>(entity =>
+            {
+                entity.ToTable("EstudiantesXGrupos");
+
+                entity.HasOne(d => d.IdEstudianteNavigation)
+                    .WithMany(p => p.EstudiantesXgrupos)
+                    .HasForeignKey(d => d.IdEstudiante)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Estudiant__IdEst__787EE5A0");
+
+                entity.HasOne(d => d.IdGrupoNavigation)
+                    .WithMany(p => p.EstudiantesXgrupos)
+                    .HasForeignKey(d => d.IdGrupo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Estudiant__IdGru__778AC167");
+
+                entity.HasOne(d => d.IdProfesorNavigation)
+                    .WithMany(p => p.EstudiantesXgrupos)
+                    .HasForeignKey(d => d.IdProfesor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Estudiant__IdPro__76969D2E");
             });
 
             modelBuilder.Entity<Grupos>(entity =>
             {
-                entity.ToTable("grupos");
-
                 entity.Property(e => e.Grupo)
                     .IsRequired()
                     .HasMaxLength(100);
+
+                entity.HasOne(d => d.IdProfesorNavigation)
+                    .WithMany(p => p.Grupos)
+                    .HasForeignKey(d => d.IdProfesor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Grupos__IdProfes__70DDC3D8");
             });
 
             modelBuilder.Entity<Profesores>(entity =>
