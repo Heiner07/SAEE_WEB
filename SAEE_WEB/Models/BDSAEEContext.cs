@@ -15,6 +15,8 @@ namespace SAEE_WEB.Models
         {
         }
 
+        public virtual DbSet<Cursos> Cursos { get; set; }
+        public virtual DbSet<CursosGrupos> CursosGrupos { get; set; }
         public virtual DbSet<Estudiantes> Estudiantes { get; set; }
         public virtual DbSet<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
         public virtual DbSet<Grupos> Grupos { get; set; }
@@ -30,6 +32,34 @@ namespace SAEE_WEB.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Cursos>(entity =>
+            {
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+
+                entity.HasOne(d => d.IdProfesorNavigation)
+                    .WithMany(p => p.Cursos)
+                    .HasForeignKey(d => d.IdProfesor)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__Cursos__IdProfes__07C12930");
+            });
+
+            modelBuilder.Entity<CursosGrupos>(entity =>
+            {
+                entity.HasOne(d => d.IdCursoNavigation)
+                    .WithMany(p => p.CursosGrupos)
+                    .HasForeignKey(d => d.IdCurso)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__CursosGru__IdCur__0A9D95DB");
+
+                entity.HasOne(d => d.IdGrupoNavigation)
+                    .WithMany(p => p.CursosGrupos)
+                    .HasForeignKey(d => d.IdGrupo)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK__CursosGru__IdGru__0B91BA14");
+            });
+
             modelBuilder.Entity<Estudiantes>(entity =>
             {
                 entity.Property(e => e.Cedula)

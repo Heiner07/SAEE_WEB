@@ -1,12 +1,12 @@
 ﻿@inject ProfesoresServices ServicioProfesores
 
-@if (profesores == null)
+@if (cursos == null)
 {
-    <text>Cargando profesores...</text>
+    <text>Cargando cursos...</text>
 }
-else if (profesores.Length == 0)
+else if (cursos.Length == 0)
 {
-    <text>No hay profesores</text>
+    <text>No hay cursos</text>
 }
 else
 {
@@ -29,7 +29,7 @@ else
                 </tr>
             </thead>
             <tbody>
-                @foreach (var profesor in profesores)
+                @foreach (var profesor in cursos)
                 {
                     if (profesor.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
                     {
@@ -50,15 +50,15 @@ else
 }
 @if (mostrarEditar)
 {
-    <Edit Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
+    @*<Edit Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />*@
 }
 @if (mostrarBorrar)
 {
-    <Delete Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
+    @*<Delete Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />*@
 }
 
 @code {
-    Profesores[] profesores { get; set; }
+    Profesores[] cursos { get; set; }
     Profesores profesorEditar;
     Boolean mostrarEditar = false;
     Boolean mostrarBorrar = false;
@@ -73,7 +73,7 @@ else
 
     async Task CargarProfesores()
     {
-        profesores = await ServicioProfesores.GetProfesores();
+        cursos = await ServicioProfesores.GetProfesores();
     }
 
     void MostrarPanelEditar(Profesores profesor)
