@@ -7,7 +7,7 @@
     Estudiantes estudiante = new Estudiantes();
 
     async Task AgregarEstudiante(){
-
+        estudiante.IdProfesor = 48;
         estudiante.Pin = estudiantesServices.GenerarContrasenia();
         await estudiantesServices.PutEstudiante(estudiante);
         Navigation.NavigateTo("indice-estudiantes", true);
