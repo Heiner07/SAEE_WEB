@@ -11,10 +11,10 @@
             <input class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
             <ValidationMessage For="@(() => Curso.CantidadPeriodos)" />
         </div>
-        <ListGrupos AgregarGrupo="AgregarGrupo" GruposAgregados="@GruposAgregados" />
+        @*<ListGrupos AgregarGrupo="AgregarGrupo" GruposAgregados="@GruposAgregados" />
         <br />
         <ListGruposAgregados BorrarGrupo="BorrarGrupo" GruposAgregados="@GruposAgregados" />
-        <br />
+        <br />*@
         <button type="submit" class="btn btn-success">@TextoBoton</button>
         <DataAnnotationsValidator />
     </EditForm>
