@@ -8,7 +8,10 @@
 
     async Task AgregarEstudiante(){
         estudiante.IdProfesor = 48;
-        estudiante.Pin = estudiantesServices.GenerarContrasenia();
+        if (estudiante.Pin==null) { 
+            estudiante.Pin = estudiantesServices.GenerarContrasenia();
+
+        }
         await estudiantesServices.PutEstudiante(estudiante);
         Navigation.NavigateTo("indice-estudiantes", true);
     }

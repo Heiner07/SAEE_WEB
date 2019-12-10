@@ -38,8 +38,12 @@ namespace SAEE_WEB
             services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             services.AddDbContext<BDSAEEContext>(options =>
+            
                 options.UseSqlServer(
-                    Configuration.GetConnectionString("ConexionServidor")));
+                    Configuration.GetConnectionString("ConexionServidor")),
+                ServiceLifetime.Transient
+
+                );
             services.AddRazorPages();
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
