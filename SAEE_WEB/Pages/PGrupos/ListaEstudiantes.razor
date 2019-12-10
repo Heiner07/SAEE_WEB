@@ -1,0 +1,125 @@
+﻿@inject GruposServices gruposServices
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OcultarPanelEstudiantes">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+
+                @if (estudiantes == null)
+                {
+                    <text>Cargando estudiantes...</text>
+                }
+                else if (estudiantes.Count == 0)
+                {
+                    <text>No hay estudiantes</text>
+                }
+                else
+                {
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Buscar nombre" @bind="@TextoBuscar" />
+                        <div class="input-group-append">
+                            <button class="btn btn-info">
+                                <i>Buscar</i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Cédula</th>
+                                    <th>Nombre</th>
+                                    <th>Opciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var estudiante in estudiantes)
+                                {
+                                    if (estudiante.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
+                                    {
+                                        <tr>
+                                            <td>@estudiante.Cedula</td>
+                                            <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                                            <td>
+                                                <button class="btn btn-outline-danger" @onclick="(() => MostrarPanelBorrar(estudiante))">Borrar</button>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+
+                <button type="button" class="btn btn-success" @onclick="OcultarPanelEstudiantes"><span class="glyphicon glyphicon-plus"></span> Añadir</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (mostrarBorrar)
+{
+    <SAEE_WEB.Pages.PEstudiantes.Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="true" Grupo="@Grupo"/>
+
+
+}
+
+
+
+@code {
+
+    public List<Estudiantes> estudiantes;
+    Estudiantes estudianteEditar;
+    Boolean mostrarEditar = false;
+    Boolean mostrarBorrar = false;
+    String TextoBuscar = "";
+    [Parameter] public EventCallback Editar { get; set; }
+    [Parameter] public EventCallback Borrar { get; set; }
+    [Parameter] public EventCallback OcultarPanelEstudiantes { get; set; }
+    [Parameter] public Grupos Grupo { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEstudiantes();
+    }
+
+    async Task CargarEstudiantes()
+    {
+        estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
+    }
+
+    void MostrarPanelEditar(Estudiantes estudiante)
+    {
+        estudianteEditar = estudiante;
+        mostrarEditar = true;
+    }
+
+    void OcultarPanelEditar()
+    {
+        mostrarEditar = false;
+    }
+
+    void MostrarPanelBorrar(Estudiantes estudiante)
+    {
+        estudianteEditar = estudiante;
+        mostrarBorrar = true;
+    }
+
+    async Task OcultarPanelBorrar()
+    {
+        await CargarEstudiantes();
+        mostrarBorrar = false;
+    }
+    /*  async Task RevertirCambios()
+       {
+           // await estudiantesServices.RollbackEstudiantes(Estudiante);
+           //await CerrarEditar.InvokeAsync(null);
+       }*/
+
+
+}

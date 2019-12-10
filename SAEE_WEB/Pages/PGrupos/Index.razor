@@ -36,27 +36,34 @@
         }
         else
         {
+
             <table class="table">
                 <thead>
                     <tr>
-                        <th>Grupo</th>
-                        <th>Año</th>
-                        <th>Opciones</th>
+                        <th >Grupo</th>
+                        <th >Año</th>
+                        <th >Opciones</th>
+                        
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var grupo in grupos)
                     {
-                        <tr>
+                    <tr>
 
-                            <td>@grupo.Grupo</td>
-                            <td>@grupo.Anio</td>
-                            <td>
-                                <button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>
-                                <button class="btn btn-outline-danger" @onclick="@(() => MostrarPanelBorrar(grupo))">Borrar</button>
-                            </td>
+                        <td>@grupo.Grupo</td>
+                        <td>@grupo.Anio</td>
+                        <td>
 
-                        </tr>
+                            <button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>
+                            <button class="btn btn-outline-danger" @onclick="@(() => MostrarPanelBorrar(grupo))">Borrar</button>
+                            
+                            <button class="btn btn-outline-secondary" @onclick="@(() => MostrarPanelEstudiantes(grupo))">Estudiantes</button>
+                        </td>
+                       
+
+
+                    </tr>
 
                     }
 
@@ -75,7 +82,11 @@
         {
             <EditGrupos grupo="@editarGrupo" CerrarEditar="@cerrarEditar" MostrarError="@mostrarError" msjError="@msjError" />
         }
-        </div>
+        @if (mostrarListaEstudiantes)
+        {
+            <ListaEstudiantes OcultarPanelEstudiantes ="@OcultarPanelEstudiantes" Grupo="@grupoEstudiantes" />
+        }
+    </div>
 
         @code{
 
@@ -83,9 +94,11 @@
             Grupos editarGrupo = new Grupos();
             Grupos nuevoGrupo = new Grupos();
             Grupos eliminarGrupo = new Grupos();
+            Grupos grupoEstudiantes = new Grupos();
             Boolean mostrarBorrar = false;
             Boolean mostrarError = false;
             Boolean mostrarEditar = false;
+            Boolean mostrarListaEstudiantes = false;
             String msjError = "";
             Boolean MostrarPanelAgregar = false;
             String TextoBotonAgregar = "Agregar Grupo";
@@ -116,6 +129,17 @@
             {
                 eliminarGrupo = grupo;
                 mostrarBorrar = true;
+            }
+
+            void MostrarPanelEstudiantes(Grupos grupo)
+            {
+                grupoEstudiantes = grupo;
+                mostrarListaEstudiantes = true;
+            }
+
+             void OcultarPanelEstudiantes()
+            {
+                mostrarListaEstudiantes = false;
             }
 
             void OcultarPanelBorrar()

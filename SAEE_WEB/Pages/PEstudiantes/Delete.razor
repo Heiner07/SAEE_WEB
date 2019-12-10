@@ -1,4 +1,6 @@
 ﻿@inject EstudiantesServices estudiantesServices
+@inject GruposServices gruposServices
+
 @inject NavigationManager Navigation
 
 <div class="modal" tabindex="-1" style="display:block" role="dialog">
@@ -11,7 +13,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                ¿Realmente desea borrar al estudiante "@Estudiante.Nombre  @Estudiante.PrimerApellido  @Estudiante.SegundoApellido" y toda su información relacionada?
+                ¿Realmente desea borrar al estudiante "@Estudiante.Nombre  @Estudiante.PrimerApellido  @Estudiante.SegundoApellido"?
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
@@ -23,11 +25,21 @@
 
 @code {
     [Parameter] public Estudiantes Estudiante { get; set; }
+    [Parameter] public Boolean EnGrupos { get; set; }
+    [Parameter] public Grupos Grupo { get; set; }
     [Parameter] public EventCallback CerrarEliminar { get; set; }
 
     async Task EditarEstudiante()
     {
-        await estudiantesServices.DeleteEstudiante(Estudiante.Id);
-        Navigation.NavigateTo("indice-estudiantes", true);
+        if (!EnGrupos)
+        {
+            await estudiantesServices.DeleteEstudiante(Estudiante.Id);
+            Navigation.NavigateTo("indice-estudiantes", true);
+        }
+        else
+        {
+            await gruposServices.DeleteEstudianteXGrupos(Estudiante.Id,Grupo);
+            await CerrarEliminar.InvokeAsync(null);
+        }
     }
 }

@@ -10,6 +10,14 @@ else if (estudiantes.Count == 0)
 }
 else
 {
+    <div class="input-group">
+        <input type="text" class="form-control" placeholder="Buscar nombre" @bind="@TextoBuscar" />
+        <div class="input-group-append">
+            <button class="btn btn-info">
+                <i>Buscar</i>
+            </button>
+        </div>
+    </div>
     <div class="table-responsive">
         <table class="table">
             <thead>
@@ -23,67 +31,71 @@ else
             <tbody>
                 @foreach (var estudiante in estudiantes)
                 {
-                    <tr>
-                        <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
-                        <td>@estudiante.Cedula</td>
-                        <td>@estudiante.Pin</td>
-                        <td>
-                            <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(estudiante))">Editar</button>
-                            <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(estudiante))">Borrar</button>
-                        </td>
-                    </tr>
+                    if (estudiante.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
+                    {
+                        <tr>
+                            <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                            <td>@estudiante.Cedula</td>
+                            <td>@estudiante.Pin</td>
+                            <td>
+                                <button class="btn btn-outline-info" @onclick="(() => MostrarPanelEditar(estudiante))">Editar</button>
+                                <button class="btn btn-outline-danger" @onclick="(() => MostrarPanelBorrar(estudiante))">Borrar</button>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>
-        </div>
-        }
-        @if (mostrarEditar)
-        {
-            <Edit Estudiante="@estudianteEditar" CerrarEditar="@OcultarPanelEditar" />
-        }
-        @if (mostrarBorrar)
-        {
-            <Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" />
-        }
+    </div>
+}
+@if (mostrarEditar)
+{
+    <Edit Estudiante="@estudianteEditar" CerrarEditar="@OcultarPanelEditar" />
+}
+@if (mostrarBorrar)
+{
+    <Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="false"/>
+}
 
 
-        @code {
+@code {
     public List<Estudiantes> estudiantes;
-        Estudiantes estudianteEditar;
-        Boolean mostrarEditar = false;
-        Boolean mostrarBorrar = false;
-        [Parameter] public EventCallback Editar { get; set; }
-        [Parameter] public EventCallback Borrar { get; set; }
+    Estudiantes estudianteEditar;
+    Boolean mostrarEditar = false;
+    Boolean mostrarBorrar = false;
+    String TextoBuscar = "";
+    [Parameter] public EventCallback Editar { get; set; }
+    [Parameter] public EventCallback Borrar { get; set; }
 
-        protected override async Task OnInitializedAsync()
-        {
-            await CargarEstudiantes();
-        }
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarEstudiantes();
+    }
 
-        async Task CargarEstudiantes()
-        {
-            estudiantes = await estudiantesServices.GetEstudiantes();
-        }
+    async Task CargarEstudiantes()
+    {
+        estudiantes = await estudiantesServices.GetEstudiantes();
+    }
 
-        void MostrarPanelEditar(Estudiantes estudiante)
-        {
-            estudianteEditar = estudiante;
-            mostrarEditar = true;
-        }
+    void MostrarPanelEditar(Estudiantes estudiante)
+    {
+        estudianteEditar = estudiante;
+        mostrarEditar = true;
+    }
 
-        void OcultarPanelEditar()
-        {
-            mostrarEditar = false;
-        }
+    void OcultarPanelEditar()
+    {
+        mostrarEditar = false;
+    }
 
-        void MostrarPanelBorrar(Estudiantes estudiante)
-        {
-            estudianteEditar = estudiante;
-            mostrarBorrar = true;
-        }
+    void MostrarPanelBorrar(Estudiantes estudiante)
+    {
+        estudianteEditar = estudiante;
+        mostrarBorrar = true;
+    }
 
-        void OcultarPanelBorrar()
-        {
-            mostrarBorrar = false;
-        }
-        }
+    void OcultarPanelBorrar()
+    {
+        mostrarBorrar = false;
+    }
+}
