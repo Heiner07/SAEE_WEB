@@ -8,7 +8,6 @@
 else if (grupos.Count == 0)
 {
     <text> No hay grupos en la base de datos</text>
-
 }
 else
 {
@@ -27,7 +26,7 @@ else
                     <td>@grupo.Grupo</td>
                     <td>@grupo.Anio</td>
                     <td>
-                        @*<button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>*@
+                        <button type="button" class="btn btn-outline-info" @onclick="@(()=>AgregarGrupo.InvokeAsync(grupo))">Agregar</button>
                     </td>
                 </tr>
             }
@@ -36,6 +35,9 @@ else
 }
 @code {
     public List<Grupos> grupos;
+    [Parameter] public List<Grupos> GruposAgregados { get; set; }
+    //[Parameter] public Cursos Curso { get; set; }
+    [Parameter] public EventCallback<Grupos> AgregarGrupo { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

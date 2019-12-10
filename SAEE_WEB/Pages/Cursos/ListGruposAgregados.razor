@@ -1,0 +1,33 @@
+﻿@if (GruposAgregados.Count == 0)
+{
+    <text> Agregue grupos al curso</text>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Grupo</th>
+                <th>Año</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var grupo in GruposAgregados)
+            {
+                <tr>
+                    <td>@grupo.Grupo</td>
+                    <td>@grupo.Anio</td>
+                    <td>
+                        <button type="button" class="btn btn-outline-info" @onclick="(()=>BorrarGrupo.InvokeAsync(grupo))">Borrar</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    [Parameter] public List<Grupos> GruposAgregados { get; set; }
+    //[Parameter] public Cursos Curso { get; set; }
+    [Parameter] public EventCallback<Grupos> BorrarGrupo { get; set; }
+}

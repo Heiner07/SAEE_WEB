@@ -1,15 +1,23 @@
-﻿@inject ProfesoresServices ServicioProfesores
+﻿@inject CursosServices ServicioCursos
 @inject NavigationManager Navigation
 
-<Form OnValidSubmit="AgregarCurso" Titulo="Agregando curso" TextoBoton="Agregar" Curso="@curso" />
+<Form OnValidSubmit="AgregarCurso" Titulo="Agregando curso" TextoBoton="Agregar" Curso="@curso" GruposAgregados="@GruposAgregados" />
 
 @code {
-    Profesores curso = new Profesores();
+    Cursos curso = new Cursos();
+    List<Grupos> GruposAgregados = new List<Grupos>();
 
     async Task AgregarCurso()
     {
-        curso.Administrador = false;
-        await ServicioProfesores.PostProfesores(curso);
+        curso.IdProfesor = 48;//Cambiar por el id del profesor auntenticado
+        foreach(Grupos grupo in GruposAgregados)
+        {
+            curso.CursosGrupos.Add(new CursosGrupos()
+            {
+                IdGrupo = grupo.Id
+            });
+        }
+        await ServicioCursos.PostCursos(curso);
         Navigation.NavigateTo("cursos", true);
     }
 }

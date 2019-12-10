@@ -1,4 +1,4 @@
-﻿@inject ProfesoresServices ServicioProfesores
+﻿@inject CursosServices ServicioCursos
 
 @if (cursos == null)
 {
@@ -23,25 +23,41 @@ else
             <thead>
                 <tr>
                     <th>Nombre</th>
-                    <th>Cédula</th>
-                    <th>Correo</th>
+                    <th>Periodos</th>
                     <th>Opciones</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var profesor in cursos)
+                @foreach (var curso in cursos)
                 {
-                    if (profesor.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
+                    if (curso.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
                     {
                         <tr>
-                            <td>@profesor.Nombre @profesor.PrimerApellido @profesor.SegundoApellido</td>
-                            <td>@profesor.Cedula</td>
-                            <td>@profesor.Correo</td>
+                            <td>@curso.Nombre</td>
+                            <td>@curso.CantidadPeriodos</td>
                             <td>
-                                <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(profesor))">Editar</button>
-                                <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(profesor))">Borrar</button>
+                                <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(curso))">Editar</button>
+                                <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(curso))">Borrar</button>
                             </td>
                         </tr>
+                        @if (curso.CursosGrupos.Count > 0)
+                        {
+                            <tr>
+                                <td>
+                                    Grupos: 
+                                    @foreach (var cursoGrupo in curso.CursosGrupos)
+                                    {
+                                        <text>@cursoGrupo.IdGrupo </text>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr>
+                                Este curso no tiene grupos
+                            </tr>
+                        }
                     }
                 }
             </tbody>
@@ -58,8 +74,10 @@ else
 }
 
 @code {
-    Profesores[] cursos { get; set; }
-    Profesores profesorEditar;
+    Cursos[] cursos { get; set; }
+    CursosGrupos[] CursosGrupos { get; set; }
+    CursosGrupos[] CursosGruposFiltrados { get; set; }
+    Cursos cursoEditar;
     Boolean mostrarEditar = false;
     Boolean mostrarBorrar = false;
     String TextoBuscar = "";
@@ -68,17 +86,17 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        await CargarProfesores();
+        await CargarCursos();
     }
 
-    async Task CargarProfesores()
+    async Task CargarCursos()
     {
-        cursos = await ServicioProfesores.GetProfesores();
+        cursos = await ServicioCursos.GetCursos();
     }
 
-    void MostrarPanelEditar(Profesores profesor)
+    void MostrarPanelEditar(Cursos curso)
     {
-        profesorEditar = profesor;
+        cursoEditar = curso;
         mostrarEditar = true;
     }
 
@@ -87,9 +105,9 @@ else
         mostrarEditar = false;
     }
 
-    void MostrarPanelBorrar(Profesores profesor)
+    void MostrarPanelBorrar(Cursos curso)
     {
-        profesorEditar = profesor;
+        cursoEditar = curso;
         mostrarBorrar = true;
     }
 

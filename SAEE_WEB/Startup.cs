@@ -44,6 +44,8 @@ namespace SAEE_WEB
             services.AddServerSideBlazor();
             services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
             services.AddSingleton<WeatherForecastService>();
+            services.AddScoped<CursosServices>();
+            services.AddScoped<CursosGruposServices>();
             services.AddScoped<GruposServices>();
             services.AddScoped<ProfesoresServices>();
             services.AddScoped<EstudiantesServices>();

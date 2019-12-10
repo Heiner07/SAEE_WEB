@@ -7,18 +7,33 @@
             <ValidationMessage For="@(() => Curso.Nombre)" />
         </div>
         <div class="form-group">
-            <label for="InputCedula"><strong>Cédula</strong></label>
-            <input class="form-control" type="text" placeholder="Cedula" @bind="Curso.Cedula" id="InputCedula" />
-            <ValidationMessage For="@(() => Curso.Cedula)" />
+            <label for="InputCantidadPeriodos"><strong>Cantidad de periodos</strong></label>
+            <input class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
+            <ValidationMessage For="@(() => Curso.CantidadPeriodos)" />
         </div>
+        <ListGrupos AgregarGrupo="AgregarGrupo" GruposAgregados="@GruposAgregados" />
+        <br />
+        <ListGruposAgregados BorrarGrupo="BorrarGrupo" GruposAgregados="@GruposAgregados" />
+        <br />
         <button type="submit" class="btn btn-success">@TextoBoton</button>
         <DataAnnotationsValidator />
     </EditForm>
 </div>
 
 @code {
-    [Parameter] public Profesores Curso { get; set; }
+    [Parameter] public Cursos Curso { get; set; }
     [Parameter] public String Titulo { get; set; }
     [Parameter] public String TextoBoton { get; set; }
+    [Parameter] public List<Grupos> GruposAgregados { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+
+    void AgregarGrupo(Grupos grupo)
+    {
+        GruposAgregados.Add(grupo);
+    }
+
+    void BorrarGrupo(Grupos grupo)
+    {
+
+    }
 }
