@@ -26,7 +26,7 @@ namespace SAEE_WEB.Data
         public async Task<List<Estudiantes>> GetEstudiantesXGrupos(Grupos grupo)
         {
              //SE NECESITA EL ID DEL PROFESOR
-            var lista = context.EstudiantesXgrupos.Where(x => x.IdGrupo == grupo.Id && x.IdProfesor == 48).Include(z => z.IdEstudianteNavigation);
+            var lista = context.EstudiantesXgrupos.Where(x => x.IdGrupo == grupo.Id && x.IdProfesor == 1).Include(z => z.IdEstudianteNavigation);
             List<Estudiantes> estudiantesGrupos = new List<Estudiantes>();
             return await (from EG in lista
                           select EG.IdEstudianteNavigation).ToListAsync();

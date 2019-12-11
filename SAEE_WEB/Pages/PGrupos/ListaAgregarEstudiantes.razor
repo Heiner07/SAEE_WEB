@@ -4,7 +4,7 @@
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OcultarPanelEstudiantes">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OcultarPanelAniadir">
                     <span aria-hidden="true">&times;</span>
                 </button>
 
@@ -32,7 +32,7 @@
                                 <tr>
                                     <th>Cédula</th>
                                     <th>Nombre</th>
-                                    <th>Opciones</th>
+                                    <th>Agregar</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -44,7 +44,8 @@
                                             <td>@estudiante.Cedula</td>
                                             <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
                                             <td>
-                                                <button class="btn btn-outline-danger" @onclick="(() => MostrarPanelBorrar(estudiante))">Borrar</button>
+
+                                                <input name="ListaAgregar" type="checkbox" value="@estudiante.Id">
                                             </td>
                                         </tr>
                                     }
@@ -54,41 +55,20 @@
                     </div>
                 }
 
-                <button type="button" class="btn btn-success" @onclick="MostrarPanelAniadir"><span class="glyphicon glyphicon-plus"></span> Añadir</button>
+                <button type="button" class="btn btn-success" @onclick="AgregarEstudiantes"><span class="glyphicon glyphicon-plus"></span>Agregar</button>
 
             </div>
         </div>
     </div>
 </div>
-
-@if (mostrarBorrar)
-{
-    <SAEE_WEB.Pages.PEstudiantes.Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="true" Grupo="@Grupo" />
-
-
-}
-@if (mostrarAniadir)
-{
-    <ListaAgregarEstudiantes OcultarPanelAniadir="@OcultarPanelAniadir" Grupo="@Grupo" />
-
-
-}
-
-
-
 @code {
-
     public List<Estudiantes> estudiantes;
-    Estudiantes estudianteEditar;
-    Boolean mostrarEditar = false;
-    Boolean mostrarBorrar = false;
-    Boolean mostrarAniadir = false;
-    String TextoBuscar = "";
-    [Parameter] public EventCallback Editar { get; set; }
-    [Parameter] public EventCallback Borrar { get; set; }
-    [Parameter] public EventCallback OcultarPanelEstudiantes { get; set; }
-    [Parameter] public Grupos Grupo { get; set; }
 
+    Estudiantes estudianteEditar;
+    String TextoBuscar = "";
+    [Parameter] public EventCallback OcultarPanelAniadir { get; set; }
+    [Parameter] public Grupos Grupo { get; set; }
+    public List<int> ListaAgregar { get; set; } = new List<int>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -100,41 +80,10 @@
         estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
     }
 
-    void MostrarPanelEditar(Estudiantes estudiante)
+    public void AgregarEstudiantes()
     {
-        estudianteEditar = estudiante;
-        mostrarEditar = true;
-    }
+        
 
-    void OcultarPanelEditar()
-    {
-        mostrarEditar = false;
     }
-
-    void MostrarPanelBorrar(Estudiantes estudiante)
-    {
-        estudianteEditar = estudiante;
-        mostrarBorrar = true;
-    }
-    void MostrarPanelAniadir()
-    {
-        mostrarAniadir = true;
-    }
-    void OcultarPanelAniadir()
-    {
-        mostrarAniadir = false;
-    }
-
-    async Task OcultarPanelBorrar()
-    {
-        await CargarEstudiantes();
-        mostrarBorrar = false;
-    }
-    /*  async Task RevertirCambios()
-       {
-           // await estudiantesServices.RollbackEstudiantes(Estudiante);
-           //await CerrarEditar.InvokeAsync(null);
-       }*/
-
 
 }

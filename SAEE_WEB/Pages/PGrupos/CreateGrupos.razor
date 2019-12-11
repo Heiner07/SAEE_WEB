@@ -44,7 +44,7 @@
     {
         if (nuevoGrupo.Grupo != null)
         {
-            nuevoGrupo.IdProfesor = 48;
+            nuevoGrupo.IdProfesor = 1;
             nuevoGrupo.Anio = fechaActual.Year;
             Boolean exito = await gruposServices.PutGrupo(nuevoGrupo);
             if (exito)

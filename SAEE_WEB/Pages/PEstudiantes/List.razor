@@ -11,7 +11,7 @@ else if (estudiantes.Count == 0)
 else
 {
     <div class="input-group">
-        <input type="text" class="form-control" placeholder="Buscar nombre" @bind="@TextoBuscar" />
+        <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
         <div class="input-group-append">
             <button class="btn btn-info">
                 <i>Buscar</i>
