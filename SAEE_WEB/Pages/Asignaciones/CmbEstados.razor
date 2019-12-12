@@ -1,0 +1,23 @@
+﻿
+@{ var list = new List<string> { ".NET", "Python", "Java" }; }
+<div class="form-group" id="cmbEstado">
+    <Dropdown TItem="string" OnSelected="@OnSelected">
+        <InitialTip>Estado</InitialTip>
+        <ChildContent>
+            <DropdownListItem Item="@list[0]">Presente</DropdownListItem>
+            <DropdownListItem Item="@list[1]">Escape</DropdownListItem>
+            <DropdownListItem Item="@list[2]">Justificada</DropdownListItem>
+            <DropdownListItem Item="@list[2]">Injustificada</DropdownListItem>
+            <DropdownListItem Item="@list[2]">Tardía</DropdownListItem>
+        </ChildContent>
+    </Dropdown>
+</div>
+@code {
+    private void OnSelected(string selection)
+    {
+        Console.WriteLine(selection);
+    }
+
+}
+
+
