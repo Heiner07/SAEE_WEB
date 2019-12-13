@@ -104,7 +104,7 @@ namespace SAEE_WEB.Models
                 entity.HasOne(d => d.IdGrupoNavigation)
                     .WithMany(p => p.EstudiantesXgrupos)
                     .HasForeignKey(d => d.IdGrupo)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK__Estudiant__IdGru__778AC167");
 
                 entity.HasOne(d => d.IdProfesorNavigation)
@@ -123,7 +123,7 @@ namespace SAEE_WEB.Models
                 entity.HasOne(d => d.IdProfesorNavigation)
                     .WithMany(p => p.Grupos)
                     .HasForeignKey(d => d.IdProfesor)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Grupos__IdProfes__70DDC3D8");
             });
 
