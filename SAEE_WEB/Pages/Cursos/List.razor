@@ -18,30 +18,6 @@ else
             </button>
         </div>
     </div>
-    @*@foreach (var curso in cursos)
-    {
-        if (curso.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
-        {
-            <div class="card card-body">
-                <div class="col-sm">
-                    <label><strong>Curso: </strong>@curso.Nombre</label>
-                    <label><strong>Periodos: </strong>@curso.CantidadPeriodos</label>
-                </div>
-                <div class="col-sm">
-                    <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(curso))">Editar</button>
-                    <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(curso))">Borrar</button>
-                    <button class="btn btn-outline-secondary" type="button" data-toggle="collapse" data-target=@($"#collapse{curso.Nombre}") aria-expanded="false" aria-controls=@($"collapse{curso.Nombre}")>
-                        Estudiantes
-                    </button>
-                </div>
-                <div class="collapse" id=@($"collapse{curso.Nombre}")>
-                    <div class="card card-body">
-                        Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident.
-                    </div>
-                </div>
-            </div>
-        }
-    }*@
     <div class="table-responsive">
             <table class="table">
                 <thead>

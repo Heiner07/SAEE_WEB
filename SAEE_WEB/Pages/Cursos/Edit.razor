@@ -26,30 +26,12 @@
 
     protected override Task OnParametersSetAsync()
     {
-        //foreach(CursosGrupos cursoGrupo in curso.CursosGrupos)
-        //{
-        //    GruposAgregados.Add(new Grupos()
-        //    {
-        //        Id = cursoGrupo.IdGrupo
-        //    });
-        //}
         GruposAgregados = curso.CursosGrupos.ToList();
         return base.OnParametersSetAsync();
     }
 
     async Task EditarCurso()
     {
-        //curso.CursosGrupos.Clear();
-        //foreach (Grupos grupo in GruposAgregados)
-        //{
-        //    curso.CursosGrupos.Add(new CursosGrupos()
-        //    {
-        //        IdGrupo = grupo.Id,
-        //        IdCurso = curso.Id,
-        //        IdGrupoNavigation = grupo,
-        //        IdCursoNavigation = curso
-        //    });
-        //}
         curso.CursosGrupos = GruposAgregados;
         await ServicioCursos.PutCursos(curso);
         Navigation.NavigateTo("cursos", true);

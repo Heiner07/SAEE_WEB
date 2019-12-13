@@ -20,12 +20,6 @@
                 <ListGrupos OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" />
             </div>
         }
-        @*<ListGruposAgregados BorrarGrupo="BorrarGrupo" GruposAgregados="@GruposAgregados" />
-        <br />*@
-        @if (GruposAgregados.Count > 0)
-        {
-            <text>Hay datos</text>
-        }
         <button type="submit" class="btn btn-success">@TextoBoton</button>
         <DataAnnotationsValidator />
     </EditForm>
