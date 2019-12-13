@@ -51,7 +51,8 @@ namespace SAEE_WEB.Models
                 entity.HasOne(d => d.IdCursoNavigation)
                     .WithMany(p => p.CursosGrupos)
                     .HasForeignKey(d => d.IdCurso)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    //.OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK__CursosGru__IdCur__0A9D95DB");
 
                 entity.HasOne(d => d.IdGrupoNavigation)
