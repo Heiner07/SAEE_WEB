@@ -1,0 +1,63 @@
+﻿<style>
+    input[type=text], select {
+        width: 20%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <form>
+                    <h1>Editando Evaluaciones</h1>
+                    <div class="form-group">
+                        <label for="InputGrupo"><strong>Cotidiano</strong></label>
+                        <input type="text" placeholder="Cotidiano" id="InputGrupo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGrupo"><strong>Tareas</strong></label>
+                        <input type="text" placeholder="Tareas" id="InputGrupo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGrupo"><strong>Pruebas</strong></label>
+                        <input type="text" placeholder="Pruebas" id="InputGrupo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGrupo"><strong>Proyectos</strong></label>
+                        <input type="text" placeholder="Proyectos" id="InputGrupo" />
+                    </div>
+                    <div class="form-group">
+                        <label for="InputGrupo"><strong>Asistencia</strong></label>
+                        <input type="text" placeholder="Asistencia" id="InputGrupo" />
+                    </div>
+                    <button type="button" class="btn btn-success mr-4" data-dismiss="modal">Guardar</button>
+
+                    <button type="button" class="btn btn-danger mr-4" data-dismiss="modal" @onclick="@RevertirCambios">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code{
+    [Parameter] public EventCallback CerrarEditar { get; set; }
+    private void OnSelected(string selection)
+    {
+        Console.WriteLine(selection);
+    }
+    async Task RevertirCambios()
+    {
+        await CerrarEditar.InvokeAsync(null);
+    }
+}
+

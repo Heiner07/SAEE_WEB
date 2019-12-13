@@ -7,9 +7,9 @@
                 <Dropdown TItem="string" OnSelected="@OnSelected">
                     <InitialTip>Grupo</InitialTip>
                     <ChildContent>
-                        <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                        <DropdownListItem Item="@list[0]">10-4</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">9-3</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">7-1</DropdownListItem>
                     </ChildContent>
                 </Dropdown>
             </div>
@@ -17,19 +17,21 @@
                 <Dropdown TItem="string" OnSelected="@OnSelected">
                     <InitialTip>Curso</InitialTip>
                     <ChildContent>
-                        <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                        <DropdownListItem Item="@list[0]">Estudios Sociales</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">Español</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">Matemáticas</DropdownListItem>
                     </ChildContent>
                 </Dropdown>
             </div>
             <div class="form-group">
-                <Dropdown TItem="string" OnSelected="@OnSelected">
+                <Dropdown TItem="string" OnSelected="@OnSelected1">
                     <InitialTip>Rubro</InitialTip>
                     <ChildContent>
-                        <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
+                        <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">Proyecto</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">Asistencia</DropdownListItem>
                     </ChildContent>
                 </Dropdown>
             </div>
@@ -47,16 +49,11 @@
                     <input class="form-control" type="text" placeholder="Descripcion" id="InputNombre" />
 
                 </div>
-                <div class="form-group">
-                    <Dropdown TItem="string" OnSelected="@OnSelected">
-                        <InitialTip>Estado</InitialTip>
-                        <ChildContent>
-                            <DropdownListItem Item="@list[0]">@list[0]</DropdownListItem>
-                            <DropdownListItem Item="@list[1]">@list[1]</DropdownListItem>
-                            <DropdownListItem Item="@list[2]">@list[2]</DropdownListItem>
-                        </ChildContent>
-                    </Dropdown>
-                </div>
+                @if (MostrarCMBEstado)
+                {
+                    <CmbEstados/>
+                }
+
                 <div class="form-group">
                     <label for="InputSegundoApellido"><strong>Fecha</strong></label>
                     <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputSegundoApellido" />
@@ -78,11 +75,18 @@
         </div>
     </div>
 @code {
+    Boolean MostrarCMBEstado = false;
     private void OnSelected(string selection)
     {
         Console.WriteLine(selection);
     }
-
+    private void OnSelected1(string selection)
+    {
+        if (selection.Equals("Asistencia")) {
+            Console.WriteLine(selection);
+            MostrarCMBEstado = !MostrarCMBEstado;
+        }
+    }
 }
 
 
