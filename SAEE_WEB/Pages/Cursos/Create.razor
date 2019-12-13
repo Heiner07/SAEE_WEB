@@ -5,18 +5,17 @@
 
 @code {
     Cursos curso = new Cursos();
-    List<Grupos> GruposAgregados = new List<Grupos>();
+    List<CursosGrupos> GruposAgregados;
+
+    protected override void OnInitialized()
+    {
+        GruposAgregados = curso.CursosGrupos.ToList();
+    }
 
     async Task AgregarCurso()
     {
-        curso.IdProfesor = 48;//Cambiar por el id del profesor auntenticado
-        foreach(Grupos grupo in GruposAgregados)
-        {
-            curso.CursosGrupos.Add(new CursosGrupos()
-            {
-                IdGrupo = grupo.Id
-            });
-        }
+        curso.IdProfesor = 1;//Cambiar por el id del profesor auntenticado
+        curso.CursosGrupos = GruposAgregados;
         await ServicioCursos.PostCursos(curso);
         Navigation.NavigateTo("cursos", true);
     }

@@ -1,0 +1,63 @@
+﻿@inject CursosServices ServicioCursos
+@inject NavigationManager Navigation
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <Form OnValidSubmit="EditarCurso"
+                      Titulo="Editando curso"
+                      TextoBoton="Guardar"
+                      Curso="@curso"
+                      GruposAgregados="@GruposAgregados"
+                 />
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public Cursos curso { get; set; }
+    [Parameter] public EventCallback CerrarEditar { get; set; }
+    List<CursosGrupos> GruposAgregados;
+
+    protected override Task OnParametersSetAsync()
+    {
+        //foreach(CursosGrupos cursoGrupo in curso.CursosGrupos)
+        //{
+        //    GruposAgregados.Add(new Grupos()
+        //    {
+        //        Id = cursoGrupo.IdGrupo
+        //    });
+        //}
+        GruposAgregados = curso.CursosGrupos.ToList();
+        return base.OnParametersSetAsync();
+    }
+
+    async Task EditarCurso()
+    {
+        //curso.CursosGrupos.Clear();
+        //foreach (Grupos grupo in GruposAgregados)
+        //{
+        //    curso.CursosGrupos.Add(new CursosGrupos()
+        //    {
+        //        IdGrupo = grupo.Id,
+        //        IdCurso = curso.Id,
+        //        IdGrupoNavigation = grupo,
+        //        IdCursoNavigation = curso
+        //    });
+        //}
+        curso.CursosGrupos = GruposAgregados;
+        await ServicioCursos.PutCursos(curso);
+        Navigation.NavigateTo("cursos", true);
+    }
+
+    async Task RevertirCambios()
+    {
+        await ServicioCursos.RollbackCursos(curso);
+        await CerrarEditar.InvokeAsync(null);
+    }
+}

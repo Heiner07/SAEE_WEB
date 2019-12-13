@@ -41,7 +41,8 @@ namespace SAEE_WEB.Models
                 entity.HasOne(d => d.IdProfesorNavigation)
                     .WithMany(p => p.Cursos)
                     .HasForeignKey(d => d.IdProfesor)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    //.OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Cursos__IdProfes__07C12930");
             });
 

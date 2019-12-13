@@ -11,10 +11,21 @@
             <input class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
             <ValidationMessage For="@(() => Curso.CantidadPeriodos)" />
         </div>
-        @*<ListGrupos AgregarGrupo="AgregarGrupo" GruposAgregados="@GruposAgregados" />
-        <br />
-        <ListGruposAgregados BorrarGrupo="BorrarGrupo" GruposAgregados="@GruposAgregados" />
+        <div class="form-group">
+            <button type="button" class="btn btn-outline-secondary" @onclick="MostarGruposAgregar">Grupos del curso</button>
+        </div>
+        @if (MostrarGrupos)
+        {
+            <div>
+                <ListGrupos OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" />
+            </div>
+        }
+        @*<ListGruposAgregados BorrarGrupo="BorrarGrupo" GruposAgregados="@GruposAgregados" />
         <br />*@
+        @if (GruposAgregados.Count > 0)
+        {
+            <text>Hay datos</text>
+        }
         <button type="submit" class="btn btn-success">@TextoBoton</button>
         <DataAnnotationsValidator />
     </EditForm>
@@ -24,16 +35,17 @@
     [Parameter] public Cursos Curso { get; set; }
     [Parameter] public String Titulo { get; set; }
     [Parameter] public String TextoBoton { get; set; }
-    [Parameter] public List<Grupos> GruposAgregados { get; set; }
+    [Parameter] public List<CursosGrupos> GruposAgregados { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+    Boolean MostrarGrupos = false;
 
-    void AgregarGrupo(Grupos grupo)
+    void MostarGruposAgregar()
     {
-        GruposAgregados.Add(grupo);
+        MostrarGrupos = true;
     }
 
-    void BorrarGrupo(Grupos grupo)
+    void OcultarGruposAgregar()
     {
-
+        MostrarGrupos = false;
     }
 }

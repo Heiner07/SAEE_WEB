@@ -23,7 +23,8 @@ namespace SAEE_WEB.Data
 
         public async Task<Cursos[]> GetCursos()
         {
-            return await _context.Cursos.Include<Cursos>("CursosGrupos").ToArrayAsync();
+            return await _context.Cursos.Include(curso => curso.CursosGrupos)
+                .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation).ToArrayAsync();
         }
 
         public async Task<Cursos> PostCursos(Cursos curso)
