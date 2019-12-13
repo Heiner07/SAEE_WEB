@@ -20,7 +20,8 @@ namespace SAEE_WEB.Data
 
         public async Task<List<Grupos>> GetGrupos()
         {
-            return await context.Grupos.ToListAsync();
+            return await context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
+                .ThenInclude(EG => EG.IdEstudianteNavigation).ToListAsync();
         }
 
         public async Task<List<Estudiantes>> GetEstudiantesXGrupos(Grupos grupo)
@@ -72,16 +73,15 @@ namespace SAEE_WEB.Data
         
         // DELETE: api/Grupos/5
         [HttpDelete("{id}")]
-        public async Task<Boolean> DeleteGrupo(int id)
+        public async Task<Boolean> DeleteGrupo(Grupos grupo)
         {
-            var grupos = await context.Grupos.FindAsync(id);
-            if (grupos == null)
+            if (grupo == null)
             {
                 return false;
             }
             try
             {
-                context.Grupos.Remove(grupos);
+                context.Remove(grupo);
                 await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

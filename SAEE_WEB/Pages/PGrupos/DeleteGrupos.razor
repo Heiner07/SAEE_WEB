@@ -28,7 +28,7 @@
     [Parameter] public String msjError { get; set; }
     protected async Task eliminarGrupo()
     {
-        Boolean exito = await gruposServices.DeleteGrupo(grupo.Id);
+        Boolean exito = await gruposServices.DeleteGrupo(grupo);
         if (exito)
         {
             navegar.NavigateTo("indice-grupos", true);
