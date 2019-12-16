@@ -61,15 +61,17 @@
     </div>
 </div>
 
+
 @if (mostrarBorrar)
 {
+    
     <SAEE_WEB.Pages.PEstudiantes.Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="true" Grupo="@Grupo" />
 
 
 }
 @if (mostrarAniadir)
 {
-    <ListaAgregarEstudiantes OcultarPanelAniadir="@OcultarPanelAniadir" Grupo="@Grupo" />
+    <ListaAgregarEstudiantes OcultarPanelAniadir="@OcultarPanelAniadir" Grupo="@Grupo" estudiantes="@estudiantes"/>
 
 
 }
@@ -80,7 +82,6 @@
 
     public List<Estudiantes> estudiantes;
     Estudiantes estudianteEditar;
-    Boolean mostrarEditar = false;
     Boolean mostrarBorrar = false;
     Boolean mostrarAniadir = false;
     String TextoBuscar = "";
@@ -100,17 +101,6 @@
         estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
     }
 
-    void MostrarPanelEditar(Estudiantes estudiante)
-    {
-        estudianteEditar = estudiante;
-        mostrarEditar = true;
-    }
-
-    void OcultarPanelEditar()
-    {
-        mostrarEditar = false;
-    }
-
     void MostrarPanelBorrar(Estudiantes estudiante)
     {
         estudianteEditar = estudiante;
@@ -122,6 +112,7 @@
     }
     void OcultarPanelAniadir()
     {
+        
         mostrarAniadir = false;
     }
 

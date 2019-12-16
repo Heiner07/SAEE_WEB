@@ -1,17 +1,7 @@
 ﻿@inject GruposServices gruposServices
 @inject NavigationManager navegar
 
-<style>
-    input[type=text], select {
-        width: 20%;
-        padding: 12px 20px;
-        margin: 8px 0;
-        display: inline-block;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        box-sizing: border-box;
-    }
-</style>
+
 
 <div class="modal" tabindex="-1" style="display:block" role="dialog">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
@@ -25,7 +15,7 @@
                     <h1>Editando Grupo</h1>
                     <label for="InputGrupo"><strong>Grupo</strong></label>
                     <p>
-                        <input type="text" placeholder="Grupo" @bind="grupo.Grupo" id="InputGrupo" />
+                        <input class="form-control" type="text" placeholder="Grupo" @bind="grupo.Grupo" id="InputGrupo" />
                         <ValidationMessage For="@(() => grupo.Grupo)" />
                     </p>
                     <p>

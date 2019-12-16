@@ -1,4 +1,5 @@
 ﻿@inject GruposServices gruposServices
+@inject EstudiantesServices  estudiantesServices
 
 <div class="modal" tabindex="-1" style="display:block" role="dialog">
     <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
@@ -8,11 +9,11 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
 
-                @if (estudiantes == null)
+                @if (todosEstudiantes == null)
                 {
                     <text>Cargando estudiantes...</text>
                 }
-                else if (estudiantes.Count == 0)
+                else if (todosEstudiantes.Count == 0)
                 {
                     <text>No hay estudiantes</text>
                 }
@@ -36,18 +37,35 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var estudiante in estudiantes)
+                                @foreach (var estudiante in todosEstudiantes)
                                 {
                                     if (estudiante.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
                                     {
-                                        <tr>
-                                            <td>@estudiante.Cedula</td>
-                                            <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
-                                            <td>
+                                        @if (estudiantes.Count == 0)
+                                        {
+                                            <tr>
+                                                <td>@estudiante.Cedula</td>
+                                                <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                                                <td>
 
-                                                <input name="ListaAgregar" type="checkbox" value="@estudiante.Id">
-                                            </td>
-                                        </tr>
+                                                    <input name="ListaAgregar" type="checkbox" bind="@agregado" @onchange="eventArgs => { CheckboxClicked(estudiante, eventArgs.Value); }">
+                                                </td>
+                                            </tr>
+                                        }
+                                        else if (!(estudiantes.Exists(grupoTemp => grupoTemp.Id == estudiante.Id)))
+                                        {
+
+                                            <tr>
+                                                <td>@estudiante.Cedula</td>
+                                                <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                                                <td>
+
+                                                    <input name="ListaAgregar" type="checkbox" bind="@agregado" @onchange="eventArgs => { CheckboxClicked(estudiante, eventArgs.Value); }" > 
+                                                </td>
+                                            </tr>
+
+
+                                        }
                                     }
                                 }
                             </tbody>
@@ -62,13 +80,14 @@
     </div>
 </div>
 @code {
-    public List<Estudiantes> estudiantes;
-
-    Estudiantes estudianteEditar;
+    public List<Estudiantes> todosEstudiantes;
+    public List<Estudiantes> estudiantesAgregar = new List<Estudiantes>();
+    public List<EstudiantesXgrupos> EG = new List<EstudiantesXgrupos>();
     String TextoBuscar = "";
     [Parameter] public EventCallback OcultarPanelAniadir { get; set; }
     [Parameter] public Grupos Grupo { get; set; }
-    public List<int> ListaAgregar { get; set; } = new List<int>();
+    [Parameter] public List<Estudiantes> estudiantes { get; set; } = new List<Estudiantes>();
+    public bool agregado { get; set; } = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,12 +96,36 @@
 
     async Task CargarEstudiantes()
     {
-        estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
+        //estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
+        todosEstudiantes = await estudiantesServices.GetEstudiantes();
     }
 
-    public void AgregarEstudiantes()
+    async Task AgregarEstudiantes()
     {
-        
+        estudiantes.AddRange(estudiantesAgregar);
+
+        foreach (var estudiante in estudiantes) {
+            EG.Add(new EstudiantesXgrupos() {
+                IdProfesor = 1,
+                IdGrupo = Grupo.Id,
+                IdEstudiante = estudiante.Id
+
+            });
+
+        }
+        Grupo.EstudiantesXgrupos = EG;
+        await gruposServices.EditarGrupo(Grupo);
+        await OcultarPanelAniadir.InvokeAsync(null);
+
+
+    }
+    void CheckboxClicked(Estudiantes estudiante,object checkedValue)
+    {
+        if ((bool)checkedValue)
+        {
+            estudiantesAgregar.Add(estudiante);
+        }
+        else estudiantesAgregar.Remove(estudiante);
 
     }
 

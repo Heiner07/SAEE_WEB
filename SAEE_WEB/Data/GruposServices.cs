@@ -19,9 +19,10 @@ namespace SAEE_WEB.Data
         }
 
         public async Task<List<Grupos>> GetGrupos()
-        {
+        {  
             return await context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
-                .ThenInclude(EG => EG.IdEstudianteNavigation).ToListAsync();
+                .ThenInclude(EG => EG.IdEstudianteNavigation).Include(curso => curso.CursosGrupos)
+                .ToListAsync();
         }
 
         public async Task<List<Estudiantes>> GetEstudiantesXGrupos(Grupos grupo)
@@ -92,7 +93,7 @@ namespace SAEE_WEB.Data
 
         public async Task<Boolean> DeleteEstudianteXGrupos(int idEstudiante,Grupos grupo) {
             //TRAERME EL ID DEL PROFESOR
-            var grupos = context.EstudiantesXgrupos.Where(x=>x.IdEstudiante==idEstudiante && x.IdGrupo==grupo.Id && x.IdProfesor==48)
+            var grupos = context.EstudiantesXgrupos.Where(x=>x.IdEstudiante==idEstudiante && x.IdGrupo==grupo.Id)
                 .FirstOrDefault();
             if (grupos == null)
             {
