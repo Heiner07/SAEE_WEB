@@ -2,31 +2,15 @@
 @inject NavigationManager navegar
 
 
-<style>
-    input[type=text], select {
-  width: 10%;
-  padding: 12px 20px;
-  margin: 8px 0;
-  display: inline-block;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-
-</style>
 <div class="card-body border rounded">
     <EditForm Context="formContext" Model="@nuevoGrupo">
         <div class="form-group">
             <h4>Agregando Grupo</h4>
-           
-                <label for="InputGrupo"><strong>Grupo</strong></label>
-                <p>
-                    <input type="text" id="InputGrupo" placeholder="Grupo" @bind="nuevoGrupo.Grupo" />
-                    <ValidationMessage For="@(() => nuevoGrupo.Grupo)" />
-                </p>
-
-            </div>
+            <label for="InputGrupo"><strong>Grupo</strong></label>
+            <input class="form-control" type="text" id="InputGrupo" placeholder="Grupo" @bind="nuevoGrupo.Grupo" />
+            <ValidationMessage For="@(() => nuevoGrupo.Grupo)" />
+        </div>
+        
         <button type="submit" class="btn btn-success" name="btn1" @onclick="@(() => crearGrupo())">Crear Grupo</button>
         <DataAnnotationsValidator />
     </EditForm>
