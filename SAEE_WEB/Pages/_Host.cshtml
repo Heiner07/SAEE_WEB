@@ -12,10 +12,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SAEE_WEB</title>
     <base href="~/" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <script>
-        function IniciarSesion(pNC, pCON) {
+        function myFunction() {
+            var x = document.getElementById("Password");
+            var eye = document.getElementById("MyEye");
+            if (x.type === "password") {
+                x.type = "text";
+                eye.className = "fa fa-eye-slash";
+            } else {
+                eye.className = "fa fa-eye";
+                x.type = "password";
+            }
+        }
+
+
+        function IniciarSesion(pNC, pCON) { 
             window.location.href = "/login?NC=" + pNC + "&CON=" + pCON;
         }
     </script>
