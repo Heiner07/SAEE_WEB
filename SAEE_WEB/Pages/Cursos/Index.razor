@@ -1,4 +1,6 @@
 ﻿@page "/cursos"
+@attribute [Authorize]
+
 <div class="container">
     <h3>Administración de cursos</h3>
 
@@ -13,6 +15,7 @@
     <List />
 </div>
 @code {
+
     Boolean MostrarPanelAgregar = false;
     String TextoBotonAgregar = "Agregar curso";
 

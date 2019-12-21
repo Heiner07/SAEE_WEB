@@ -1,13 +1,19 @@
-﻿<AuthorizeView>
+﻿
+<AuthorizeView>
     <Authorized>
-        <a href="Identity/Account/Manage">Hello, @context.User.Identity.Name!</a>
-        <form method="post" action="Identity/Account/LogOut">
-            <button type="submit" class="nav-link btn btn-link">Log out</button>
-        </form>
+        <a>Hola, @context.User.Identity.Name!</a>
+        @*<form method="post">
+            <button type="submit" class="nav-link btn btn-link" href="/logout?returnUrl=/">Cerrar sesión</button>
+        </form>*@
+        <a href="/logout?returnUrl=/">Cerrar sesión </a>
     </Authorized>
     <NotAuthorized>
         <!--<a href="Identity/Account/Register">Register</a>-->
         @*<a href="Identity/Account/Login">Iniciar sesión </a>*@
-        <a href="Inicio-Sesion">Iniciar sesión </a>
+        <a href="Inicio-Sesion">Iniciar sesión</a>
     </NotAuthorized>
 </AuthorizeView>
+
+@code{
+
+}

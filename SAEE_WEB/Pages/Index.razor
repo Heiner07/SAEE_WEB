@@ -1,5 +1,30 @@
 ﻿@page "/"
+@inject NavigationManager navigationManager
 
 <h1>¡Bienvenido!</h1>
-
+<AuthorizeView>
+    <Authorized>
+        Hola @context.User.Identity.Name
+        Su Id es @context.User.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value
+    </Authorized>
+</AuthorizeView>
 Sistema para la Administración de Evaluaciones de los Estudiantes
+
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        AuthenticationState authState = await AuthenticationState;
+        var usuario = authState.User;
+
+        //Obtener usuario desde código
+        //usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value;
+
+        if (!usuario.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("Inicio-Sesion");
+        }
+    }
+}
