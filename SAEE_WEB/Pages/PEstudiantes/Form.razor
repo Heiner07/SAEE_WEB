@@ -21,19 +21,18 @@
             <input class="form-control" type="text" placeholder="Segundo apellido" @bind="Estudiante.SegundoApellido" id="InputSegundoApellido" />
             <ValidationMessage For="@(() => Estudiante.SegundoApellido)" />
         </div>
+
         <div class="form-group">
             <label for="InputPin"><strong>Pin</strong></label>
             <div class="input-group">
                 <input type="password" class="form-control" ID="Password" placeholder="Pin (No Obligatorio)" @bind="Estudiante.Pin" data-toggle="password">
-
                 <div class="input-group-append">
-
                     <span class="input-group-text"><i class="fa fa-eye" id = "MyEye" onclick="myFunction()"> </i></span>
-
                 </div>
                 <ValidationMessage For="@(() => Estudiante.Pin)" />
             </div>
         </div>
+
         <button type="submit" class="btn btn-success">@TextoBoton</button>
         <DataAnnotationsValidator />
     </EditForm>
