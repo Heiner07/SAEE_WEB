@@ -28,8 +28,15 @@
         </div>
         <div class="form-group">
             <label for="InputContrasenia"><strong>Contraseña</strong></label>
-            <input class="form-control" type="text" placeholder="Contraseña" @bind="Profesor.Contrasenia" id="InputContrasenia" />
-            <ValidationMessage For="@(() => Profesor.Contrasenia)" />
+            <div class="input-group">
+                <input class="form-control" type=@claseContrasenia placeholder="Contraseña" @bind="Profesor.Contrasenia" id="InputContrasenia" />
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class=@claseEye @onclick="MostrarOcultarContrasenia"></i>
+                    </span>
+                </div>
+                <ValidationMessage For="@(() => Profesor.Contrasenia)" />
+            </div>
         </div>
         <button type="submit" class="btn btn-success">@TextoBoton</button>
         <DataAnnotationsValidator />
@@ -41,4 +48,11 @@
     [Parameter] public String Titulo { get; set; }
     [Parameter] public String TextoBoton { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+    String claseContrasenia = "password", claseEye = "fa fa-eye";
+
+    void MostrarOcultarContrasenia()
+    {
+        claseContrasenia = claseContrasenia == "password" ? "text" : "password";
+        claseEye = claseContrasenia == "password" ? "fa fa-eye" : "fa fa-eye-slash";
+    }
 }
