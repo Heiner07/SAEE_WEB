@@ -11,10 +11,10 @@
         </p>
         @if (MostrarPanelAgregar)
         {
-            <Create />
+            <Create IdProfesor="idProfesor" />
         }
         <br />
-        <List />
+        <List IdProfesor="idProfesor" />
     </div>
 }
 else
@@ -29,12 +29,14 @@ else
     Boolean MostrarPanelAgregar = false;
     String TextoBotonAgregar = "Agregar curso";
     String ROL = "";
+    int idProfesor = 0;
 
     protected override async Task OnInitializedAsync()
     {
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
         ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
+        idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
     }
 
     void AbrirCerrarFormAgregar()

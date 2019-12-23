@@ -67,8 +67,7 @@ else
     Boolean mostrarEditar = false;
     Boolean mostrarBorrar = false;
     String TextoBuscar = "";
-    [Parameter] public EventCallback Editar { get; set; }
-    [Parameter] public EventCallback Borrar { get; set; }
+    [Parameter] public int IdProfesor { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -77,7 +76,7 @@ else
 
     async Task CargarCursos()
     {
-        cursos = await ServicioCursos.GetCursos();
+        cursos = await ServicioCursos.GetCursos(IdProfesor);
     }
 
     void MostrarPanelEditar(Cursos curso)

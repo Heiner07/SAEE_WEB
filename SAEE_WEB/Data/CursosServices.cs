@@ -16,15 +16,17 @@ namespace SAEE_WEB.Data
             _context = context;
         }
 
-        public async Task<Cursos> GetCursos(int id)
+        public async Task<Cursos> GetCursos(int idProfesor, int idCurso)
         {
-            return await _context.Cursos.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Cursos.FirstOrDefaultAsync(x => x.Id == idCurso);
         }
 
-        public async Task<Cursos[]> GetCursos()
+        public async Task<Cursos[]> GetCursos(int idProfesor)
         {
+            
             return await _context.Cursos.Include(curso => curso.CursosGrupos)
-                .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation).ToArrayAsync();
+                .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
+                .Where(curso => curso.IdProfesor == idProfesor).ToArrayAsync();
         }
 
         public async Task<Cursos> PostCursos(Cursos curso)

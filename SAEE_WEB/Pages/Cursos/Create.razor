@@ -4,6 +4,8 @@
 <Form OnValidSubmit="AgregarCurso" Titulo="Agregando curso" TextoBoton="Agregar" Curso="@curso" GruposAgregados="@GruposAgregados" />
 
 @code {
+
+    [Parameter] public int IdProfesor { get; set; }
     Cursos curso = new Cursos();
     List<CursosGrupos> GruposAgregados;
 
@@ -14,7 +16,7 @@
 
     async Task AgregarCurso()
     {
-        curso.IdProfesor = 1;//Cambiar por el id del profesor auntenticado
+        curso.IdProfesor = IdProfesor;
         curso.CursosGrupos = GruposAgregados;
         await ServicioCursos.PostCursos(curso);
         Navigation.NavigateTo("cursos", true);
