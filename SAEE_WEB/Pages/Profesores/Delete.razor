@@ -10,13 +10,25 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                ¿Realmente desea borrar al profesor "@Profesor.Nombre  @Profesor.PrimerApellido  @Profesor.SegundoApellido" y toda su información relacionada?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
-                <button type="button" class="btn btn-primary" @onclick="EliminarProfesor">Borrar</button>
-            </div>
+            @if (Profesor.Administrador)
+            {
+                <div class="modal-body">
+                     El profesor "@Profesor.Nombre  @Profesor.PrimerApellido  @Profesor.SegundoApellido" es administrador, por lo tanto no puede ser borrado.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cerrar</button>
+                </div>
+            }
+            else
+            {
+                <div class="modal-body">
+                    ¿Realmente desea borrar al profesor "@Profesor.Nombre  @Profesor.PrimerApellido  @Profesor.SegundoApellido" y toda su información relacionada?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @onclick="EliminarProfesor">Borrar</button>
+                </div>
+            }
         </div>
     </div>
 </div>

@@ -51,8 +51,8 @@ namespace SAEE_WEB
                     new Claim("P", true.ToString()),
                     new Claim("E", false.ToString()),
                     (profesor.Administrador) ?
-                    new Claim(ClaimTypes.Role, "Administrator")
-                    : new Claim(ClaimTypes.Role, "Profesor"),
+                    new Claim("Rol", "Administrador")
+                    : new Claim("Rol", "Profesor"),
                     new Claim("Id", profesor.Id.ToString())
                 };
             }
@@ -63,7 +63,7 @@ namespace SAEE_WEB
                     new Claim(ClaimTypes.Name, estudiante.Nombre),
                     new Claim("P", false.ToString()),
                     new Claim("E", true.ToString()),
-                    new Claim(ClaimTypes.Role, "Estudiante"),
+                    new Claim("Rol", "Estudiante"),
                     new Claim("Id", estudiante.Id.ToString())
                 };
             }

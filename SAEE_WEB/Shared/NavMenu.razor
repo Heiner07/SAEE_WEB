@@ -16,41 +16,47 @@
                 </li>
             </NotAuthorized>
             <Authorized>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
-                        <span class="oi oi-home" aria-hidden="true"></span> Inicio
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="cursos">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Cursos
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="indice-grupos">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Grupos
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="indice-estudiantes">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Estudiantes
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="profesores">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Profesores
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="asignaciones">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Asignaciones
-                    </NavLink>
-                </li>
-                <li class="nav-item px-3">
-                    <NavLink class="nav-link" href="evaluaciones">
-                        <span class="oi oi-list-rich" aria-hidden="true"></span> Evaluaciones
-                    </NavLink>
-                </li>
+                @if (ROL.Equals("Profesor") || ROL.Equals("Administrador"))
+                {
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                            <span class="oi oi-home" aria-hidden="true"></span> Inicio
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="cursos">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Cursos
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="indice-grupos">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Grupos
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="indice-estudiantes">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Estudiantes
+                        </NavLink>
+                    </li>
+                    @if (ROL.Equals("Administrador"))
+                    {
+                        <li class="nav-item px-3">
+                            <NavLink class="nav-link" href="profesores">
+                                <span class="oi oi-list-rich" aria-hidden="true"></span> Profesores
+                            </NavLink>
+                        </li>
+                    }
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="asignaciones">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Asignaciones
+                        </NavLink>
+                    </li>
+                    <li class="nav-item px-3">
+                        <NavLink class="nav-link" href="evaluaciones">
+                            <span class="oi oi-list-rich" aria-hidden="true"></span> Evaluaciones
+                        </NavLink>
+                    </li>
+                }
                 <li class="nav-item px-3">
                     <NavLink class="nav-link" href="/logout?returnUrl=/">
                         <span class="oi oi-account-logout" aria-hidden="true"></span> Cerrar sesión
@@ -62,9 +68,24 @@
 </div>
 
 @code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
     bool collapseNavMenu = true;
+    String ROL = "";
 
     string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState authState = await AuthenticationState;
+        var usuario = authState.User;
+
+        if (usuario.Identity.IsAuthenticated)
+        {
+            ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
+        }
+    }
 
     void ToggleNavMenu()
     {

@@ -1,20 +1,41 @@
 ﻿@page "/profesores"
-<div class="container">
-    <h3>Administración de profesores</h3>
+@attribute [Authorize]
 
-    <p>
-        <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
-    </p>
-    @if (MostrarPanelAgregar)
-    {
-        <Create />
-    }
-    <br />
-    <List />
-</div>
+@if (ROL.Equals("Administrador"))
+{
+    <div class="container">
+        <h3>Administración de profesores</h3>
+
+        <p>
+            <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+        </p>
+        @if (MostrarPanelAgregar)
+        {
+            <Create />
+        }
+        <br />
+        <List />
+    </div>
+}
+else
+{
+    <text>No tiene permisos para ver el contenido</text>
+}
+
 @code {
+
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
     Boolean MostrarPanelAgregar = false;
     String TextoBotonAgregar = "Agregar profesor";
+    String ROL = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState authState = await AuthenticationState;
+        var usuario = authState.User;
+        ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
+    }
 
     void AbrirCerrarFormAgregar()
     {
