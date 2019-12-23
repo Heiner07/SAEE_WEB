@@ -72,6 +72,7 @@ else
     String TextoBuscar = "";
     [Parameter] public List<CursosGrupos> GruposAgregados { get; set; }
     [Parameter] public int IdCurso { get; set; }
+    [Parameter] public int IdProfesor { get; set; }
     [Parameter] public EventCallback OcultarModel { get; set; }
 
     protected override async Task OnInitializedAsync()
@@ -83,7 +84,7 @@ else
 
     async Task CargarGrupos()
     {
-        grupos = await gruposServices.GetGrupos();
+        grupos = await gruposServices.GetGrupos(IdProfesor);
     }
 
     void AgregarGrupo(Grupos grupo)

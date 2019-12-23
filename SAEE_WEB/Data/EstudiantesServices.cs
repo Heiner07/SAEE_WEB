@@ -16,9 +16,9 @@ namespace SAEE_WEB.Data
             this.context = context;
         }
 
-        public async Task<List<Estudiantes>> GetEstudiantes()
+        public async Task<List<Estudiantes>> GetEstudiantes(int idProfesor)
         {
-            return await context.Estudiantes.ToListAsync();
+            return await context.Estudiantes.Where(curso => curso.IdProfesor == idProfesor).ToListAsync();
         }
 
 

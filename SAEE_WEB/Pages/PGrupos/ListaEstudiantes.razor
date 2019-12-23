@@ -71,7 +71,7 @@
 }
 @if (mostrarAniadir)
 {
-    <ListaAgregarEstudiantes OcultarPanelAniadir="@OcultarPanelAniadir" Grupo="@Grupo" estudiantes="@estudiantes"/>
+    <ListaAgregarEstudiantes OcultarPanelAniadir="@OcultarPanelAniadir" Grupo="@Grupo" estudiantes="@estudiantes" IdProfesor="IdProfesor"/>
 
 
 }
@@ -89,7 +89,7 @@
     [Parameter] public EventCallback Borrar { get; set; }
     [Parameter] public EventCallback OcultarPanelEstudiantes { get; set; }
     [Parameter] public Grupos Grupo { get; set; }
-
+    [Parameter] public int IdProfesor { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

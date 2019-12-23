@@ -5,9 +5,9 @@
 
 @code {
     Estudiantes estudiante = new Estudiantes();
-
+    [Parameter] public int IdProfesor { get; set; }
     async Task AgregarEstudiante(){
-        estudiante.IdProfesor = 1;
+        estudiante.IdProfesor = IdProfesor;
         if (estudiante.Pin==null) { 
             estudiante.Pin = estudiantesServices.GenerarContrasenia();
 

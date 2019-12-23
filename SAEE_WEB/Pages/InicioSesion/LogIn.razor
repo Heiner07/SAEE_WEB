@@ -16,20 +16,25 @@
                         </div>
                         <div class="form-group">
                             <label for="InputContrasenia">Contraseña</label>
-                            <input class="form-control" type="password" @bind="Usuario.Contrasenia" id="InputContrasenia" />
-                            <ValidationMessage For="@(() => Usuario.Contrasenia)" />
-                        </div>
-                        @if (Error)
-                        {
-                            <div class="form-group">
-                                <label class="alert-danger">La cédula o contraseña es incorrecta</label>
+                            <div class="input-group">
+                                <input class="form-control" type="password" @bind="Usuario.Contrasenia" id="Password" />
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-eye" id="MyEye" onclick="myFunction()"> </i></span>
+                                </div>
+                                <ValidationMessage For="@(() => Usuario.Contrasenia)" />
                             </div>
-                        }
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Entrar</button>
-                        </div>
-                        <DataAnnotationsValidator />
-                    </EditForm>
+                         </div>
+                            @if (Error)
+                            {
+                                <div class="form-group">
+                                    <label class="alert-danger">La cédula o contraseña es incorrecta</label>
+                                </div>
+                            }
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-primary">Entrar</button>
+                            </div>
+                            <DataAnnotationsValidator />
+</EditForm>
                 </section>
             </div>
         </div>

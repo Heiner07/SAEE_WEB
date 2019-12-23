@@ -64,6 +64,7 @@ else
     String TextoBuscar = "";
     [Parameter] public EventCallback Editar { get; set; }
     [Parameter] public EventCallback Borrar { get; set; }
+    [Parameter] public int IdProfesor { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -72,7 +73,7 @@ else
 
     async Task CargarEstudiantes()
     {
-        estudiantes = await estudiantesServices.GetEstudiantes();
+        estudiantes = await estudiantesServices.GetEstudiantes(IdProfesor);
     }
 
     void MostrarPanelEditar(Estudiantes estudiante)

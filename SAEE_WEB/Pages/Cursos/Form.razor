@@ -17,7 +17,7 @@
         @if (MostrarGrupos)
         {
             <div>
-                <ListGrupos OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" />
+                <ListGrupos OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" IdProfesor="IdProfesor" />
             </div>
         }
         <button type="submit" class="btn btn-success">@TextoBoton</button>
@@ -31,6 +31,7 @@
     [Parameter] public String TextoBoton { get; set; }
     [Parameter] public List<CursosGrupos> GruposAgregados { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter] public int IdProfesor { get; set; }
     Boolean MostrarGrupos = false;
 
     void MostarGruposAgregar()

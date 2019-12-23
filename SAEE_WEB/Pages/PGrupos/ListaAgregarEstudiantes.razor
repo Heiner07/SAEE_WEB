@@ -88,7 +88,7 @@
     [Parameter] public Grupos Grupo { get; set; }
     [Parameter] public List<Estudiantes> estudiantes { get; set; } = new List<Estudiantes>();
     public bool agregado { get; set; } = false;
-
+    [Parameter] public int IdProfesor { get; set; }
     protected override async Task OnInitializedAsync()
     {
         await CargarEstudiantes();
@@ -97,7 +97,7 @@
     async Task CargarEstudiantes()
     {
         //estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
-        todosEstudiantes = await estudiantesServices.GetEstudiantes();
+        todosEstudiantes = await estudiantesServices.GetEstudiantes(IdProfesor);
     }
 
     async Task AgregarEstudiantes()

@@ -1,13 +1,16 @@
 ﻿@page "/indice-grupos"
 @inject GruposServices gruposServices
+@attribute [Authorize]
 @inject NavigationManager  navegar
+@if (ROL.Equals("Profesor") || ROL.Equals("Administrador"))
+{
     <div class="container">
         <h3>Administración de Grupos</h3>
         @if (mostrarError)
         {
             <div class="alert alert-warning alert-dismissible fade show" role="alert">
                 <strong>ERROR!</strong> @msjError
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError=false)">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError = false)">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -19,7 +22,7 @@
         </p>
         @if (MostrarPanelAgregar)
         {
-            <CreateGrupos nuevoGrupo="@nuevoGrupo" MostrarError="@mostrarError" />
+            <CreateGrupos nuevoGrupo="@nuevoGrupo" MostrarError="@mostrarError" IdProfesor="idProfesor"/>
 
         }
 
@@ -40,30 +43,30 @@
             <table class="table">
                 <thead>
                     <tr>
-                        <th >Grupo</th>
-                        <th >Año</th>
-                        <th >Opciones</th>
-                        
+                        <th>Grupo</th>
+                        <th>Año</th>
+                        <th>Opciones</th>
+
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var grupo in grupos)
                     {
-                    <tr>
+                        <tr>
 
-                        <td>@grupo.Grupo</td>
-                        <td>@grupo.Anio</td>
-                        <td>
+                            <td>@grupo.Grupo</td>
+                            <td>@grupo.Anio</td>
+                            <td>
 
-                            <button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>
-                            <button class="btn btn-outline-danger" @onclick="@(() => MostrarPanelBorrar(grupo))">Borrar</button>
-                            
-                            <button class="btn btn-outline-secondary" @onclick="@(() => MostrarPanelEstudiantes(grupo))">Estudiantes</button>
-                        </td>
-                       
+                                <button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>
+                                <button class="btn btn-outline-danger" @onclick="@(() => MostrarPanelBorrar(grupo))">Borrar</button>
+
+                                <button class="btn btn-outline-secondary" @onclick="@(() => MostrarPanelEstudiantes(grupo))">Estudiantes</button>
+                            </td>
 
 
-                    </tr>
+
+                        </tr>
 
                     }
 
@@ -84,89 +87,103 @@
         }
         @if (mostrarListaEstudiantes)
         {
-            <ListaEstudiantes OcultarPanelEstudiantes ="@OcultarPanelEstudiantes" Grupo="@grupoEstudiantes" />
+            <ListaEstudiantes OcultarPanelEstudiantes="@OcultarPanelEstudiantes" Grupo="@grupoEstudiantes" IdProfesor="idProfesor"/>
         }
     </div>
+}
+else
+{
 
-        @code{
+    <text>No tiene permisos para ver el contenido</text>
+}
 
-            public List<Grupos> grupos;
-            Grupos editarGrupo = new Grupos();
-            Grupos nuevoGrupo = new Grupos();
-            Grupos eliminarGrupo = new Grupos();
-            Grupos grupoEstudiantes = new Grupos();
-            Boolean mostrarBorrar = false;
-            Boolean mostrarError = false;
-            Boolean mostrarEditar = false;
-            Boolean mostrarListaEstudiantes = false;
-            String msjError = "";
-            Boolean MostrarPanelAgregar = false;
-            String TextoBotonAgregar = "Agregar Grupo";
-            protected override async Task OnInitializedAsync()
-            {
+@code{
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+    public List<Grupos> grupos;
+    Grupos editarGrupo = new Grupos();
+    Grupos nuevoGrupo = new Grupos();
+    Grupos eliminarGrupo = new Grupos();
+    Grupos grupoEstudiantes = new Grupos();
+    Boolean mostrarBorrar = false;
+    Boolean mostrarError = false;
+    Boolean mostrarEditar = false;
+    Boolean mostrarListaEstudiantes = false;
+    String msjError = "";
+    Boolean MostrarPanelAgregar = false;
+    String TextoBotonAgregar = "Agregar Grupo";
+    String ROL = "";
+    int idProfesor = 0;
 
-                await CargarGrupos();
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState authState = await AuthenticationState;
+        var usuario = authState.User;
+        ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
+        idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
 
-            }
-            async Task CargarGrupos()
-            {
-                grupos = await gruposServices.GetGrupos();
-            }
+        await CargarGrupos();
 
-
-
-            protected async Task cambiarEdicion(Grupos grupo)
-            {
-
-                editarGrupo = await gruposServices.GetGrupo(grupo.Id);
-                mostrarEditar = true;
-
-
-
-            }
-
-            void MostrarPanelBorrar(Grupos grupo)
-            {
-                eliminarGrupo = grupo;
-                mostrarBorrar = true;
-            }
-
-            void MostrarPanelEstudiantes(Grupos grupo)
-            {
-                grupoEstudiantes = grupo;
-                mostrarListaEstudiantes = true;
-            }
-
-             void OcultarPanelEstudiantes()
-            {
-                mostrarListaEstudiantes = false;
-            }
-
-            void OcultarPanelBorrar()
-            {
-                mostrarBorrar = false;
-
-            }
-
-            void cerrarEditar()
-            {
-                mostrarEditar = false;
-
-            }
-
-            void AbrirCerrarFormAgregar()
-            {
-                MostrarPanelAgregar = !MostrarPanelAgregar;
-                if (MostrarPanelAgregar)
-                {
-                    TextoBotonAgregar = "Ocultar Panel";
-                }
-                else
-                {
-                    TextoBotonAgregar = "Agregar Grupo";
-                }
-            }
+    }
+    async Task CargarGrupos()
+    {
+        grupos = await gruposServices.GetGrupos(idProfesor);
+    }
 
 
+
+    protected async Task cambiarEdicion(Grupos grupo)
+    {
+
+        editarGrupo = await gruposServices.GetGrupo(grupo.Id);
+        mostrarEditar = true;
+
+
+
+    }
+
+    void MostrarPanelBorrar(Grupos grupo)
+    {
+        eliminarGrupo = grupo;
+        mostrarBorrar = true;
+    }
+
+    void MostrarPanelEstudiantes(Grupos grupo)
+    {
+        grupoEstudiantes = grupo;
+        mostrarListaEstudiantes = true;
+    }
+
+    void OcultarPanelEstudiantes()
+    {
+        mostrarListaEstudiantes = false;
+    }
+
+    void OcultarPanelBorrar()
+    {
+        mostrarBorrar = false;
+
+    }
+
+    void cerrarEditar()
+    {
+        mostrarEditar = false;
+
+    }
+
+    void AbrirCerrarFormAgregar()
+    {
+        MostrarPanelAgregar = !MostrarPanelAgregar;
+        if (MostrarPanelAgregar)
+        {
+            TextoBotonAgregar = "Ocultar Panel";
         }
+        else
+        {
+            TextoBotonAgregar = "Agregar Grupo";
+        }
+    }
+
+
+}
 

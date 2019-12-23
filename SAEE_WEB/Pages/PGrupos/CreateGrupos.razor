@@ -17,6 +17,7 @@
 </div>
 @code {
     [Parameter] public Grupos nuevoGrupo { get; set; }
+    [Parameter] public int IdProfesor { get; set; }
     [Parameter] public String msjError { get; set; }
     [Parameter] public Boolean MostrarError { get; set; }
     DateTime fechaActual = DateTime.Today;
@@ -28,7 +29,7 @@
     {
         if (nuevoGrupo.Grupo != null)
         {
-            nuevoGrupo.IdProfesor = 1;
+            nuevoGrupo.IdProfesor = IdProfesor;
             nuevoGrupo.Anio = fechaActual.Year;
             Boolean exito = await gruposServices.PutGrupo(nuevoGrupo);
             if (exito)

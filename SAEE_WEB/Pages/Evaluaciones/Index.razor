@@ -125,11 +125,11 @@
 
     async Task CargarCursos()
     {
-        cursos = await ServicioCursos.GetCursos();
+       // cursos = await ServicioCursos.GetCursos();
     }
     async Task CursoSeleccionado(int selection)
     {
-        cursoSeleccionado = await ServicioCursos.GetCursos(selection);
+        //cursoSeleccionado = await ServicioCursos.GetCursos(selection);
         periodos = cursoSeleccionado.CantidadPeriodos;
         Console.WriteLine(cursoSeleccionado.CantidadPeriodos);
     }
