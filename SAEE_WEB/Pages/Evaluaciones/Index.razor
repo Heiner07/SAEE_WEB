@@ -1,100 +1,145 @@
 ﻿@page "/evaluaciones"
+@inject CursosServices ServicioCursos
 
 @{ var list = new List<string> { ".NET", "Python", "Java" }; }
-    <div class="container">
-        <h3>Evaluaciones</h3>
-        <form class="form-inline" action="/">
-            <div class="form-group">
-                <Dropdown TItem="string" OnSelected="@OnSelected">
-                    <InitialTip>Año</InitialTip>
-                    <ChildContent>
-                        <DropdownListItem Item="@list[0]">2017</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">2018</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">2019</DropdownListItem>
-                    </ChildContent>
-                </Dropdown>
-            </div>
-            <div class="form-group">
-                <Dropdown TItem="string" OnSelected="@OnSelected">
-                    <InitialTip>Periodo</InitialTip>
-                    <ChildContent>
-                        <DropdownListItem Item="@list[0]">1</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">2</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">3</DropdownListItem>
-                    </ChildContent>
-                </Dropdown>
-            </div>
-            <div class="form-group">
-                <Dropdown TItem="string" OnSelected="@OnSelected">
-                    <InitialTip>Curso</InitialTip>
-                    <ChildContent>
-                        <DropdownListItem Item="@list[0]">Estudios Sociales</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">Español</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">Matemáticas</DropdownListItem>
-                    </ChildContent>
-                </Dropdown>
-            </div>
-            <div class="form-group">
-                <Dropdown TItem="string" OnSelected="@OnSelected">
-                    <InitialTip>Grupo</InitialTip>
-                    <ChildContent>
-                        <DropdownListItem Item="@list[0]">10-4</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">9-3</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">7-1</DropdownListItem>
-                    </ChildContent>
-                </Dropdown>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-outline-success mr-4">Guardar</button>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-outline-danger mr-4">Exportar</button>
-            </div>
-        </form>
-        <p></p>
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre del estudiante</th>
-                        <th>Identificación</th>
-                        <th>Cotidiano</th>
-                        <th>Tarea</th>
-                        <th>Pruebas</th>
-                        <th>Proyectos</th>
-                        <th>Asistencia</th>
-                        <th>Nota Final</th>
-                        <th>Ponderado</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Cristopher Vaciana</td>
-                        <td>702400593</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td>100</td>
-                        <td>10</td>
-                        <td>3</td>
-                        <td><button type="button" class="btn btn-outline-info" @onclick="AbrirModal">Editar</button></td>
-                    </tr>
-                </tbody>
-            </table>
+<div class="container">
+    <h3>Evaluaciones</h3>
+    <form class="form-inline" action="/">
+        <div class="form-group">
+            <Dropdown TItem="string" OnSelected="@OnSelected">
+                <InitialTip>Año</InitialTip>
+                <ChildContent>
+                    <DropdownListItem Item="@list[0]">2017</DropdownListItem>
+                    <DropdownListItem Item="@list[1]">2018</DropdownListItem>
+                    <DropdownListItem Item="@list[2]">2019</DropdownListItem>
+                </ChildContent>
+            </Dropdown>
         </div>
-        <p></p>
-        <form class="form-inline">
-        </form>
-        @if (mostrarEditar)
-        { 
-            <EditEvaluaciones CerrarEditar="@cerrarEditar"></EditEvaluaciones>
-        }
+        <div class="form-group">
+            <Dropdown TItem="int" OnSelected="@CursoSeleccionado">
+                <InitialTip>Curso</InitialTip>
+                <ChildContent>
+                    @if (cursos == null)
+                    {
+
+                    }
+                    else if (cursos.Length == 0)
+                    {
+
+                    }
+                    else
+                    {
+                        @foreach (var curso in cursos)
+                        {
+                            <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
+                        }
+                    }
+                </ChildContent>
+            </Dropdown>
+        </div>
+        <div class="form-group">
+            <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
+                <InitialTip>Periodo</InitialTip>
+                <ChildContent>
+                    @if (periodos != 0)
+                    {
+                        @for (int i = 1; i < periodos; i++)
+                        {
+                            <DropdownListItem Item="@i">@i</DropdownListItem>
+                        }
+                    }
+                </ChildContent>
+            </Dropdown>
         </div>
 
+        <div class="form-group">
+            <Dropdown TItem="string" OnSelected="@OnSelected">
+                <InitialTip>Grupo</InitialTip>
+                <ChildContent>
+                    <DropdownListItem Item="@list[0]">10-4</DropdownListItem>
+                    <DropdownListItem Item="@list[1]">9-3</DropdownListItem>
+                    <DropdownListItem Item="@list[2]">7-1</DropdownListItem>
+                </ChildContent>
+            </Dropdown>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-outline-success mr-4">Guardar</button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-outline-danger mr-4">Exportar</button>
+        </div>
+    </form>
+    <p></p>
+    <div class="table-responsive">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre del estudiante</th>
+                    <th>Identificación</th>
+                    <th>Cotidiano</th>
+                    <th>Tarea</th>
+                    <th>Pruebas</th>
+                    <th>Proyectos</th>
+                    <th>Asistencia</th>
+                    <th>Nota Final</th>
+                    <th>Ponderado</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Cristopher Vaciana</td>
+                    <td>702400593</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td>100</td>
+                    <td>10</td>
+                    <td>3</td>
+                    <td><button type="button" class="btn btn-outline-info" @onclick="AbrirModal">Editar</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <p></p>
+    <form class="form-inline">
+    </form>
+    @if (mostrarEditar)
+    {
+        <EditEvaluaciones CerrarEditar="@cerrarEditar"></EditEvaluaciones>
+    }
+</div>
+
 @code{
+
+    Cursos[] cursos { get; set; }
+    Cursos cursoSeleccionado { get; set; }
+    int periodos { get; set; }
     Boolean mostrarEditar = false;
+    protected override async Task OnInitializedAsync()
+    {
+        await CargarCursos();
+        periodos = 0;
+    }
+
+    async Task CargarCursos()
+    {
+        cursos = await ServicioCursos.GetCursos();
+    }
+    async Task CursoSeleccionado(int selection)
+    {
+        cursoSeleccionado = await ServicioCursos.GetCursos(selection);
+        periodos = cursoSeleccionado.CantidadPeriodos;
+        Console.WriteLine(cursoSeleccionado.CantidadPeriodos);
+    }
+
+    private void PeriodoSeleccionado(int selection)
+    {
+        Console.WriteLine(selection);
+    }
+
+
     private void OnSelected(string selection)
     {
         Console.WriteLine(selection);
