@@ -26,7 +26,7 @@ namespace SAEE_WEB.Models
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Server=tcp:dbsaee.database.windows.net,1433;Initial Catalog=BDSAEE;Persist Security Info=False;User ID=saee;Password=Proyecto123#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+                optionsBuilder.UseSqlServer("Server=tcp:dbsaee.database.windows.net,1433;Initial Catalog=dbsaee;Persist Security Info=False;User ID=saee;Password=Proyecto123#;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
             }
         }
 
