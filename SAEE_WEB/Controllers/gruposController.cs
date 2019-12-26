@@ -25,7 +25,7 @@ namespace SAEE_WEB.Controllers
         // GET: api/Grupos/GetGrupos?id=IDPROFESOR
         [HttpGet]
         [Route("GetGrupos")]
-        public async Task<ActionResult<List<Grupos>>> GetGrupos(int id)
+        public async Task<ActionResult<IEnumerable<Grupos>>> GetGrupos(int id)
         {
             return await _context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
                 .ThenInclude(EG => EG.IdEstudianteNavigation).Include(curso => curso.CursosGrupos)
@@ -35,7 +35,7 @@ namespace SAEE_WEB.Controllers
         // GET: api/Grupos/GetEstudiantes?id=IDGRUPO
         [HttpGet]
         [Route("GetEstudiantes")]
-        public async Task<ActionResult<List<Estudiantes>>> GetEstudiantes(int id)
+        public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes(int id)
         {
             var lista = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == id).Include(z => z.IdEstudianteNavigation);
 
@@ -86,7 +86,7 @@ namespace SAEE_WEB.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Route("PostGrupos")]
-        public async Task<ActionResult<Grupos>> PostGrupos([FromBody]Grupos grupos)
+        public async Task<ActionResult<Grupos>> PostGrupos(Grupos grupos)
         {
             _context.Grupos.Add(grupos);
             await _context.SaveChangesAsync();

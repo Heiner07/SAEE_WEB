@@ -19,5 +19,5 @@ namespace SAEE_WEB.Models
         public virtual Profesores IdProfesorNavigation { get; set; }
         public virtual ICollection<CursosGrupos> CursosGrupos { get; set; }
         public virtual ICollection<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
-    }
+    }   
 }
