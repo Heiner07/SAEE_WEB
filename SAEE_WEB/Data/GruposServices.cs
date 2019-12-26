@@ -18,6 +18,7 @@ namespace SAEE_WEB.Data
             this.context = context;
         }
 
+        [HttpGet]
         public async Task<List<Grupos>> GetGrupos(int idProfesor)
         {  
             return await context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
@@ -28,7 +29,6 @@ namespace SAEE_WEB.Data
         public async Task<List<Estudiantes>> GetEstudiantesXGrupos(Grupos grupo)
         {
             var lista = context.EstudiantesXgrupos.Where(x => x.IdGrupo == grupo.Id).Include(z => z.IdEstudianteNavigation);
-            List<Estudiantes> estudiantesGrupos = new List<Estudiantes>();
             return await (from EG in lista
                           select EG.IdEstudianteNavigation).ToListAsync();
         }

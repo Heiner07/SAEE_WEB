@@ -22,31 +22,37 @@ namespace SAEE_WEB.Controllers
             _context = context;
         }
 
-        // GET: api/Grupos
+        // GET: api/Grupos/GetGrupos?id=IDPROFESOR
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Grupos>>> GetGrupos()
+        [Route("GetGrupos")]
+        public async Task<ActionResult<List<Grupos>>> GetGrupos(int id)
         {
-            return await _context.Grupos.ToListAsync();
+            return await _context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
+                .ThenInclude(EG => EG.IdEstudianteNavigation).Include(curso => curso.CursosGrupos)
+                .Where(curso => curso.IdProfesor == id).ToListAsync();
         }
 
-        // GET: api/Grupos/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Grupos>> GetGrupos(int id)
+        // GET: api/Grupos/GetEstudiantes?id=IDGRUPO
+        [HttpGet]
+        [Route("GetEstudiantes")]
+        public async Task<ActionResult<List<Estudiantes>>> GetEstudiantes(int id)
         {
-            var grupos = await _context.Grupos.FindAsync(id);
+            var lista = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == id).Include(z => z.IdEstudianteNavigation);
 
-            if (grupos == null)
+            if (lista == null)
             {
                 return NotFound();
             }
 
-            return grupos;
+            return await (from EG in lista
+                          select EG.IdEstudianteNavigation).ToListAsync();
         }
 
         // PUT: api/Grupos/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
+        [Route("PutGrupos")]
         public async Task<IActionResult> PutGrupos(int id, Grupos grupos)
         {
             if (id != grupos.Id)
@@ -75,16 +81,17 @@ namespace SAEE_WEB.Controllers
             return NoContent();
         }
 
-        // POST: api/Grupos
+        // POST: api/Grupos/PostGrupos?
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
-        public async Task<ActionResult<Grupos>> PostGrupos(Grupos grupos)
+        [Route("PostGrupos")]
+        public async Task<ActionResult<Grupos>> PostGrupos([FromBody]Grupos grupos)
         {
             _context.Grupos.Add(grupos);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetProfesores", new { id = grupos.Id }, grupos);
+            return CreatedAtAction("GetGrupos", new { id = grupos.Id }, grupos);
         }
 
         // DELETE: api/Grupos/5
