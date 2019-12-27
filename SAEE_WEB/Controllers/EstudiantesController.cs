@@ -23,9 +23,10 @@ namespace SAEE_WEB.Controllers
         // GET: api/Estudiantes
         [HttpGet]
         [Route("GetEstudiantes")]
-        public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes()
+        public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes(int id)
         {
-            return await _context.Estudiantes.ToListAsync();
+            return await _context.Estudiantes.Include(grupo => grupo.EstudiantesXgrupos)
+                .Where(curso => curso.IdProfesor == id).ToListAsync();
         }
 
         // GET: api/Estudiantes/5
@@ -92,18 +93,18 @@ namespace SAEE_WEB.Controllers
         // DELETE: api/Estudiantes/5
         [HttpDelete]
         [Route("DeleteEstudiantes")]
-        public async Task<ActionResult<Estudiantes>> DeleteEstudiantes(int id)
+        public async Task<ActionResult<Estudiantes>> DeleteEstudiantes(Estudiantes estudiante)
         {
-            var estudiantes = await _context.Estudiantes.FindAsync(id);
-            if (estudiantes == null)
+           
+            if (estudiante == null)
             {
                 return NotFound();
             }
 
-            _context.Estudiantes.Remove(estudiantes);
+            _context.Estudiantes.Remove(estudiante);
             await _context.SaveChangesAsync();
 
-            return estudiantes;
+            return estudiante;
         }
 
         private bool EstudiantesExists(int id)

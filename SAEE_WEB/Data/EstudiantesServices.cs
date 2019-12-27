@@ -18,10 +18,9 @@ namespace SAEE_WEB.Data
 
         public async Task<List<Estudiantes>> GetEstudiantes(int idProfesor)
         {
-            return await context.Estudiantes.Where(curso => curso.IdProfesor == idProfesor).ToListAsync();
+            return await context.Estudiantes.Include(grupo => grupo.EstudiantesXgrupos)
+                .Where(curso => curso.IdProfesor == idProfesor).ToListAsync();
         }
-
-
         [HttpGet("{id}", Name = "obtenerEstudiante")]
         public async Task<Estudiantes> GetEstudiante(int id)
         {
@@ -62,16 +61,15 @@ namespace SAEE_WEB.Data
 
         // DELETE: api/Estudiantes/5
         [HttpDelete("{id}")]
-        public async Task<Boolean> DeleteEstudiante(int id)
+        public async Task<Boolean> DeleteEstudiante(Estudiantes estudiante)
         {
-            var estudiante = await context.Estudiantes.FindAsync(id);
             if (estudiante == null)
             {
                 return false;
             }
             try
             {
-                context.Estudiantes.Remove(estudiante);
+                context.Remove(estudiante);
                 await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

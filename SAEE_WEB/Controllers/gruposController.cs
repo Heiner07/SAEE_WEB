@@ -96,18 +96,19 @@ namespace SAEE_WEB.Controllers
 
         // DELETE: api/Grupos/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Grupos>> DeleteGrupos(int id)
+        [Route("DeleteGrupos")]
+        public async Task<ActionResult<Grupos>> DeleteGrupos(Grupos grupo)
         {
-            var grupos = await _context.Grupos.FindAsync(id);
-            if (grupos == null)
+           
+            if (grupo == null)
             {
                 return NotFound();
             }
 
-            _context.Grupos.Remove(grupos);
+            _context.Grupos.Remove(grupo);
             await _context.SaveChangesAsync();
 
-            return grupos;
+            return grupo;
         }
 
         private bool GruposExists(int id)

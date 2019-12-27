@@ -33,7 +33,7 @@
     {
         if (!EnGrupos)
         {
-            await estudiantesServices.DeleteEstudiante(Estudiante.Id);
+            await estudiantesServices.DeleteEstudiante(Estudiante);
             Navigation.NavigateTo("indice-estudiantes", true);
         }
         else

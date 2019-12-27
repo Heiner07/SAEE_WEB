@@ -87,7 +87,7 @@ namespace SAEE_WEB.Models
                 entity.HasOne(d => d.IdProfesorNavigation)
                     .WithMany(p => p.Estudiantes)
                     .HasForeignKey(d => d.IdProfesor)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK__Estudiant__IdPro__73BA3083");
             });
 
@@ -110,7 +110,7 @@ namespace SAEE_WEB.Models
                 entity.HasOne(d => d.IdProfesorNavigation)
                     .WithMany(p => p.EstudiantesXgrupos)
                     .HasForeignKey(d => d.IdProfesor)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK__Estudiant__IdPro__76969D2E");
             });
 
