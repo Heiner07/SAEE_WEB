@@ -2,7 +2,7 @@
 @inject CursosServices ServicioCursos
 @inject CursosGruposServices ServicioGruposCursos
 @inject GruposServices ServicioGrupos
-@{ var list = new List<string> { ".NET", "Python", "Java" }; }
+@{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano","Proyecto","Asistencia" }; }
 <div class="container">
     <h3>Asignaciones</h3>
     <form class="form-inline" action="/">
@@ -49,8 +49,8 @@
                     <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
                     <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
                     <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
-                    <DropdownListItem Item="@list[2]">Proyecto</DropdownListItem>
-                    <DropdownListItem Item="@list[2]">Asistencia</DropdownListItem>
+                    <DropdownListItem Item="@list[3]">Proyecto</DropdownListItem>
+                    <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
                 </ChildContent>
             </Dropdown>
         </div>
@@ -144,10 +144,14 @@
     }
     private void OnSelected1(string selection)
     {
+        Console.WriteLine(selection);
         if (selection.Equals("Asistencia"))
         {
-            Console.WriteLine(selection);
-            MostrarCMBEstado = !MostrarCMBEstado;
+            MostrarCMBEstado = true;
+        }
+        else
+        {
+            MostrarCMBEstado = false;
         }
     }
 }
