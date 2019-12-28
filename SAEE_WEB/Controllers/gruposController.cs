@@ -53,29 +53,17 @@ namespace SAEE_WEB.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         [Route("PutGrupos")]
-        public async Task<IActionResult> PutGrupos(int id, Grupos grupos)
-        {
-            if (id != grupos.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(grupos).State = EntityState.Modified;
-
+        public async Task<IActionResult> PutGrupos(Grupos grupos)
+        { 
+            
             try
             {
+                _context.Entry(grupos).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!GruposExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return BadRequest();
             }
 
             return NoContent();
