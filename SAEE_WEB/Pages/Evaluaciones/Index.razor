@@ -43,7 +43,7 @@
                 <ChildContent>
                     @if (periodos != 0)
                     {
-                        @for (int i = 1; i < periodos; i++)
+                        @for (int i = 1; i <= periodos; i++)
                         {
                             <DropdownListItem Item="@i">@i</DropdownListItem>
                         }
@@ -117,19 +117,31 @@
     Cursos cursoSeleccionado { get; set; }
     int periodos { get; set; }
     Boolean mostrarEditar = false;
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
+    Boolean MostrarPanelAgregar = false;
+    String TextoBotonAgregar = "Agregar curso";
+    String ROL = "";
+    int idProfesor = 0;
     protected override async Task OnInitializedAsync()
     {
+        AuthenticationState authState = await AuthenticationState;
+        var usuario = authState.User;
+        ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
+        idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
+        Console.WriteLine(idProfesor);
         await CargarCursos();
         periodos = 0;
     }
 
     async Task CargarCursos()
     {
-       // cursos = await ServicioCursos.GetCursos();
+        cursos = await ServicioCursos.GetCursos(idProfesor);
     }
+
     async Task CursoSeleccionado(int selection)
     {
-        //cursoSeleccionado = await ServicioCursos.GetCursos(selection);
+        cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor,selection);
         periodos = cursoSeleccionado.CantidadPeriodos;
         Console.WriteLine(cursoSeleccionado.CantidadPeriodos);
     }
