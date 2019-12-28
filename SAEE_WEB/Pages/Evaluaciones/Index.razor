@@ -1,17 +1,19 @@
 ﻿@page "/evaluaciones"
 @inject CursosServices ServicioCursos
+@inject CursosGruposServices ServicioGruposCursos
+@inject GruposServices ServicioGrupos
 
-@{ var list = new List<string> { ".NET", "Python", "Java" }; }
+
 <div class="container">
     <h3>Evaluaciones</h3>
     <form class="form-inline" action="/">
         <div class="form-group">
-            <Dropdown TItem="string" OnSelected="@OnSelected">
+            <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
                 <InitialTip>Año</InitialTip>
                 <ChildContent>
-                    <DropdownListItem Item="@list[0]">2017</DropdownListItem>
-                    <DropdownListItem Item="@list[1]">2018</DropdownListItem>
-                    <DropdownListItem Item="@list[2]">2019</DropdownListItem>
+                    <DropdownListItem Item="2017">2017</DropdownListItem>
+                    <DropdownListItem Item="2018">2018</DropdownListItem>
+                    <DropdownListItem Item="2019">2019</DropdownListItem>
                 </ChildContent>
             </Dropdown>
         </div>
@@ -41,9 +43,9 @@
             <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
                 <InitialTip>Periodo</InitialTip>
                 <ChildContent>
-                    @if (periodos != 0)
+                    @if (periodos.Count != 0)
                     {
-                        @for (int i = 1; i <= periodos; i++)
+                        @foreach (var i in periodos)
                         {
                             <DropdownListItem Item="@i">@i</DropdownListItem>
                         }
@@ -53,14 +55,21 @@
         </div>
 
         <div class="form-group">
-            <Dropdown TItem="string" OnSelected="@OnSelected">
+            <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
                 <InitialTip>Grupo</InitialTip>
                 <ChildContent>
-                    <DropdownListItem Item="@list[0]">10-4</DropdownListItem>
-                    <DropdownListItem Item="@list[1]">9-3</DropdownListItem>
-                    <DropdownListItem Item="@list[2]">7-1</DropdownListItem>
+                    @if (gruposenCurso.Count != 0)
+                    {
+                        @foreach (var i in gruposenCurso)
+                        {
+                            <DropdownListItem Item="@i.Id">@i.Grupo</DropdownListItem>
+                        }
+                    }
                 </ChildContent>
             </Dropdown>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-outline-warning mr-4">Ver</button>
         </div>
         <div class="form-group">
             <button type="button" class="btn btn-outline-success mr-4">Guardar</button>
@@ -115,34 +124,53 @@
 
     Cursos[] cursos { get; set; }
     Cursos cursoSeleccionado { get; set; }
-    int periodos { get; set; }
+    List<CursosGrupos> gruposenCursoid { get; set; }
+    List<Grupos> gruposenCurso { get; set; }
+    List<int> periodos { get; set; }
     Boolean mostrarEditar = false;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
-    Boolean MostrarPanelAgregar = false;
-    String TextoBotonAgregar = "Agregar curso";
-    String ROL = "";
     int idProfesor = 0;
     protected override async Task OnInitializedAsync()
     {
+        periodos = new List<int>();
+        gruposenCursoid = new List<CursosGrupos>();
+        gruposenCurso = new List<Grupos>();
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
-        ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
         idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
         Console.WriteLine(idProfesor);
         await CargarCursos();
-        periodos = 0;
     }
 
     async Task CargarCursos()
     {
         cursos = await ServicioCursos.GetCursos(idProfesor);
+
     }
 
     async Task CursoSeleccionado(int selection)
     {
-        cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor,selection);
-        periodos = cursoSeleccionado.CantidadPeriodos;
+        cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor, selection);
+        CursosGrupos[] gruposid = await ServicioGruposCursos.GetCursosGrupos();
+        List<Grupos> grupos = await ServicioGrupos.GetGrupos(idProfesor);
+        int idCurso = cursoSeleccionado.Id;
+        int per = cursoSeleccionado.CantidadPeriodos;
+        foreach (var grupo in gruposid) {
+            if (grupo.IdCurso == idCurso){
+                foreach(var g in grupos)
+                {
+                    if(g.Id == grupo.IdGrupo)
+                    {
+                        gruposenCurso.Add(g);
+                    }
+                }
+            }
+        }
+
+
+        for (int i = 1; i <= per; i++)
+            periodos.Add(i);
         Console.WriteLine(cursoSeleccionado.CantidadPeriodos);
     }
 
