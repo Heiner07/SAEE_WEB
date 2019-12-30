@@ -25,7 +25,10 @@ namespace SAEE_WEB.Data
 
         public async Task<Profesores[]> GetProfesores()
         {
-            return await _context.Profesores.ToArrayAsync();
+            return await _context.Profesores.Include(profesor => profesor.Cursos)
+                .Include(profesor => profesor.EstudiantesXgrupos)
+                .Include(profesor => profesor.Estudiantes)
+                .ToArrayAsync();
         }
 
         public async Task<Profesores> PostProfesores(Profesores profesor)
