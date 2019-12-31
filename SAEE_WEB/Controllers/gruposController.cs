@@ -54,8 +54,8 @@ namespace SAEE_WEB.Controllers
         [HttpPut("{id}")]
         [Route("PutGrupos")]
         public async Task<IActionResult> PutGrupos(Grupos grupos)
-        { 
-            
+        {
+
             try
             {
                 _context.Entry(grupos).State = EntityState.Modified;
@@ -87,7 +87,7 @@ namespace SAEE_WEB.Controllers
         [Route("DeleteGrupos")]
         public async Task<ActionResult<Grupos>> DeleteGrupos(Grupos grupo)
         {
-           
+
             if (grupo == null)
             {
                 return NotFound();
@@ -98,7 +98,29 @@ namespace SAEE_WEB.Controllers
 
             return grupo;
         }
+        [HttpDelete]
+        [Route("DeleteEG")]
+        public async Task<Boolean> DeleteEG(EstudiantesXgrupos eg)
+        {
+           // var grupos = _context.EstudiantesXgrupos.Where(x => x.IdEstudiante == idEstudiante && x.IdGrupo == idGrupo)
+            //.FirstOrDefault();
+            if (eg == null)
+            {
+                return false;
+            }
+            try
+            {
+                _context.EstudiantesXgrupos.Remove(eg);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
 
+
+        }
         private bool GruposExists(int id)
         {
             return _context.Grupos.Any(e => e.Id == id);
