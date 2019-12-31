@@ -90,7 +90,10 @@ namespace SAEE_WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Profesores>> DeleteProfesores(int id)
         {
-            var profesores = await _context.Profesores.FindAsync(id);
+            var profesores = await _context.Profesores.Include(profesor => profesor.Cursos)
+                .Include(profesor => profesor.EstudiantesXgrupos)
+                .Include(profesor => profesor.Estudiantes)
+                .FirstOrDefaultAsync(x => x.Id == id);
             if (profesores == null)
             {
                 return NotFound();

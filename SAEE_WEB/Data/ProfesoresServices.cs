@@ -25,10 +25,15 @@ namespace SAEE_WEB.Data
 
         public async Task<Profesores[]> GetProfesores()
         {
+            return await _context.Profesores.ToArrayAsync();
+        }
+
+        private async Task<Profesores> GetProfesorCompleteData(int id)
+        {
             return await _context.Profesores.Include(profesor => profesor.Cursos)
                 .Include(profesor => profesor.EstudiantesXgrupos)
                 .Include(profesor => profesor.Estudiantes)
-                .ToArrayAsync();
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<Profesores> PostProfesores(Profesores profesor)
@@ -49,7 +54,8 @@ namespace SAEE_WEB.Data
 
         public async Task<Boolean> DeleteProfesores(Profesores profesor)
         {
-            _context.Remove(profesor);
+
+            _context.Remove(await GetProfesorCompleteData(profesor.Id));
             await _context.SaveChangesAsync();
 
             return await Task.FromResult(true);
