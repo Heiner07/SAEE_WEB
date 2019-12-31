@@ -27,25 +27,21 @@ namespace SAEE_WEB.Controllers
         [Route("GetGrupos")]
         public async Task<ActionResult<IEnumerable<Grupos>>> GetGrupos(int id)
         {
-            return await _context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
+            return await _context.Grupos.Where(grupo => grupo.IdProfesor == id).ToListAsync();
+            /*return await _context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
                 .ThenInclude(EG => EG.IdEstudianteNavigation).Include(curso => curso.CursosGrupos)
-                .Where(curso => curso.IdProfesor == id).ToListAsync();
+                .Where(curso => curso.IdProfesor == id).ToListAsync();*/
         }
 
         // GET: api/Grupos/GetEstudiantes?id=IDGRUPO
         [HttpGet]
-        [Route("GetEstudiantes")]
-        public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes(int id)
+        [Route("GetEG")]
+        public async Task<ActionResult<IEnumerable<EstudiantesXgrupos>>> GetEG(int id)
         {
-            var lista = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == id).Include(z => z.IdEstudianteNavigation);
-
-            if (lista == null)
-            {
-                return NotFound();
-            }
-
-            return await (from EG in lista
-                          select EG.IdEstudianteNavigation).ToListAsync();
+            var lista = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == id).Include(z => z.IdEstudianteNavigation).ToListAsync();
+            return await lista;
+            //return await (from EG in lista
+            //              select EG.IdEstudianteNavigation).ToListAsync();
         }
 
         // PUT: api/Grupos/5
@@ -87,7 +83,7 @@ namespace SAEE_WEB.Controllers
         [Route("DeleteGrupos")]
         public async Task<ActionResult<Grupos>> DeleteGrupos(Grupos grupo)
         {
-
+            grupo.EstudiantesXgrupos = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == grupo.Id).Include(z => z.IdEstudianteNavigation).ToList();
             if (grupo == null)
             {
                 return NotFound();
