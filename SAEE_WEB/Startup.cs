@@ -69,6 +69,7 @@ namespace SAEE_WEB
             services.AddScoped<GruposServices>();
             services.AddScoped<ProfesoresServices>();
             services.AddScoped<EstudiantesServices>();
+            services.AddScoped<AsignacionesServices>();
 
             services.AddHttpContextAccessor();
             services.AddScoped<HttpContextAccessor>();
