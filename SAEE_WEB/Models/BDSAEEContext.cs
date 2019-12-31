@@ -22,6 +22,9 @@ namespace SAEE_WEB.Models
         public virtual DbSet<Grupos> Grupos { get; set; }
         public virtual DbSet<Profesores> Profesores { get; set; }
 
+        public virtual DbSet<Asignaciones> Asignaciones { get; set; }
+
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -151,6 +154,47 @@ namespace SAEE_WEB.Models
                     .IsRequired()
                     .HasMaxLength(100);
             });
+
+            modelBuilder.Entity<Asignaciones>(entity =>
+            {
+                entity.Property(e => e.Tipo)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Profesor)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Curso)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Grupo)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Nombre)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Descripcion)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Estado)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Fecha)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Puntos)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Porcentaje)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Nota)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
+
+
+
+
 
             OnModelCreatingPartial(modelBuilder);
         }

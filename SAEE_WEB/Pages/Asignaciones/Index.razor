@@ -2,7 +2,10 @@
 @inject CursosServices ServicioCursos
 @inject CursosGruposServices ServicioGruposCursos
 @inject GruposServices ServicioGrupos
-@{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano","Proyecto","Asistencia" }; }
+
+
+@{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
+@{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
 <div class="container">
     <h3>Asignaciones</h3>
     <form class="form-inline" action="/">
@@ -29,7 +32,7 @@
             </Dropdown>
         </div>
         <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@OnSelected">
+            <Dropdown TItem="int" OnSelected="@GrupoSeleccionado">
                 <InitialTip>Grupo</InitialTip>
                 <ChildContent>
                     @if (gruposenCurso.Count != 0)
@@ -43,7 +46,7 @@
             </Dropdown>
         </div>
         <div class="form-group">
-            <Dropdown TItem="string" OnSelected="@OnSelected1">
+            <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
                 <InitialTip>Rubro</InitialTip>
                 <ChildContent>
                     <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
@@ -70,7 +73,18 @@
             </div>
             @if (MostrarCMBEstado)
             {
-                <CmbEstados />
+                <div class="form-group" id="cmbEstado">
+                    <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
+                        <InitialTip>Estado</InitialTip>
+                        <ChildContent>
+                            <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
+                            <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
+                            <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
+                            <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
+                            <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
+                        </ChildContent>
+                    </Dropdown>
+                </div>
             }
 
             <div class="form-group">
@@ -88,6 +102,12 @@
                 <input class="form-control" type="number" placeholder="Porcentaje" id="InputCorreo" />
 
             </div>
+            <div class="form-group">
+                <label for="InputCorreo"><strong>Nota</strong></label>
+                <input class="form-control" type="number" placeholder="Nota" id="InputCorreo" />
+
+            </div>
+
             <button type="submit" class="btn btn-success">Crear</button>
 
         </form>
@@ -95,6 +115,7 @@
 </div>
 @code {
     Boolean MostrarCMBEstado = false;
+   // Asignaciones asignacion { get; set; }
     Cursos[] cursos { get; set; }
     Cursos cursoSeleccionado { get; set; }
     List<CursosGrupos> gruposenCursoid { get; set; }
@@ -110,6 +131,7 @@
         var usuario = authState.User;
         idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
         Console.WriteLine(idProfesor);
+     //   asignacion.Profesor = idProfesor;
         await CargarCursos();
     }
 
@@ -125,25 +147,35 @@
         List<Grupos> grupos = await ServicioGrupos.GetGrupos(idProfesor);
         int idCurso = cursoSeleccionado.Id;
         int per = cursoSeleccionado.CantidadPeriodos;
-        foreach (var grupo in gruposid) {
-            if (grupo.IdCurso == idCurso){
-                foreach(var g in grupos)
+        foreach (var grupo in gruposid)
+        {
+            if (grupo.IdCurso == idCurso)
+            {
+                foreach (var g in grupos)
                 {
-                    if(g.Id == grupo.IdGrupo)
+                    if (g.Id == grupo.IdGrupo)
                     {
                         gruposenCurso.Add(g);
                     }
                 }
             }
         }
+     //   asignacion.Curso = selection;
     }
 
-    private void OnSelected(int selection)
+    private void GrupoSeleccionado(int selection)
     {
+       // asignacion.Grupo = selection;
         Console.WriteLine(selection);
     }
-    private void OnSelected1(string selection)
+    private void EstadoSeleccionado(string selection)
     {
+       // asignacion.Estado= selection;
+        Console.WriteLine(selection);
+    }
+    private void RubroSeleccionado(string selection)
+    {
+      //  asignacion.Tipo = selection;
         Console.WriteLine(selection);
         if (selection.Equals("Asistencia"))
         {
