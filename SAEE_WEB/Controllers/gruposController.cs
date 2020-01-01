@@ -133,7 +133,7 @@ namespace SAEE_WEB.Controllers
             {
                 return null;
             }
-            return CreatedAtAction("GetEG", new { id = eg.Id }, eg); ;
+            return CreatedAtAction("GetEG", new { id = eg.Id }, eg);
 
 
         }
