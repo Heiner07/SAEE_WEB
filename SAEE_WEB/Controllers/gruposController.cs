@@ -121,21 +121,9 @@ namespace SAEE_WEB.Controllers
         [Route("PostEG")]
         public async Task<ActionResult<EstudiantesXgrupos>> PostEG(EstudiantesXgrupos eg)
         {
-            // var grupos = _context.EstudiantesXgrupos.Where(x => x.IdEstudiante == idEstudiante && x.IdGrupo == idGrupo)
-            //.FirstOrDefault();
-            
-            try
-            {
-                _context.EstudiantesXgrupos.Add(eg);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return null;
-            }
+            _context.EstudiantesXgrupos.Add(eg);
+            await _context.SaveChangesAsync();
             return CreatedAtAction("GetEG", new { id = eg.Id }, eg);
-
-
         }
         private bool GruposExists(int id)
         {
