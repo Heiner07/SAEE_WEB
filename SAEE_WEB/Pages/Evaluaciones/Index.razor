@@ -124,7 +124,6 @@
 
     Cursos[] cursos { get; set; }
     Cursos cursoSeleccionado { get; set; }
-    List<CursosGrupos> gruposenCursoid { get; set; }
     List<Grupos> gruposenCurso { get; set; }
     List<int> periodos { get; set; }
     Boolean mostrarEditar = false;
@@ -134,7 +133,6 @@
     protected override async Task OnInitializedAsync()
     {
         periodos = new List<int>();
-        gruposenCursoid = new List<CursosGrupos>();
         gruposenCurso = new List<Grupos>();
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
@@ -151,6 +149,8 @@
 
     async Task CursoSeleccionado(int selection)
     {
+        gruposenCurso = new List<Grupos>();
+        periodos = new List<int>();
         cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor, selection);
         CursosGrupos[] gruposid = await ServicioGruposCursos.GetCursosGrupos();
         List<Grupos> grupos = await ServicioGrupos.GetGrupos(idProfesor);

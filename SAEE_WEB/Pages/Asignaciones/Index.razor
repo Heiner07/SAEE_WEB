@@ -6,127 +6,156 @@
 
 @{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
 @{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
-<div class="container">
-    <h3>Asignaciones</h3>
-    <form class="form-inline" action="/">
-        <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@CursoSeleccionado">
-                <InitialTip>Curso</InitialTip>
-                <ChildContent>
-                    @if (cursos == null)
-                    {
-
-                    }
-                    else if (cursos.Length == 0)
-                    {
-
-                    }
-                    else
-                    {
-                        @foreach (var curso in cursos)
+    <div class="container">
+        @if (mostrarError)
+        {
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                <strong>ERROR!</strong> @msjError
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError = false)">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        }
+        <h3>Asignaciones</h3>
+        <form class="form-inline">
+            <div class="form-group">
+                <Dropdown TItem="int" OnSelected="@CursoSeleccionado">
+                    <InitialTip>Curso</InitialTip>
+                    <ChildContent>
+                        @if (cursos == null)
                         {
-                            <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
+
                         }
-                    }
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@GrupoSeleccionado">
-                <InitialTip>Grupo</InitialTip>
-                <ChildContent>
-                    @if (gruposenCurso.Count != 0)
-                    {
-                        @foreach (var i in gruposenCurso)
+                        else if (cursos.Length == 0)
                         {
-                            <DropdownListItem Item="@i.Id">@i.Grupo</DropdownListItem>
+
                         }
-                    }
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
-                <InitialTip>Rubro</InitialTip>
-                <ChildContent>
-                    <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
-                    <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
-                    <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
-                    <DropdownListItem Item="@list[3]">Proyecto</DropdownListItem>
-                    <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
-                </ChildContent>
-            </Dropdown>
-        </div>
-    </form>
-    <p></p>
-    <div class="card-body border rounded">
-        <form>
-            <div class="form-group">
-                <label for="InputCedula"><strong>Nombre</strong></label>
-                <input class="form-control" type="text" placeholder="Nombre" id="InputCedula" />
-
+                        else
+                        {
+                            @foreach (var curso in cursos)
+                            {
+                                <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
+                            }
+                        }
+                    </ChildContent>
+                </Dropdown>
             </div>
             <div class="form-group">
-                <label for="InputNombre"><strong>Descripcion</strong></label>
-                <input class="form-control" type="text" placeholder="Descripcion" id="InputNombre" />
-
-            </div>
-            @if (MostrarCMBEstado)
-            {
-                <div class="form-group" id="cmbEstado">
-                    <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
-                        <InitialTip>Estado</InitialTip>
-                        <ChildContent>
-                            <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
-                            <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
-                            <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
-                            <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
-                            <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
-                        </ChildContent>
-                    </Dropdown>
-                </div>
-            }
-
-            <div class="form-group">
-                <label for="InputSegundoApellido"><strong>Fecha</strong></label>
-                <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputSegundoApellido" />
-
+                <Dropdown TItem="int" OnSelected="@GrupoSeleccionado">
+                    <InitialTip>Grupo</InitialTip>
+                    <ChildContent>
+                        @if (gruposenCurso.Count != 0)
+                        {
+                            @foreach (var i in gruposenCurso)
+                            {
+                                <DropdownListItem Item="@i.Id">@i.Grupo</DropdownListItem>
+                            }
+                        }
+                    </ChildContent>
+                </Dropdown>
             </div>
             <div class="form-group">
-                <label for="InputCorreo"><strong>Puntos</strong></label>
-                <input class="form-control" type="number" placeholder="Puntos" id="InputCorreo" />
-
+                <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
+                    <InitialTip>Rubro</InitialTip>
+                    <ChildContent>
+                        <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
+                        <DropdownListItem Item="@list[3]">Proyecto</DropdownListItem>
+                        <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
+                    </ChildContent>
+                </Dropdown>
             </div>
             <div class="form-group">
-                <label for="InputCorreo"><strong>Porcentaje</strong></label>
-                <input class="form-control" type="number" placeholder="Porcentaje" id="InputCorreo" />
-
+                <button type="button" class="btn btn-warning" @onclick="VerAsignaciones">Ver</button>
             </div>
-            <div class="form-group">
-                <label for="InputCorreo"><strong>Nota</strong></label>
-                <input class="form-control" type="number" placeholder="Nota" id="InputCorreo" />
-
-            </div>
-
-            <button type="submit" class="btn btn-success">Crear</button>
-
         </form>
+        <p></p>
+        <p>
+            <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+        </p>
+        @if (mostrarFormulario)
+        {
+            <div class="card-body border rounded">
+                <form>
+                    <div class="form-group">
+                        <label for="InputNombre"><strong>Nombre</strong></label>
+                        <input class="form-control" type="text" placeholder="Nombre" id="InputNombre" @bind="@asignacion.Nombre" />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="InputDescripcion"><strong>Descripcion</strong></label>
+                        <input class="form-control" type="text" placeholder="Descripcion" id="InputDescripcion" @bind="@asignacion.Descripcion" />
+
+                    </div>
+                    @if (MostrarCMBEstado)
+                    {
+                        <div class="form-group" id="cmbEstado">
+                            <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
+                                <InitialTip>Estado</InitialTip>
+                                <ChildContent>
+                                    <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
+                                    <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
+                                    <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
+                                    <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
+                                    <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
+                                </ChildContent>
+                            </Dropdown>
+                        </div>
+                    }
+
+                    <div class="form-group">
+                        <label for="InputFecha"><strong>Fecha</strong></label>
+                        <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputFecha" @bind="@asignacion.Fecha" />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="InputPuntos"><strong>Puntos</strong></label>
+                        <input class="form-control" type="number" placeholder="Puntos" id="InputPuntos" @bind="@asignacion.Puntos" />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="InputPorcentaje"><strong>Porcentaje</strong></label>
+                        <input class="form-control" type="number" placeholder="Porcentaje" id="InputPorcentaje" @bind="@asignacion.Porcentaje" />
+
+                    </div>
+                    <div class="form-group">
+                        <label for="InputNota"><strong>Nota</strong></label>
+                        <input class="form-control" type="number" placeholder="Nota" id="InputNota" @bind="@asignacion.Nota" />
+
+                    </div>
+
+                    <button type="button" class="btn btn-success" @onclick="GuardarAsignacion">Crear</button>
+
+                </form>
+            </div>
+        }
     </div>
-</div>
 @code {
     Boolean MostrarCMBEstado = false;
     Asignaciones asignacion { get; set; }
     Cursos[] cursos { get; set; }
     Cursos cursoSeleccionado { get; set; }
-    List<CursosGrupos> gruposenCursoid { get; set; }
     List<Grupos> gruposenCurso { get; set; }
+    Boolean mostrarError = false;
+    String msjError = "";
+    Boolean mostrarFormulario = false;
+    String TextoBotonAgregar = "Mostrar Formulario";
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
     int idProfesor = 0;
     protected override async Task OnInitializedAsync()
     {
-        gruposenCursoid = new List<CursosGrupos>();
         asignacion = new Asignaciones();
+        asignacion.Nombre = "";
+        asignacion.Descripcion = "";
+        asignacion.Estado = "";
+        asignacion.Puntos = 0;
+        asignacion.Porcentaje = 0;
+        asignacion.Nota =0;
+        asignacion.Curso = 0;
+        asignacion.Grupo = 0;
+        asignacion.Tipo = "";
         gruposenCurso = new List<Grupos>();
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
@@ -141,8 +170,57 @@
         cursos = await ServicioCursos.GetCursos(idProfesor);
 
     }
+    private void VerAsignaciones()
+    {
+        Console.WriteLine("Entra");
+    }
+    private void AbrirCerrarFormAgregar()
+    {
+
+        mostrarFormulario = !mostrarFormulario;
+        if (mostrarFormulario)
+        {
+            TextoBotonAgregar = "Ocultar Formulario";
+        }
+        else
+        {
+            TextoBotonAgregar = "Mostrar Formulario";
+        }
+
+
+    }
+    private void GuardarAsignacion() {
+
+        Console.WriteLine(asignacion.Nombre);
+        Console.WriteLine(asignacion.Descripcion);
+        Console.WriteLine(asignacion.Estado);
+        Console.WriteLine(asignacion.Fecha);
+        Console.WriteLine(asignacion.Puntos);
+        Console.WriteLine(asignacion.Porcentaje);
+        Console.WriteLine(asignacion.Nota);
+        Console.WriteLine(asignacion.Curso);
+        Console.WriteLine(asignacion.Grupo);
+        Console.WriteLine(asignacion.Tipo);
+        if(asignacion.Curso == 0 || asignacion.Tipo.Equals("") || asignacion.Grupo == 0 || asignacion.Nombre.Equals("") ||
+            asignacion.Descripcion.Equals("") || asignacion.Fecha.Equals("") || asignacion.Nota == 0 || asignacion.Porcentaje == 0 ||
+            asignacion.Puntos == 0
+            )
+        {
+            msjError = "Debe llenar todos los datos requeridos.";
+            mostrarError = true;
+        }
+        else
+        {
+            if (asignacion.Tipo.Equals("Asistencia"))
+            {
+                asignacion.Estado = "Ninguno";
+            }
+
+        }
+    }
     async Task CursoSeleccionado(int selection)
     {
+        gruposenCurso = new List<Grupos>();
         cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor, selection);
         CursosGrupos[] gruposid = await ServicioGruposCursos.GetCursosGrupos();
         List<Grupos> grupos = await ServicioGrupos.GetGrupos(idProfesor);
@@ -161,23 +239,20 @@
                 }
             }
         }
-         asignacion.Curso = selection;
+        asignacion.Curso = selection;
     }
 
     private void GrupoSeleccionado(int selection)
     {
-         asignacion.Grupo = selection;
-        Console.WriteLine(selection);
+        asignacion.Grupo = selection;
     }
     private void EstadoSeleccionado(string selection)
     {
-         asignacion.Estado= selection;
-        Console.WriteLine(selection);
+        asignacion.Estado= selection;
     }
     private void RubroSeleccionado(string selection)
     {
-          asignacion.Tipo = selection;
-        Console.WriteLine(selection);
+        asignacion.Tipo = selection;
         if (selection.Equals("Asistencia"))
         {
             MostrarCMBEstado = true;
