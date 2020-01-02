@@ -117,6 +117,14 @@ namespace SAEE_WEB.Controllers
 
 
         }
+        [HttpPost]
+        [Route("PostEG")]
+        public async Task<ActionResult<EstudiantesXgrupos>> PostEG(EstudiantesXgrupos eg)
+        {
+            _context.EstudiantesXgrupos.Add(eg);
+            await _context.SaveChangesAsync();
+            return CreatedAtAction("GetEG", new { id = eg.Id }, eg);
+        }
         private bool GruposExists(int id)
         {
             return _context.Grupos.Any(e => e.Id == id);

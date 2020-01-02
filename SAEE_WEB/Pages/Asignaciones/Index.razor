@@ -2,7 +2,7 @@
 @inject CursosServices ServicioCursos
 @inject CursosGruposServices ServicioGruposCursos
 @inject GruposServices ServicioGrupos
-
+@inject AsignacionesServices ServicioAsignaciones
 
 @{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
 @{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
@@ -115,7 +115,7 @@
 </div>
 @code {
     Boolean MostrarCMBEstado = false;
-   // Asignaciones asignacion { get; set; }
+    Asignaciones asignacion { get; set; }
     Cursos[] cursos { get; set; }
     Cursos cursoSeleccionado { get; set; }
     List<CursosGrupos> gruposenCursoid { get; set; }
@@ -126,12 +126,13 @@
     protected override async Task OnInitializedAsync()
     {
         gruposenCursoid = new List<CursosGrupos>();
+        asignacion = new Asignaciones();
         gruposenCurso = new List<Grupos>();
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
         idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
         Console.WriteLine(idProfesor);
-     //   asignacion.Profesor = idProfesor;
+        asignacion.Profesor = idProfesor;
         await CargarCursos();
     }
 
@@ -160,22 +161,22 @@
                 }
             }
         }
-     //   asignacion.Curso = selection;
+         asignacion.Curso = selection;
     }
 
     private void GrupoSeleccionado(int selection)
     {
-       // asignacion.Grupo = selection;
+         asignacion.Grupo = selection;
         Console.WriteLine(selection);
     }
     private void EstadoSeleccionado(string selection)
     {
-       // asignacion.Estado= selection;
+         asignacion.Estado= selection;
         Console.WriteLine(selection);
     }
     private void RubroSeleccionado(string selection)
     {
-      //  asignacion.Tipo = selection;
+          asignacion.Tipo = selection;
         Console.WriteLine(selection);
         if (selection.Equals("Asistencia"))
         {
