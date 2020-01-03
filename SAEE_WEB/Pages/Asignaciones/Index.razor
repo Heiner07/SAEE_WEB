@@ -117,11 +117,6 @@
                         <input class="form-control" type="number" placeholder="Porcentaje" id="InputPorcentaje" @bind="@asignacion.Porcentaje" />
 
                     </div>
-                    <div class="form-group">
-                        <label for="InputNota"><strong>Nota</strong></label>
-                        <input class="form-control" type="number" placeholder="Nota" id="InputNota" @bind="@asignacion.Nota" />
-
-                    </div>
 
                     <button type="button" class="btn btn-success" @onclick="GuardarAsignacion">Crear</button>
 
@@ -150,7 +145,6 @@
                         <th>Fecha</th>
                         <th>Puntos</th>
                         <th>Porcentaje</th>
-                        <th>Nota</th>
                         <th>Opciones</th>
                     </tr>
                 </thead>
@@ -166,7 +160,6 @@
                         <td>@asig.Fecha</td>
                         <td>@asig.Puntos</td>
                         <td>@asig.Porcentaje</td>
-                        <td>@asig.Nota</td>
                         <td>
 
                             <button class="btn btn-outline-info">Editar</button>
@@ -209,7 +202,6 @@
         asignacion.Estado = "";
         asignacion.Puntos = 0;
         asignacion.Porcentaje = 0;
-        asignacion.Nota =0;
         asignacion.Curso = 0;
         asignacion.Grupo = 0;
         asignacion.Tipo = "";
@@ -249,7 +241,7 @@
     }
     async Task GuardarAsignacion() {
         if(asignacion.Curso == 0 || asignacion.Tipo.Equals("") || asignacion.Grupo == 0 || asignacion.Nombre.Equals("") ||
-            asignacion.Descripcion.Equals("") || asignacion.Fecha.Equals("") || asignacion.Nota == 0 || asignacion.Porcentaje == 0 ||
+            asignacion.Descripcion.Equals("") || asignacion.Fecha.Equals("") || asignacion.Porcentaje == 0 ||
             asignacion.Puntos == 0
             )
         {
@@ -277,7 +269,6 @@
                 asignacion.Estado = "";
                 asignacion.Puntos = 0;
                 asignacion.Porcentaje = 0;
-                asignacion.Nota =0;
                 asignacion.Curso = 0;
                 asignacion.Grupo = 0;
                 asignacion.Tipo = "";

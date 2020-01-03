@@ -187,9 +187,6 @@ namespace SAEE_WEB.Models
                 entity.Property(e => e.Porcentaje)
                     .IsRequired()
                     .HasMaxLength(100);
-                entity.Property(e => e.Nota)
-                    .IsRequired()
-                    .HasMaxLength(100);
             });
 
 
