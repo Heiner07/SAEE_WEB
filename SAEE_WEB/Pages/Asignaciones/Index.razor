@@ -9,8 +9,8 @@
     <div class="container">
         @if (mostrarError)
         {
-            <div class="alert alert-warning alert-dismissible fade show" role="alert">
-                <strong>ERROR!</strong> @msjError
+            <div class="alert @tipoMsg alert-dismissible fade show" role="alert">
+                <strong>@headerMsg</strong> @msjError
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError = false)">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -66,9 +66,7 @@
                     </ChildContent>
                 </Dropdown>
             </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-warning" @onclick="VerAsignaciones">Ver</button>
-            </div>
+
         </form>
         <p></p>
         <p>
@@ -130,6 +128,62 @@
                 </form>
             </div>
         }
+        @if (asignaciones == null)
+        {
+            <text> Cargando... </text>
+        }
+        else if (asignaciones.Length == 0)
+        {
+            <text> No hay asignaciones de este profesor</text>
+
+        }
+        else
+        {
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Puntos</th>
+                        <th>Porcentaje</th>
+                        <th>Nota</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var asig in asignaciones)
+                    {
+                    <tr>
+
+                        <td>@asig.Tipo</td>
+                        <td>@asig.Nombre</td>
+                        <td>@asig.Descripcion</td>
+                        <td>@asig.Estado</td>
+                        <td>@asig.Fecha</td>
+                        <td>@asig.Puntos</td>
+                        <td>@asig.Porcentaje</td>
+                        <td>@asig.Nota</td>
+                        <td>
+
+                            <button class="btn btn-outline-info">Editar</button>
+                            <button class="btn btn-outline-danger">Borrar</button>
+                        </td>
+
+
+
+                    </tr>
+
+                    }
+
+                </tbody>
+
+
+            </table>
+        }
     </div>
 @code {
     Boolean MostrarCMBEstado = false;
@@ -137,10 +191,13 @@
     Cursos[] cursos { get; set; }
     Cursos cursoSeleccionado { get; set; }
     List<Grupos> gruposenCurso { get; set; }
+    Asignaciones[] asignaciones { get; set; }
     Boolean mostrarError = false;
+    String tipoMsg = "alert-warning";
     String msjError = "";
     Boolean mostrarFormulario = false;
     String TextoBotonAgregar = "Mostrar Formulario";
+    String headerMsg = "ERROR!";
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
     int idProfesor = 0;
@@ -160,8 +217,8 @@
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
         idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
-        Console.WriteLine(idProfesor);
         asignacion.Profesor = idProfesor;
+        await CargarAsignaciones();
         await CargarCursos();
     }
 
@@ -170,10 +227,11 @@
         cursos = await ServicioCursos.GetCursos(idProfesor);
 
     }
-    private void VerAsignaciones()
+    async Task CargarAsignaciones()
     {
-        Console.WriteLine("Entra");
+        asignaciones = await ServicioAsignaciones.GetAsignacionesProfesor(idProfesor);
     }
+
     private void AbrirCerrarFormAgregar()
     {
 
@@ -189,31 +247,41 @@
 
 
     }
-    private void GuardarAsignacion() {
-
-        Console.WriteLine(asignacion.Nombre);
-        Console.WriteLine(asignacion.Descripcion);
-        Console.WriteLine(asignacion.Estado);
-        Console.WriteLine(asignacion.Fecha);
-        Console.WriteLine(asignacion.Puntos);
-        Console.WriteLine(asignacion.Porcentaje);
-        Console.WriteLine(asignacion.Nota);
-        Console.WriteLine(asignacion.Curso);
-        Console.WriteLine(asignacion.Grupo);
-        Console.WriteLine(asignacion.Tipo);
+    async Task GuardarAsignacion() {
         if(asignacion.Curso == 0 || asignacion.Tipo.Equals("") || asignacion.Grupo == 0 || asignacion.Nombre.Equals("") ||
             asignacion.Descripcion.Equals("") || asignacion.Fecha.Equals("") || asignacion.Nota == 0 || asignacion.Porcentaje == 0 ||
             asignacion.Puntos == 0
             )
         {
+            tipoMsg = "alert-warning";
+            headerMsg = "ERROR!";
             msjError = "Debe llenar todos los datos requeridos.";
             mostrarError = true;
         }
         else
         {
-            if (asignacion.Tipo.Equals("Asistencia"))
+            if (!asignacion.Tipo.Equals("Asistencia"))
             {
                 asignacion.Estado = "Ninguno";
+            }
+            Boolean resultado = await ServicioAsignaciones.PostAsignaciones(asignacion);
+            if(resultado)
+            {
+                tipoMsg = "alert-success";
+                headerMsg = "HECHO!";
+                msjError = "Asignacion agregada satisfactoriamente";
+                mostrarError = true;
+                asignacion = new Asignaciones();
+                asignacion.Nombre = "";
+                asignacion.Descripcion = "";
+                asignacion.Estado = "";
+                asignacion.Puntos = 0;
+                asignacion.Porcentaje = 0;
+                asignacion.Nota =0;
+                asignacion.Curso = 0;
+                asignacion.Grupo = 0;
+                asignacion.Tipo = "";
+                await CargarAsignaciones();
             }
 
         }
