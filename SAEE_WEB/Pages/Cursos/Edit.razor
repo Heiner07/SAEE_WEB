@@ -13,6 +13,7 @@
                       TextoBoton="Guardar"
                       Curso="@curso"
                       GruposAgregados="@GruposAgregados"
+                      IdProfesor="@IdProfesor"
                  />
             </div>
         </div>
@@ -21,6 +22,7 @@
 
 @code {
     [Parameter] public Cursos curso { get; set; }
+    [Parameter] public int IdProfesor { get; set; }
     [Parameter] public EventCallback CerrarEditar { get; set; }
     List<CursosGrupos> GruposAgregados;
 

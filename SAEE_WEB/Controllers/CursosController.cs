@@ -74,6 +74,47 @@ namespace SAEE_WEB.Controllers
             return NoContent();
         }
 
+        [HttpGet("{id}")]
+        public async Task<ActionResult<IEnumerable<CursosGrupos>>> GetGrupos(int id)
+        {
+            return await _context.CursosGrupos.Include(cursoGrupo => cursoGrupo.IdGrupoNavigation).
+                Where(cursoGrupo => cursoGrupo.IdCurso == id).ToListAsync();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PostGrupos(List<CursosGrupos> cursosGrupos)
+        {
+            _context.CursosGrupos.AddRange(cursosGrupos);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> DeleteGrupos(List<CursosGrupos> cursosGrupos)
+        {
+            _context.CursosGrupos.RemoveRange(cursosGrupos);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw;
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Cursos
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
