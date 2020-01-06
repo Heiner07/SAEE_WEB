@@ -103,6 +103,7 @@ namespace SAEE_WEB.Controllers
         //    return CreatedAtAction("GetCursosGrupos", new { id = cursosGrupos.Id }, cursosGrupos);
         //}
         [HttpPost]
+        [Route("PostCursosGrupos")]
         public async Task<IActionResult> PostCursosGrupos(List<CursosGrupos> cursosGrupos)
         {
             _context.CursosGrupos.AddRange(cursosGrupos);
