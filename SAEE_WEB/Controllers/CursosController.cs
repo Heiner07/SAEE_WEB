@@ -74,13 +74,6 @@ namespace SAEE_WEB.Controllers
             return NoContent();
         }
 
-        [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<CursosGrupos>>> GetGrupos(int id)
-        {
-            return await _context.CursosGrupos.Include(cursoGrupo => cursoGrupo.IdGrupoNavigation).
-                Where(cursoGrupo => cursoGrupo.IdCurso == id).ToListAsync();
-        }
-
         [HttpPost]
         public async Task<IActionResult> PostGrupos(List<CursosGrupos> cursosGrupos)
         {
