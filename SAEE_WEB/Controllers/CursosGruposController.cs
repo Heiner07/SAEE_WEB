@@ -75,6 +75,7 @@ namespace SAEE_WEB.Controllers
         }
 
         [HttpPut]
+        [Route("DeleteCursosGrupos")]
         public async Task<IActionResult> DeleteCursosGrupos(List<CursosGrupos> cursosGrupos)
         {
             _context.CursosGrupos.RemoveRange(cursosGrupos);
@@ -102,7 +103,7 @@ namespace SAEE_WEB.Controllers
 
         //    return CreatedAtAction("GetCursosGrupos", new { id = cursosGrupos.Id }, cursosGrupos);
         //}
-        [HttpPost]
+        [HttpPut]
         [Route("PostCursosGrupos")]
         public async Task<IActionResult> PostCursosGrupos(List<CursosGrupos> cursosGrupos)
         {
