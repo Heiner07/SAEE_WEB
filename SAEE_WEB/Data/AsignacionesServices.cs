@@ -27,6 +27,11 @@ namespace SAEE_WEB.Data
         {
             return await _context.Asignaciones.Where(asignacion => asignacion.Profesor == idProfesor).ToArrayAsync();
         }
+        public async Task<Asignaciones[]> GetAsignacionesDetallada(int idProfesor,int curso,int grupo,string tipo)
+        {
+            return await _context.Asignaciones.Where(asignacion => asignacion.Profesor == idProfesor && asignacion.Curso == curso &&
+            asignacion.Tipo == tipo && asignacion.Grupo == grupo).ToArrayAsync();
+        }
         public async Task<Asignaciones[]> GetAsignaciones()
         {
             return await _context.Asignaciones.ToArrayAsync();

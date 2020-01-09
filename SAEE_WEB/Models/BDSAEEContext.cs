@@ -25,6 +25,7 @@ namespace SAEE_WEB.Models
         public virtual DbSet<Asignaciones> Asignaciones { get; set; }
 
 
+        public virtual DbSet<Evaluaciones> Evaluaciones { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -190,6 +191,24 @@ namespace SAEE_WEB.Models
             });
 
 
+            modelBuilder.Entity<Evaluaciones>(entity =>
+            {
+                entity.Property(e => e.Asignacion)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Estudiante)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Puntos)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Porcentaje)
+                    .IsRequired()
+                    .HasMaxLength(100);
+                entity.Property(e => e.Nota)
+                    .IsRequired()
+                    .HasMaxLength(100);
+            });
 
 
 

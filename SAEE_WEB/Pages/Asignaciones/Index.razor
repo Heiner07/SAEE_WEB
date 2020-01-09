@@ -3,7 +3,7 @@
 @inject CursosGruposServices ServicioGruposCursos
 @inject GruposServices ServicioGrupos
 @inject AsignacionesServices ServicioAsignaciones
-
+@inject EvaluacionesServices ServicioEvaluaciones
 @{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
 @{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
     <div class="container">
@@ -41,14 +41,14 @@
                 </Dropdown>
             </div>
             <div class="form-group">
-                <Dropdown TItem="int" OnSelected="@GrupoSeleccionado">
+                <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
                     <InitialTip>Grupo</InitialTip>
                     <ChildContent>
                         @if (gruposenCurso.Count != 0)
                         {
                             @foreach (var i in gruposenCurso)
                             {
-                                <DropdownListItem Item="@i.Id">@i.Grupo</DropdownListItem>
+                                <DropdownListItem Item="@i">@i.Grupo</DropdownListItem>
                             }
                         }
                     </ChildContent>
@@ -66,7 +66,12 @@
                     </ChildContent>
                 </Dropdown>
             </div>
-
+            <div class="form-group">
+                <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones">Ver</button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-outline-info mr-4" @onclick="CargarAsignaciones">Ver Todos</button>
+            </div>
         </form>
         <p></p>
         <p>
@@ -118,8 +123,10 @@
 
                     </div>
 
-                    <button type="button" class="btn btn-success" @onclick="GuardarAsignacion">Crear</button>
-
+                    <button type="button" class="btn btn-success" @onclick="GuardarAsignacion">@MsgBoton</button>
+                    @if(mostrarBotonCancelar){
+                    <button type="button" class="btn btn-danger mr-4" @onclick="CancelarEdicion">Cancelar</button>
+                    }
                 </form>
             </div>
         }
@@ -162,8 +169,8 @@
                         <td>@asig.Porcentaje</td>
                         <td>
 
-                            <button class="btn btn-outline-info">Editar</button>
-                            <button class="btn btn-outline-danger">Borrar</button>
+                            <button class="btn btn-outline-info" @onclick="(() => EditarAsignacion(asig))">Editar</button>
+                            <button class="btn btn-outline-danger" @onclick="(() => EliminarAsignacion(asig))">Borrar</button>
                         </td>
 
 
@@ -185,17 +192,27 @@
     Cursos cursoSeleccionado { get; set; }
     List<Grupos> gruposenCurso { get; set; }
     Asignaciones[] asignaciones { get; set; }
+    List<Estudiantes> estudiantesXgrupo { get; set; }
     Boolean mostrarError = false;
+    String MsgBoton = "Crear";
+    Boolean Opcion = false;
     String tipoMsg = "alert-warning";
     String msjError = "";
+    Grupos grupoSelec { get; set; }
+    Boolean mostrarBotonCancelar = false;
     Boolean mostrarFormulario = false;
     String TextoBotonAgregar = "Mostrar Formulario";
     String headerMsg = "ERROR!";
+
+    String rubro = "";
+    int idcurso = 0, idgrupo = 0;
+
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
     int idProfesor = 0;
     protected override async Task OnInitializedAsync()
     {
+        grupoSelec = new Grupos();
         asignacion = new Asignaciones();
         asignacion.Nombre = "";
         asignacion.Descripcion = "";
@@ -213,7 +230,13 @@
         await CargarAsignaciones();
         await CargarCursos();
     }
-
+    async Task VerEvaluaciones()
+    {
+        if (!rubro.Equals("") && idcurso != 0 && idgrupo != 0)
+        {
+            asignaciones = await ServicioAsignaciones.GetAsignacionesDetallada(idProfesor, idcurso, idgrupo, rubro);
+        }
+    }
     async Task CargarCursos()
     {
         cursos = await ServicioCursos.GetCursos(idProfesor);
@@ -224,6 +247,48 @@
         asignaciones = await ServicioAsignaciones.GetAsignacionesProfesor(idProfesor);
     }
 
+    async Task EliminarAsignacion(Asignaciones asig)
+    {
+        Boolean resultado = await ServicioAsignaciones.DeleteAsignaciones(asig);
+        if (resultado)
+        {
+            tipoMsg = "alert-success";
+            headerMsg = "HECHO!";
+            msjError = "Asignación eliminada satisfactoriamente";
+            mostrarError = true;
+            await CargarAsignaciones();
+        }
+    }
+    private void CancelarEdicion()
+    {
+        MsgBoton = "Crear";
+        asignacion = new Asignaciones();
+        asignacion.Profesor = idProfesor;
+        asignacion.Nombre = "";
+        asignacion.Descripcion = "";
+        asignacion.Estado = "";
+        asignacion.Puntos = 0;
+        asignacion.Porcentaje = 0;
+        asignacion.Curso = 0;
+        asignacion.Grupo = 0;
+        asignacion.Tipo = "";
+        mostrarBotonCancelar = false;
+        Opcion = false;
+        MostrarCMBEstado = false;
+        mostrarFormulario = false;
+    }
+    private void EditarAsignacion(Asignaciones asig) {
+        asignacion = asig;
+        if (!asignacion.Estado.Equals("Ninguno"))
+        {
+            MostrarCMBEstado = true;
+        }
+        MsgBoton = "Guardar Cambios";
+        mostrarFormulario = true;
+        mostrarBotonCancelar = true;
+        Opcion = true;
+
+    }
     private void AbrirCerrarFormAgregar()
     {
 
@@ -256,25 +321,77 @@
             {
                 asignacion.Estado = "Ninguno";
             }
-            Boolean resultado = await ServicioAsignaciones.PostAsignaciones(asignacion);
-            if(resultado)
+            if (Opcion)
             {
-                tipoMsg = "alert-success";
-                headerMsg = "HECHO!";
-                msjError = "Asignacion agregada satisfactoriamente";
-                mostrarError = true;
-                asignacion = new Asignaciones();
-                asignacion.Nombre = "";
-                asignacion.Descripcion = "";
-                asignacion.Estado = "";
-                asignacion.Puntos = 0;
-                asignacion.Porcentaje = 0;
-                asignacion.Curso = 0;
-                asignacion.Grupo = 0;
-                asignacion.Tipo = "";
-                await CargarAsignaciones();
+                Boolean resultado = await ServicioAsignaciones.PutAsignaciones(asignacion);
+                if (resultado)
+                {
+                    tipoMsg = "alert-success";
+                    headerMsg = "HECHO!";
+                    msjError = "Asignación editada satisfactoriamente";
+                    mostrarError = true;
+                    await CargarAsignaciones();
+                    mostrarBotonCancelar = false;
+                    Opcion = false;
+                    asignacion = new Asignaciones();
+                    asignacion.Profesor = idProfesor;
+                    asignacion.Nombre = "";
+                    asignacion.Descripcion = "";
+                    asignacion.Estado = "";
+                    asignacion.Puntos = 0;
+                    asignacion.Porcentaje = 0;
+                    asignacion.Curso = 0;
+                    asignacion.Grupo = 0;
+                    asignacion.Tipo = "";
+                    MsgBoton = "Crear";
+                    MostrarCMBEstado = false;
+                    mostrarFormulario = false;
+                }
+                else
+                {
+                    tipoMsg = "alert-warning";
+                    headerMsg = "ALERTA!";
+                    msjError = "Error al editar la asignación";
+                    mostrarError = true;
+                    await  ServicioAsignaciones.RollbackAsignaciones(asignacion);
+                    await CargarAsignaciones();
+                }
             }
-
+            else
+            {
+                Boolean resultado = await ServicioAsignaciones.PostAsignaciones(asignacion);
+                if(resultado)
+                {
+                    tipoMsg = "alert-success";
+                    headerMsg = "HECHO!";
+                    msjError = "Asignación agregada satisfactoriamente";
+                    mostrarError = true;
+                    asignacion = new Asignaciones();
+                    asignacion.Profesor = idProfesor;
+                    asignacion.Nombre = "";
+                    asignacion.Descripcion = "";
+                    asignacion.Estado = "";
+                    asignacion.Puntos = 0;
+                    asignacion.Porcentaje = 0;
+                    asignacion.Curso = 0;
+                    asignacion.Grupo = 0;
+                    asignacion.Tipo = "";
+                    await CargarAsignaciones();
+                    int idasignacion = asignaciones[asignaciones.Length - 1].Id;
+                    Console.WriteLine(idasignacion);
+                    estudiantesXgrupo = await ServicioGrupos.GetEstudiantesXGrupos(grupoSelec);
+                    foreach(var i in estudiantesXgrupo)
+                    {
+                        Evaluaciones evaluacion = new Evaluaciones();
+                        evaluacion.Asignacion = idasignacion;
+                        evaluacion.Estudiante = i.Id;
+                        evaluacion.Puntos = 0;
+                        evaluacion.Porcentaje = 0;
+                        evaluacion.Nota = 0;
+                        await ServicioEvaluaciones.PostEvaluaciones(evaluacion);
+                    }
+                }
+            }
         }
     }
     async Task CursoSeleccionado(int selection)
@@ -299,11 +416,14 @@
             }
         }
         asignacion.Curso = selection;
+        idcurso = selection;
     }
 
-    private void GrupoSeleccionado(int selection)
+    private void GrupoSeleccionado(Grupos selection)
     {
-        asignacion.Grupo = selection;
+        grupoSelec = selection;
+        asignacion.Grupo = selection.Id;
+        idgrupo = selection.Id;
     }
     private void EstadoSeleccionado(string selection)
     {
@@ -311,6 +431,7 @@
     }
     private void RubroSeleccionado(string selection)
     {
+        rubro = selection;
         asignacion.Tipo = selection;
         if (selection.Equals("Asistencia"))
         {

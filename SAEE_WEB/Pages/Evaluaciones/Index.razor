@@ -2,8 +2,9 @@
 @inject CursosServices ServicioCursos
 @inject CursosGruposServices ServicioGruposCursos
 @inject GruposServices ServicioGrupos
+@inject AsignacionesServices ServicioAsignaciones
 
-
+@{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
 <div class="container">
     <h3>Evaluaciones</h3>
     <form class="form-inline" action="/">
@@ -53,9 +54,8 @@
                 </ChildContent>
             </Dropdown>
         </div>
-
         <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
+            <Dropdown TItem="int" OnSelected="@GrupoSeleccionado">
                 <InitialTip>Grupo</InitialTip>
                 <ChildContent>
                     @if (gruposenCurso.Count != 0)
@@ -69,7 +69,19 @@
             </Dropdown>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-outline-warning mr-4">Ver</button>
+            <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
+                <InitialTip>Rubro</InitialTip>
+                <ChildContent>
+                    <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
+                    <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
+                    <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
+                    <DropdownListItem Item="@list[3]">Proyectos</DropdownListItem>
+                    <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
+                </ChildContent>
+            </Dropdown>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones">Ver</button>
         </div>
         <div class="form-group">
             <button type="button" class="btn btn-outline-success mr-4">Guardar</button>
@@ -80,40 +92,60 @@
     </form>
     <p></p>
     <div class="table-responsive">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Nombre del estudiante</th>
-                    <th>Identificación</th>
-                    <th>Cotidiano</th>
-                    <th>Tarea</th>
-                    <th>Pruebas</th>
-                    <th>Proyectos</th>
-                    <th>Asistencia</th>
-                    <th>Nota Final</th>
-                    <th>Ponderado</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Cristopher Vaciana</td>
-                    <td>702400593</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>0</td>
-                    <td>100</td>
-                    <td>10</td>
-                    <td>3</td>
-                    <td><button type="button" class="btn btn-outline-info" @onclick="AbrirModal">Editar</button></td>
-                </tr>
-            </tbody>
-        </table>
+        @if (asignaciones == null)
+        {
+            <text> Cargando... </text>
+        }
+        else if (asignaciones.Length == 0)
+        {
+            <text> No hay asignaciones de este profesor</text>
+
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Fecha</th>
+                        <th>Puntos</th>
+                        <th>Porcentaje</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var asig in asignaciones)
+                    {
+                        <tr>
+
+                            <td>@asig.Tipo</td>
+                            <td>@asig.Nombre</td>
+                            <td>@asig.Descripcion</td>
+                            <td>@asig.Estado</td>
+                            <td>@asig.Fecha</td>
+                            <td>@asig.Puntos</td>
+                            <td>@asig.Porcentaje</td>
+                            <td>
+                                <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacion(asig))">+</button>
+                            </td>
+
+
+
+                        </tr>
+
+                    }
+
+                </tbody>
+
+
+            </table>
+        }
+
     </div>
     <p></p>
-    <form class="form-inline">
-    </form>
     @if (mostrarEditar)
     {
         <EditEvaluaciones CerrarEditar="@cerrarEditar"></EditEvaluaciones>
@@ -126,7 +158,10 @@
     Cursos cursoSeleccionado { get; set; }
     List<Grupos> gruposenCurso { get; set; }
     List<int> periodos { get; set; }
+    Asignaciones [] asignaciones { get; set; }
     Boolean mostrarEditar = false;
+    String rubro = "";
+    int idcurso = 0, idgrupo = 0;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
     int idProfesor = 0;
@@ -137,8 +172,19 @@
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
         idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
-        Console.WriteLine(idProfesor);
         await CargarCursos();
+    }
+
+    async Task VerEvaluaciones()
+    {
+        if (!rubro.Equals("") && idcurso != 0 && idgrupo != 0)
+        {
+            asignaciones = await ServicioAsignaciones.GetAsignacionesDetallada(idProfesor, idcurso, idgrupo, rubro);
+        }
+    }
+    private void EditarEvaluacion(Asignaciones asignacion)
+    {
+
     }
 
     async Task CargarCursos()
@@ -146,9 +192,18 @@
         cursos = await ServicioCursos.GetCursos(idProfesor);
 
     }
+    private void GrupoSeleccionado(int selection)
+    {
+        idgrupo = selection;
+    }
+    private void RubroSeleccionado(string selection)
+    {
+        rubro = selection;
+    }
 
     async Task CursoSeleccionado(int selection)
     {
+        idcurso = selection;
         gruposenCurso = new List<Grupos>();
         periodos = new List<int>();
         cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor, selection);
@@ -156,11 +211,13 @@
         List<Grupos> grupos = await ServicioGrupos.GetGrupos(idProfesor);
         int idCurso = cursoSeleccionado.Id;
         int per = cursoSeleccionado.CantidadPeriodos;
-        foreach (var grupo in gruposid) {
-            if (grupo.IdCurso == idCurso){
-                foreach(var g in grupos)
+        foreach (var grupo in gruposid)
+        {
+            if (grupo.IdCurso == idCurso)
+            {
+                foreach (var g in grupos)
                 {
-                    if(g.Id == grupo.IdGrupo)
+                    if (g.Id == grupo.IdGrupo)
                     {
                         gruposenCurso.Add(g);
                     }
@@ -171,7 +228,6 @@
 
         for (int i = 1; i <= per; i++)
             periodos.Add(i);
-        Console.WriteLine(cursoSeleccionado.CantidadPeriodos);
     }
 
     private void PeriodoSeleccionado(int selection)
