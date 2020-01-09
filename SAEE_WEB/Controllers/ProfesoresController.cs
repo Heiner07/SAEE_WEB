@@ -25,13 +25,25 @@ namespace SAEE_WEB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Profesores>>> GetProfesores()
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             return await _context.Profesores.ToListAsync();
         }
 
         // GET: api/Profesores/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Profesores>> GetProfesores(int id)
+        public async Task<ActionResult<Profesores>> GetProfesor(int id)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             var profesores = await _context.Profesores.FindAsync(id);
 
             if (profesores == null)
@@ -48,6 +60,12 @@ namespace SAEE_WEB.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProfesores(int id, Profesores profesores)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             if (id != profesores.Id)
             {
                 return BadRequest();
@@ -80,6 +98,12 @@ namespace SAEE_WEB.Controllers
         [HttpPost]
         public async Task<ActionResult<Profesores>> PostProfesores(Profesores profesores)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             _context.Profesores.Add(profesores);
             await _context.SaveChangesAsync();
 
@@ -90,6 +114,12 @@ namespace SAEE_WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Profesores>> DeleteProfesores(int id)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             var profesores = await _context.Profesores.Include(profesor => profesor.Cursos)
                 .Include(profesor => profesor.EstudiantesXgrupos)
                 .Include(profesor => profesor.Estudiantes)
