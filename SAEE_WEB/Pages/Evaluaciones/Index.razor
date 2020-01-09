@@ -131,9 +131,6 @@
                             <td>
                                 <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacion(asig))">+</button>
                             </td>
-
-
-
                         </tr>
 
                     }
@@ -148,17 +145,19 @@
     <p></p>
     @if (mostrarEditar)
     {
-        <EditEvaluaciones CerrarEditar="@cerrarEditar"></EditEvaluaciones>
+        <EditEvaluaciones CerrarEditar="@cerrarEditar"  asignacion ="@asignacion"></EditEvaluaciones>
     }
 </div>
 
 @code{
+
 
     Cursos[] cursos { get; set; }
     Cursos cursoSeleccionado { get; set; }
     List<Grupos> gruposenCurso { get; set; }
     List<int> periodos { get; set; }
     Asignaciones [] asignaciones { get; set; }
+    Asignaciones asignacion { get; set;}
     Boolean mostrarEditar = false;
     String rubro = "";
     int idcurso = 0, idgrupo = 0;
@@ -167,6 +166,7 @@
     int idProfesor = 0;
     protected override async Task OnInitializedAsync()
     {
+        asignacion = new Asignaciones();
         periodos = new List<int>();
         gruposenCurso = new List<Grupos>();
         AuthenticationState authState = await AuthenticationState;
@@ -182,8 +182,10 @@
             asignaciones = await ServicioAsignaciones.GetAsignacionesDetallada(idProfesor, idcurso, idgrupo, rubro);
         }
     }
-    private void EditarEvaluacion(Asignaciones asignacion)
+    private void EditarEvaluacion(Asignaciones asig)
     {
+        asignacion = asig;
+        mostrarEditar = true;
 
     }
 
