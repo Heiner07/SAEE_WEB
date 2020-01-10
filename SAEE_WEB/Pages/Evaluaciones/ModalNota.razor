@@ -11,12 +11,12 @@
         box-sizing: border-box;
     }
 </style>
-
+@{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
 <div class="modal" tabindex="-1" style="display:block" role="dialog">
     <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title mr-4" id="exampleModalLabel">@asignacion.Nombre</h5>
+                <h5 class="modal-title mr-4">@asignacion.Nombre</h5>
                 <p class="mr-4">Puntos: @asignacion.Puntos</p>
                 <p class="mr-4">Porcentaje: @asignacion.Porcentaje</p>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
@@ -37,21 +37,38 @@
                 </div>
                 <div class="row">
                     <div class="col mr-1">
-                        <input type="number"  @bind="@evaluacion.Puntos" />
+                        <input type="number" @bind="@evaluacion.Puntos" />
                     </div>
                     <div class="col mr-1">
-                        <input type="number"  @bind="@evaluacion.Porcentaje" />
+                        <input type="number" @bind="@evaluacion.Porcentaje" />
                     </div>
                     <div class="col mr-1">
-                        <input type="number" @bind="@evaluacion.Nota"/>
+                        <input type="number" @bind="@evaluacion.Nota" />
+                    </div>
+                    </div>
+                <p></p>
+                <div class="row">
+                    <div class="col mr-1">
+                        <div class="form-group" id="cmbEstado">
+                            <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
+                                <InitialTip>Estado</InitialTip>
+                                <ChildContent>
+                                    <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
+                                    <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
+                                    <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
+                                    <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
+                                    <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
+                                </ChildContent>
+                            </Dropdown>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-outline-success" @onclick="GuardarNota" >Guardar</button>
-            </div>
+                <button class="btn btn-outline-success" @onclick="GuardarNota">Guardar</button>
             </div>
         </div>
+    </div>
 </div>
 
 @code{
@@ -68,6 +85,10 @@
         }
     }
 
+    private void EstadoSeleccionado()
+    {
+
+    }
     async Task RevertirCambios()
     {
         await CerrarEditar2.InvokeAsync(null);
