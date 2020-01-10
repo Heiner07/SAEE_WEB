@@ -50,7 +50,7 @@ namespace SAEE_WEB.Controllers
             return profesor;
         }
 
-        static async Task<Profesores> ComprobarInicioSesion(IHeaderDictionary headers, BDSAEEContext _context)
+        public static async Task<Profesores> ComprobarInicioSesion(IHeaderDictionary headers, BDSAEEContext _context)
         {
             Usuario usuario = new Usuario()
             {
