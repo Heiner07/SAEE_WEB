@@ -25,7 +25,7 @@ namespace SAEE_WEB.Controllers
         // GET: api/Grupos/GetGrupos?id=IDPROFESOR
         [HttpGet]
         [Route("GetGrupos")]
-        public async Task<ActionResult<IEnumerable<Grupos>>> GetGrupos(int id)
+        public async Task<ActionResult<IEnumerable<Grupos>>> GetGrupos()
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)

@@ -23,7 +23,7 @@ namespace SAEE_WEB.Controllers
         // GET: api/Estudiantes
         [HttpGet]
         [Route("GetEstudiantes")]
-        public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes(int id)
+        public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes()
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
