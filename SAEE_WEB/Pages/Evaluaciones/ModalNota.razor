@@ -1,0 +1,76 @@
+﻿@inject AsignacionesServices ServicioAsignaciones
+@inject EvaluacionesServices ServicioEvaluaciones
+<style>
+    input[type=text], select {
+        width: 20%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+</style>
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title mr-4" id="exampleModalLabel">@asignacion.Nombre</h5>
+                <p class="mr-4">Puntos: @asignacion.Puntos</p>
+                <p class="mr-4">Porcentaje: @asignacion.Porcentaje</p>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col mr-1">
+                        <label><strong>Puntos</strong></label>
+                    </div>
+                    <div class="col mr-1">
+                        <label><strong>%</strong></label>
+                    </div>
+                    <div class="col mr-1">
+                        <label><strong>Nota</strong></label>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col mr-1">
+                        <input type="number"  @bind="@evaluacion.Puntos" />
+                    </div>
+                    <div class="col mr-1">
+                        <input type="number"  @bind="@evaluacion.Porcentaje" />
+                    </div>
+                    <div class="col mr-1">
+                        <input type="number" @bind="@evaluacion.Nota"/>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-success" @onclick="GuardarNota" >Guardar</button>
+            </div>
+            </div>
+        </div>
+</div>
+
+@code{
+    [Parameter] public EventCallback CerrarEditar2 { get; set; }
+    [Parameter] public Asignaciones asignacion { get; set; }
+    [Parameter] public Evaluaciones evaluacion { get; set; }
+
+    async Task GuardarNota()
+    {
+        Boolean resultado = await ServicioEvaluaciones.PutEvaluaciones(evaluacion);
+        if (resultado)
+        {
+            await RevertirCambios();
+        }
+    }
+
+    async Task RevertirCambios()
+    {
+        await CerrarEditar2.InvokeAsync(null);
+    }
+}
+

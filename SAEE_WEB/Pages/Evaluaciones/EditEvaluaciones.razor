@@ -48,7 +48,7 @@
                                             <td>@estu.Porcentaje</td>
                                             <td>@estu.Nota</td>
                                             <td>
-                                                <button class="btn btn-outline-info" >Editar</button>
+                                                <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacionEstudiante(estu.evaluacion))" >Editar</button>
                                             </td>
                                         </tr>
 
@@ -62,6 +62,10 @@
                     </div>
                 </div>
             </div>
+        @if (mostrarEditar)
+        {
+            <ModalNota CerrarEditar2="@cerrarEditar2" asignacion="@asignacion" evaluacion="@evaluacion"></ModalNota>
+        }
         </div>
 </div>
 
@@ -70,17 +74,31 @@
     [Parameter] public Asignaciones asignacion { get; set; }
     Evaluaciones [] evaluaciones { get; set; }
     List<EstudianteEvaluacion> estudiantes { get; set; }
-
+    Evaluaciones evaluacion { get; set; }
+    Boolean mostrarEditar = false;
     public class EstudianteEvaluacion
     {
-        public int Id { get; set; }
+        public Evaluaciones evaluacion { get; set; }
         public string Cedula { get; set; }
         public string Nombre { get; set; }
         public Decimal Puntos { get; set; }
         public Decimal Porcentaje { get; set; }
         public int Nota { get; set; }
     }
+
+    private void EditarEvaluacionEstudiante(Evaluaciones estu)
+    {
+        mostrarEditar = true;
+        evaluacion = estu;
+    }
+
     protected override async Task OnInitializedAsync()
+    {
+        estudiantes = new List<EstudianteEvaluacion>();
+        await cargarEvaluaciones();
+
+    }
+    async Task cargarEvaluaciones()
     {
         estudiantes = new List<EstudianteEvaluacion>();
         evaluaciones = await ServicioEvaluaciones.GetEvaluacionesXAsignacion(asignacion.Id);
@@ -88,7 +106,7 @@
         {
             EstudianteEvaluacion nuevo = new EstudianteEvaluacion();
             Estudiantes estudiante = await ServicioEstudiantes.GetEstudiante(i.Estudiante);
-            nuevo.Id = i.Id;
+            nuevo.evaluacion = i;
             nuevo.Cedula = estudiante.Cedula;
             nuevo.Nombre = estudiante.Nombre + " " + estudiante.PrimerApellido + " " + estudiante.SegundoApellido;
             nuevo.Puntos = i.Puntos;
@@ -97,9 +115,11 @@
             estudiantes.Add(nuevo);
         }
     }
-    private void OnSelected(string selection)
+    public async Task cerrarEditar2()
     {
-        Console.WriteLine(selection);
+        mostrarEditar = false;
+        await cargarEvaluaciones(); 
+
     }
     async Task RevertirCambios()
     {
