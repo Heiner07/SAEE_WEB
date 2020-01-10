@@ -27,10 +27,12 @@ namespace SAEE_WEB.Controllers
         [Route("GetGrupos")]
         public async Task<ActionResult<IEnumerable<Grupos>>> GetGrupos(int id)
         {
-            return await _context.Grupos.Where(grupo => grupo.IdProfesor == id).ToListAsync();
-            /*return await _context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
-                .ThenInclude(EG => EG.IdEstudianteNavigation).Include(curso => curso.CursosGrupos)
-                .Where(curso => curso.IdProfesor == id).ToListAsync();*/
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+            return await _context.Grupos.Where(grupo => grupo.IdProfesor == profesor.Id).ToListAsync();
         }
 
         // GET: api/Grupos/GetEstudiantes?id=IDGRUPO
@@ -38,6 +40,11 @@ namespace SAEE_WEB.Controllers
         [Route("GetEG")]
         public async Task<ActionResult<IEnumerable<EstudiantesXgrupos>>> GetEG(int id)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
             var lista = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == id).Include(z => z.IdEstudianteNavigation).ToListAsync();
             return await lista;
             //return await (from EG in lista
@@ -54,6 +61,11 @@ namespace SAEE_WEB.Controllers
 
             try
             {
+                Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+                if (profesor == null)
+                {
+                    return BadRequest();
+                }
                 _context.Entry(grupos).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
@@ -72,6 +84,12 @@ namespace SAEE_WEB.Controllers
         [Route("PostGrupos")]
         public async Task<ActionResult<Grupos>> PostGrupos(Grupos grupos)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+            grupos.IdProfesor = profesor.Id;
             _context.Grupos.Add(grupos);
             await _context.SaveChangesAsync();
 
@@ -83,6 +101,11 @@ namespace SAEE_WEB.Controllers
         [Route("DeleteGrupos")]
         public async Task<ActionResult<Grupos>> DeleteGrupos(Grupos grupo)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
             grupo.EstudiantesXgrupos = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == grupo.Id).Include(z => z.IdEstudianteNavigation).ToList();
             if (grupo == null)
             {
@@ -121,6 +144,7 @@ namespace SAEE_WEB.Controllers
         [Route("PostEG")]
         public async Task<ActionResult<EstudiantesXgrupos>> PostEG(EstudiantesXgrupos eg)
         {
+
             _context.EstudiantesXgrupos.Add(eg);
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEG", new { id = eg.Id }, eg);

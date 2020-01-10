@@ -25,8 +25,13 @@ namespace SAEE_WEB.Controllers
         [Route("GetEstudiantes")]
         public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes(int id)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
             return await _context.Estudiantes.Include(grupo => grupo.EstudiantesXgrupos)
-                .Where(curso => curso.IdProfesor == id).ToListAsync();
+                .Where(curso => curso.IdProfesor == profesor.Id).ToListAsync();
         }
 
         // GET: api/Estudiantes/5
@@ -53,6 +58,11 @@ namespace SAEE_WEB.Controllers
         {
             try
             {
+                Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+                if (profesor == null)
+                {
+                    return BadRequest();
+                }
                 _context.Entry(estudiantes).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
@@ -72,6 +82,12 @@ namespace SAEE_WEB.Controllers
         [Route("PostEstudiantes")]
         public async Task<ActionResult<Estudiantes>> PostEstudiantes(Estudiantes estudiantes)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+            estudiantes.IdProfesor = profesor.Id;
             _context.Estudiantes.Add(estudiantes);
             await _context.SaveChangesAsync();
 
@@ -83,10 +99,10 @@ namespace SAEE_WEB.Controllers
         [Route("DeleteEstudiantes")]
         public async Task<ActionResult<Estudiantes>> DeleteEstudiantes(Estudiantes estudiante)
         {
-           
-            if (estudiante == null)
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             _context.Estudiantes.Remove(estudiante);
@@ -95,9 +111,6 @@ namespace SAEE_WEB.Controllers
             return estudiante;
         }
 
-        private bool EstudiantesExists(int id)
-        {
-            return _context.Estudiantes.Any(e => e.Id == id);
-        }
+        
     }
 }
