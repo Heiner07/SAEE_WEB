@@ -26,7 +26,7 @@ namespace SAEE_WEB.Controllers
         public async Task<ActionResult<IEnumerable<Profesores>>> GetProfesores()
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
+            if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
             }
@@ -39,7 +39,7 @@ namespace SAEE_WEB.Controllers
         public async Task<ActionResult<Profesores>> GetProfesor(int id)
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
+            if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
             }
@@ -61,7 +61,7 @@ namespace SAEE_WEB.Controllers
         public async Task<IActionResult> PutProfesores(int id, Profesores profesores)
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
+            if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
             }
@@ -99,7 +99,7 @@ namespace SAEE_WEB.Controllers
         public async Task<ActionResult<Profesores>> PostProfesores(Profesores profesores)
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
+            if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
             }
@@ -115,7 +115,7 @@ namespace SAEE_WEB.Controllers
         public async Task<ActionResult<Profesores>> DeleteProfesores(int id)
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
+            if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
             }
