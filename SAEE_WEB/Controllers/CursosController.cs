@@ -30,9 +30,10 @@ namespace SAEE_WEB.Controllers
                 return BadRequest();
             }
 
-            return await _context.Cursos.Include(curso => curso.CursosGrupos)
-                .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
-                .Where(curso => curso.IdProfesor == profesor.Id).ToListAsync();
+            //return await _context.Cursos.Include(curso => curso.CursosGrupos)
+            //    .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
+            //    .Where(curso => curso.IdProfesor == profesor.Id).ToListAsync();
+            return await _context.Cursos.Where(curso => curso.IdProfesor == profesor.Id).ToListAsync();
         }
 
         // GET: api/Cursos/5
