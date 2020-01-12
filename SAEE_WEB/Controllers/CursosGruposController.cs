@@ -102,7 +102,14 @@ namespace SAEE_WEB.Controllers
                 return BadRequest();
             }
 
-            _context.CursosGrupos.RemoveRange(cursosGrupos);
+            CursosGrupos borrarGC;
+            foreach(CursosGrupos cg in cursosGrupos)
+            {
+                borrarGC = _context.CursosGrupos.FirstOrDefault(cgt => cgt.Id == cg.Id);
+                _context.CursosGrupos.Remove(borrarGC);
+            }
+
+            //_context.CursosGrupos.RemoveRange(cursosGrupos);
 
             try
             {
