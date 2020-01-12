@@ -24,14 +24,27 @@ namespace SAEE_WEB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cursos>>> GetCursos()
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             return await _context.Cursos.Include(curso => curso.CursosGrupos)
-                .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation).ToListAsync();
+                .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
+                .Where(curso => curso.IdProfesor == profesor.Id).ToListAsync();
         }
 
         // GET: api/Cursos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Cursos>> GetCursos(int id)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             var cursos = await _context.Cursos.FindAsync(id);
 
             if (cursos == null)
@@ -48,6 +61,12 @@ namespace SAEE_WEB.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCursos(int id, Cursos cursos)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             if (id != cursos.Id)
             {
                 return BadRequest();
@@ -80,6 +99,12 @@ namespace SAEE_WEB.Controllers
         [HttpPost]
         public async Task<ActionResult<Cursos>> PostCursos(Cursos cursos)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             _context.Cursos.Add(cursos);
             await _context.SaveChangesAsync();
 
@@ -90,6 +115,12 @@ namespace SAEE_WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cursos>> DeleteCursos(int id)
         {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
             var cursos = await _context.Cursos.Include(curso => curso.CursosGrupos)
                 .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
                 .Where(curso => curso.Id == id).FirstOrDefaultAsync();
