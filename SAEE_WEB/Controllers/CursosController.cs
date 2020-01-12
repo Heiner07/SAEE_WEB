@@ -104,6 +104,7 @@ namespace SAEE_WEB.Controllers
             {
                 return BadRequest();
             }
+            cursos.IdProfesor = profesor.Id;
 
             _context.Cursos.Add(cursos);
             await _context.SaveChangesAsync();
