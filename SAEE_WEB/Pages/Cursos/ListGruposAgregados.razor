@@ -1,33 +1,126 @@
-﻿@if (GruposAgregados.Count == 0)
-{
-    <text> Agregue grupos al curso</text>
-}
-else
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Grupo</th>
-                <th>Año</th>
-                <th>Opciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var grupo in GruposAgregados)
-            {
-                <tr>
-                    <td>@grupo.Grupo</td>
-                    <td>@grupo.Anio</td>
-                    <td>
-                        <button type="button" class="btn btn-outline-info" @onclick="(()=>BorrarGrupo.InvokeAsync(grupo))">Borrar</button>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-}
+﻿@inject CursosServices ServicioCursos
+@inject NavigationManager Navigation
+
+<div class="modal" tabindex="-1" style="display:block" role="dialog">
+    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Grupos del curso</h3>
+                <button type="button" class="close" @onclick="OcultarGruposAgregados">
+                    <span aria-hidden="true">X</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
+                    <div class="input-group-append">
+                        <button class="btn btn-info">
+                            <i>Buscar</i>
+                        </button>
+                    </div>
+                </div>
+
+                @if (GruposAgregados.Count == 0)
+                {
+                    <text>No hay grupos</text>
+                }
+                else
+                {
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Grupo</th>
+                                <th>Año</th>
+                                <th>Opciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var cursoGrupo in GruposAgregados)
+                            {
+                                if (cursoGrupo.IdGrupoNavigation.Grupo.ToLower().StartsWith(TextoBuscar.ToLower()))
+                                {
+                                    <tr>
+                                        <td>@cursoGrupo.IdGrupoNavigation.Grupo</td>
+                                        <td>@cursoGrupo.IdGrupoNavigation.Anio</td>
+                                        <td>
+                                            <button type="button" class="btn btn-outline-danger" @onclick="() => RemoverGrupo(cursoGrupo)">Borrar</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                }
+
+                @if (MostrarGrupos)
+                {
+                    <div>
+                        <ListGruposAgregar OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" IdProfesor="IdProfesor" />
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <label>*Presione Guardar para almacenar cambios realizados.</label>
+                @*<label class="alert-danger">*Presione Guardar para almacenar cambios realizados.</label>*@
+                @*<h6>*Presione Guardar para almacenar cambios realizados.</h6>*@
+                @*<div>*Presione Guardar para almacenar cambios realizados.</div>*@
+                <button type="button" class="btn btn-secondary" @onclick="MostarGruposAgregar">Agregar</button>
+                <button type="button" class="btn btn-secondary" @onclick="OcultarGruposAgregados">Cancelar</button>
+                <button type="button" class="btn btn-primary" @onclick="GuardarCursosGrupos">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @code {
-    [Parameter] public List<Grupos> GruposAgregados { get; set; }
-    //[Parameter] public Cursos Curso { get; set; }
-    [Parameter] public EventCallback<Grupos> BorrarGrupo { get; set; }
+    [Parameter] public List<CursosGrupos> GruposAgregados { get; set; }
+    [Parameter] public Cursos Curso { get; set; }
+    [Parameter] public int IdProfesor { get; set; }
+    [Parameter] public EventCallback OcultarGruposAgregados { get; set; }
+    bool MostrarGrupos = false;
+    string TextoBuscar = string.Empty;
+
+    protected override Task OnParametersSetAsync()
+    {
+        GruposAgregados = Curso.CursosGrupos.ToList();
+        return base.OnParametersSetAsync();
+    }
+
+    async Task GuardarCursosGrupos()
+    {
+        List<CursosGrupos> GruposAgregadosPreparados = new List<CursosGrupos>();
+        foreach(CursosGrupos cg in GruposAgregados)
+        {
+            if(cg.Id == -1)
+            {
+                GruposAgregadosPreparados.Add(new CursosGrupos
+                {
+                    IdCurso = cg.IdCurso,
+                    IdGrupo = cg.IdGrupo
+                });
+            }
+            else
+            {
+                GruposAgregadosPreparados.Add(cg);
+            }
+        }
+        Curso.CursosGrupos = GruposAgregadosPreparados;
+        await ServicioCursos.PutCursos(Curso);
+        Navigation.NavigateTo("cursos", true);
+    }
+
+    void MostarGruposAgregar()
+    {
+        MostrarGrupos = true;
+    }
+
+    void OcultarGruposAgregar()
+    {
+        MostrarGrupos = false;
+    }
+
+    void RemoverGrupo(CursosGrupos cursoGrupo)
+    {
+        GruposAgregados.RemoveAt(GruposAgregados.FindIndex(grupoTemp => grupoTemp.IdGrupo == cursoGrupo.IdGrupo));
+    }
 }

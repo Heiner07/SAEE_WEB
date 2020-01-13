@@ -19,40 +19,47 @@ else
         </div>
     </div>
     <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Periodos</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var curso in cursos)
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Periodos</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var curso in cursos)
+                {
+                    if (curso.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
                     {
-                        if (curso.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
-                        {
-                            <tr>
-                                <td>@curso.Nombre</td>
-                                <td>@curso.CantidadPeriodos</td>
-                                <td>
-                                    <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(curso))">
-                                        Editar
-                                    </button>
-                                    <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(curso))">
-                                        Borrar
-                                    </button>
-                                </td>
-                            </tr>
-                        }
+                        <tr>
+                            <td>@curso.Nombre</td>
+                            <td>@curso.CantidadPeriodos</td>
+                            <td>
+                                <button class="btn btn-outline-info" @onclick="(()=>MostrarPanelEditar(curso))">
+                                    Editar
+                                </button>
+                                <button class="btn btn-outline-secondary" @onclick="(()=>MostrarPanelGrupos(curso))">
+                                    Grupos
+                                </button>
+                                <button class="btn btn-outline-danger" @onclick="(()=>MostrarPanelBorrar(curso))">
+                                    Borrar
+                                </button>
+                            </td>
+                        </tr>
                     }
-                </tbody>
-            </table>
-        </div>
+                }
+            </tbody>
+        </table>
+    </div>
 }
 @if (mostrarEditar)
 {
     <Edit curso="cursoEditar" IdProfesor="@IdProfesor" CerrarEditar="@OcultarPanelEditar" />
+}
+@if (mostrarGrupos)
+{
+    <ListGruposAgregados Curso="cursoEditar" IdProfesor="@IdProfesor" OcultarGruposAgregados="OcultarPanelGrupos" />
 }
 @if (mostrarBorrar)
 {
@@ -64,8 +71,7 @@ else
     CursosGrupos[] CursosGrupos { get; set; }
     CursosGrupos[] CursosGruposFiltrados { get; set; }
     Cursos cursoEditar;
-    Boolean mostrarEditar = false;
-    Boolean mostrarBorrar = false;
+    Boolean mostrarEditar = false, mostrarGrupos = false, mostrarBorrar = false;
     String TextoBuscar = "";
     [Parameter] public int IdProfesor { get; set; }
 
@@ -88,6 +94,17 @@ else
     void OcultarPanelEditar()
     {
         mostrarEditar = false;
+    }
+
+    void MostrarPanelGrupos(Cursos curso)
+    {
+        cursoEditar = curso;//Revisar
+        mostrarGrupos = true;
+    }
+
+    void OcultarPanelGrupos()
+    {
+        mostrarGrupos = false;
     }
 
     void MostrarPanelBorrar(Cursos curso)
