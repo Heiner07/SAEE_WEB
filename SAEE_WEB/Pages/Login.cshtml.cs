@@ -48,6 +48,8 @@ namespace SAEE_WEB
                 claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, profesor.Nombre),
+                    new Claim("Ap1", profesor.PrimerApellido),
+                    new Claim("Ap2", profesor.SegundoApellido),
                     new Claim("P", true.ToString()),
                     new Claim("E", false.ToString()),
                     (profesor.Administrador) ?
@@ -61,6 +63,8 @@ namespace SAEE_WEB
                 claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.Name, estudiante.Nombre),
+                    new Claim("Ap1", estudiante.PrimerApellido),
+                    new Claim("Ap2", estudiante.SegundoApellido),
                     new Claim("P", false.ToString()),
                     new Claim("E", true.ToString()),
                     new Claim("Rol", "Estudiante"),
