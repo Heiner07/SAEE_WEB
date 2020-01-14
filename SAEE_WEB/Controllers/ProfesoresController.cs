@@ -92,6 +92,42 @@ namespace SAEE_WEB.Controllers
             return NoContent();
         }
 
+        [HttpPut("{id}")]
+        [Route("PutProfesor")]//Actualiza el perfil
+        public async Task<IActionResult> PutProfesor(int id, Profesores profesores)
+        {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null && profesor.Id != profesores.Id)
+            {
+                return BadRequest();
+            }
+
+            if (id != profesores.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(profesores).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!ProfesoresExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
         // POST: api/Profesores
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
