@@ -67,10 +67,10 @@
                 </Dropdown>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones">Ver</button>
+                <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones"><i class="fa fa-search"></i></button>
             </div>
             <div class="form-group">
-                <button type="button" class="btn btn-outline-info mr-4" @onclick="CargarAsignaciones">Ver Todos</button>
+                <button type="button" class="btn btn-outline-info mr-4" @onclick="CargarAsignaciones">Listar Todos</button>
             </div>
         </form>
         <p></p>
@@ -388,6 +388,7 @@
                         evaluacion.Puntos = 0;
                         evaluacion.Porcentaje = 0;
                         evaluacion.Nota = 0;
+                        evaluacion.Estado = "Ninguno";
                         await ServicioEvaluaciones.PostEvaluaciones(evaluacion);
                     }
                 }
