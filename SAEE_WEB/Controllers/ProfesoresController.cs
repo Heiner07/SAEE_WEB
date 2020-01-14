@@ -92,17 +92,12 @@ namespace SAEE_WEB.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}")]
+        [HttpPut]
         [Route("PutProfesor")]//Actualiza el perfil
-        public async Task<IActionResult> PutProfesor(int id, Profesores profesores)
+        public async Task<IActionResult> PutProfesor(Profesores profesores)
         {
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Id != profesores.Id)
-            {
-                return BadRequest();
-            }
-
-            if (id != profesores.Id)
             {
                 return BadRequest();
             }
@@ -115,14 +110,7 @@ namespace SAEE_WEB.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ProfesoresExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                throw;
             }
 
             return NoContent();
