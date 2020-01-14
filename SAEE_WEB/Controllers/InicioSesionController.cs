@@ -34,11 +34,7 @@ namespace SAEE_WEB.Controllers
             }
             else
             {
-                usuario.Id = profesor.Id;
-                usuario.Administrador = profesor.Administrador;
-                usuario.Nombre = profesor.Nombre;
-                usuario.Apellido1 = profesor.PrimerApellido;
-                usuario.Apellido2 = profesor.SegundoApellido;
+                usuario.Profesor = profesor;
                 return usuario;
             }
         }
@@ -46,7 +42,8 @@ namespace SAEE_WEB.Controllers
         static async Task<Profesores> ComprobarInicioSesion(Usuario usuario, BDSAEEContext _context)
         {
             Profesores profesor = await _context.Profesores.
-                Where(P => P.Cedula.Equals(usuario.Cedula) && P.Contrasenia.Equals(usuario.Contrasenia)).FirstOrDefaultAsync();
+                Where(P => P.Cedula.Equals(usuario.Profesor.Cedula) && P.Contrasenia.Equals(usuario.Profesor.Contrasenia)).
+                FirstOrDefaultAsync();
             return profesor;
         }
 
@@ -54,8 +51,11 @@ namespace SAEE_WEB.Controllers
         {
             Usuario usuario = new Usuario()
             {
-                Cedula = headers["cedula"],
-                Contrasenia = headers["contrasenia"]
+                Profesor = new Profesores()
+                {
+                    Cedula = headers["cedula"],
+                    Contrasenia = headers["contrasenia"]
+                }
             };
             return await ComprobarInicioSesion(usuario, _context);
         }
