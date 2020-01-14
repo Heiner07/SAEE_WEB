@@ -1,14 +1,18 @@
 ﻿@inject AsignacionesServices ServicioAsignaciones
 @inject EvaluacionesServices ServicioEvaluaciones
 <style>
-    input[type=text], select {
-        width: 20%;
+    input[type=number], select {
+        width: 90%;
         padding: 12px 20px;
         margin: 8px 0;
         display: inline-block;
         border: 1px solid #ccc;
         border-radius: 4px;
         box-sizing: border-box;
+    }
+    .modal-body{
+        height: 300px;
+        overflow-y: auto;
     }
 </style>
 @{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
@@ -24,45 +28,48 @@
                 </button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <div class="col mr-1">
-                        <label><strong>Puntos</strong></label>
-                    </div>
-                    <div class="col mr-1">
-                        <label><strong>%</strong></label>
-                    </div>
-                    <div class="col mr-1">
-                        <label><strong>Nota</strong></label>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col mr-1">
-                        <input type="number" @bind="@evaluacion.Puntos" />
-                    </div>
-                    <div class="col mr-1">
-                        <input type="number" @bind="@evaluacion.Porcentaje" />
-                    </div>
-                    <div class="col mr-1">
-                        <input type="number" @bind="@evaluacion.Nota" />
-                    </div>
-                    </div>
-                <p></p>
-                <div class="row">
-                    <div class="col mr-1">
-                        <div class="form-group" id="cmbEstado">
-                            <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
-                                <InitialTip>Estado</InitialTip>
-                                <ChildContent>
-                                    <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
-                                    <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
-                                    <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
-                                    <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
-                                    <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
-                                </ChildContent>
-                            </Dropdown>
-                        </div>
-                    </div>
-                </div>
+                <table class="table table-sm">
+                    <thead>
+                        <tr>
+                            @if (asignacion.Tipo.Equals("Asistencia"))
+                            {
+                            <th width="25%">Estado Actual</th>
+                            <th width="30%">Estado</th>
+                            }
+                            <th width="15%">Puntos</th>
+                            <th width="15%">%</th>
+                            <th width="15%">Nota</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            @if (asignacion.Tipo.Equals("Asistencia"))
+                            {
+                                <td><p>@evaluacion.Estado</p></td>
+                                <td>
+                                    <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
+                                        <InitialTip>Estado</InitialTip>
+                                        <ChildContent>
+                                            <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
+                                            <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
+                                            <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
+                                            <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
+                                            <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
+                                        </ChildContent>
+                                    </Dropdown>
+                                </td>
+                            }
+                            <td><input type="number" @bind="@evaluacion.Puntos" /></td>
+                            <td> <input type="number" @bind="@evaluacion.Porcentaje" /></td>
+                            <td><input type="number" @bind="@evaluacion.Nota" /></td>
+                        </tr>
+
+                    </tbody>
+
+
+                </table>
+ 
+
             </div>
             <div class="modal-footer">
                 <button class="btn btn-outline-success" @onclick="GuardarNota">Guardar</button>
@@ -78,16 +85,35 @@
 
     async Task GuardarNota()
     {
-        Boolean resultado = await ServicioEvaluaciones.PutEvaluaciones(evaluacion);
-        if (resultado)
+        if (asignacion.Tipo.Equals("Asistencia"))
         {
-            await RevertirCambios();
+            if (!evaluacion.Estado.Equals("Ninguno"))
+            {
+                await NotaVerificada();
+            }
         }
+        else
+        {
+            await NotaVerificada();
+        }
+
     }
 
-    private void EstadoSeleccionado()
+    async Task NotaVerificada()
     {
+        if(evaluacion.Nota >= 0 && evaluacion.Porcentaje >= 0 && evaluacion.Puntos >= 0)
+        {
 
+            Boolean resultado = await ServicioEvaluaciones.PutEvaluaciones(evaluacion);
+            if (resultado)
+            {
+                await RevertirCambios();
+            }
+        }
+    }
+    private void EstadoSeleccionado(string selection)
+    {
+        evaluacion.Estado = selection;
     }
     async Task RevertirCambios()
     {

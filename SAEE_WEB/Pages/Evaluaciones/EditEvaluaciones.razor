@@ -84,6 +84,7 @@
         public Decimal Puntos { get; set; }
         public Decimal Porcentaje { get; set; }
         public int Nota { get; set; }
+        public string Estado { get; set; }
     }
 
     private void EditarEvaluacionEstudiante(Evaluaciones estu)
@@ -112,13 +113,14 @@
             nuevo.Puntos = i.Puntos;
             nuevo.Porcentaje = i.Porcentaje;
             nuevo.Nota = i.Nota;
+            nuevo.Estado = i.Estado;
             estudiantes.Add(nuevo);
         }
     }
     public async Task cerrarEditar2()
     {
         mostrarEditar = false;
-        await cargarEvaluaciones(); 
+        await cargarEvaluaciones();
 
     }
     async Task RevertirCambios()

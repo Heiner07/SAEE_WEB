@@ -20,6 +20,7 @@ namespace SAEE_WEB.Models
         public Decimal Puntos { get; set; }
         public Decimal Porcentaje { get; set; }
         public int Nota { get; set; }
+        public string Estado { get; set; }
 
      /*   public virtual ICollection<Cursos> Cursos { get; set; }
         public virtual ICollection<Estudiantes> Estudiantes { get; set; }
