@@ -99,10 +99,17 @@ namespace SAEE_WEB.Controllers
             Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Id != profesores.Id)
             {
-                return BadRequest();
+                HttpContext.Response.Headers.Add("MiERROR","Error de id");
+                return BadRequest("Error de id");
             }
 
-            _context.Entry(profesores).State = EntityState.Modified;
+            profesor.Nombre = profesores.Nombre;
+            profesor.PrimerApellido = profesores.PrimerApellido;
+            profesor.SegundoApellido = profesores.SegundoApellido;
+            profesor.Correo = profesores.Correo;
+            profesor.Contrasenia = profesores.Contrasenia;
+
+            _context.Entry(profesor).State = EntityState.Modified;
 
             try
             {
@@ -110,6 +117,7 @@ namespace SAEE_WEB.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
+                HttpContext.Response.Headers.Add("MiERROR", "Error de ef");
                 throw;
             }
 
