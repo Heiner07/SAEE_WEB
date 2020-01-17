@@ -48,7 +48,7 @@
                         {
                             @foreach (var i in gruposenCurso)
                             {
-                                <DropdownListItem Item="@i">@i.Grupo</DropdownListItem>
+                                <DropdownListItem Item="@i">@i.Grupo | @i.Anio </DropdownListItem>
                             }
                         }
                     </ChildContent>
@@ -378,18 +378,22 @@
                     asignacion.Tipo = "";
                     await CargarAsignaciones();
                     int idasignacion = asignaciones[asignaciones.Length - 1].Id;
-                    Console.WriteLine(idasignacion);
+                    int periodos = cursoSeleccionado.CantidadPeriodos;
                     estudiantesXgrupo = await ServicioGrupos.GetEstudiantesXGrupos(grupoSelec);
                     foreach(var i in estudiantesXgrupo)
                     {
-                        Evaluaciones evaluacion = new Evaluaciones();
-                        evaluacion.Asignacion = idasignacion;
-                        evaluacion.Estudiante = i.Id;
-                        evaluacion.Puntos = 0;
-                        evaluacion.Porcentaje = 0;
-                        evaluacion.Nota = 0;
-                        evaluacion.Estado = "Ninguno";
-                        await ServicioEvaluaciones.PostEvaluaciones(evaluacion);
+                        for (int j = 1; j <= periodos; j++)
+                        {
+                            Evaluaciones evaluacion = new Evaluaciones();
+                            evaluacion.Asignacion = idasignacion;
+                            evaluacion.Estudiante = i.Id;
+                            evaluacion.Puntos = 0;
+                            evaluacion.Porcentaje = 0;
+                            evaluacion.Nota = 0;
+                            evaluacion.Estado = "Ninguno";
+                            evaluacion.Periodo = j;
+                            await ServicioEvaluaciones.PostEvaluaciones(evaluacion);
+                        }
                     }
                 }
             }

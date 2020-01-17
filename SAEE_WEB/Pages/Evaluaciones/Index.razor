@@ -9,16 +9,6 @@
     <h3>Evaluaciones</h3>
     <form class="form-inline" action="/">
         <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
-                <InitialTip>Año</InitialTip>
-                <ChildContent>
-                    <DropdownListItem Item="2017">2017</DropdownListItem>
-                    <DropdownListItem Item="2018">2018</DropdownListItem>
-                    <DropdownListItem Item="2019">2019</DropdownListItem>
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
             <Dropdown TItem="int" OnSelected="@CursoSeleccionado">
                 <InitialTip>Curso</InitialTip>
                 <ChildContent>
@@ -32,7 +22,7 @@
                     }
                     else
                     {
-                        @foreach (var curso in cursos)
+                        @foreach(var curso in cursos)
                         {
                             <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
                         }
@@ -62,7 +52,7 @@
                     {
                         @foreach (var i in gruposenCurso)
                         {
-                            <DropdownListItem Item="@i.Id">@i.Grupo</DropdownListItem>
+                            <DropdownListItem Item="@i.Id">@i.Grupo | @i.Anio</DropdownListItem>
                         }
                     }
                 </ChildContent>
@@ -87,7 +77,7 @@
             <button type="button" class="btn btn-outline-success mr-4">Guardar</button>
         </div>
         <div class="form-group">
-            <button type="button" class="btn btn-outline-danger mr-4">Exportar</button>
+            <button type="button" class="btn btn-outline-danger mr-4">Enviar por correo</button>
         </div>
     </form>
     <p></p>
@@ -145,7 +135,7 @@
     <p></p>
     @if (mostrarEditar)
     {
-        <EditEvaluaciones CerrarEditar="@cerrarEditar"  asignacion ="@asignacion"></EditEvaluaciones>
+        <EditEvaluaciones CerrarEditar="@cerrarEditar"  asignacion ="@asignacion" periodo="@periodo" ></EditEvaluaciones>
     }
 </div>
 
@@ -156,10 +146,12 @@
     Cursos cursoSeleccionado { get; set; }
     List<Grupos> gruposenCurso { get; set; }
     List<int> periodos { get; set; }
+    List<int> annos { get; set; }
     Asignaciones [] asignaciones { get; set; }
     Asignaciones asignacion { get; set;}
     Boolean mostrarEditar = false;
     String rubro = "";
+    int periodo = 0;
     int idcurso = 0, idgrupo = 0;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
@@ -168,6 +160,7 @@
     {
         asignacion = new Asignaciones();
         periodos = new List<int>();
+        annos = new List<int>();
         gruposenCurso = new List<Grupos>();
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
@@ -177,7 +170,7 @@
 
     async Task VerEvaluaciones()
     {
-        if (!rubro.Equals("") && idcurso != 0 && idgrupo != 0)
+        if (!rubro.Equals("") && idcurso != 0 && idgrupo != 0 && periodo != 0)
         {
             asignaciones = await ServicioAsignaciones.GetAsignacionesDetallada(idProfesor, idcurso, idgrupo, rubro);
         }
@@ -191,7 +184,6 @@
     async Task CargarCursos()
     {
         cursos = await ServicioCursos.GetCursos(idProfesor);
-
     }
     private void GrupoSeleccionado(int selection)
     {
@@ -207,6 +199,7 @@
         idcurso = selection;
         gruposenCurso = new List<Grupos>();
         periodos = new List<int>();
+        annos = new List<int>();
         cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor, selection);
         CursosGrupos[] gruposid = await ServicioGruposCursos.GetCursosGrupos();
         List<Grupos> grupos = await ServicioGrupos.GetGrupos(idProfesor);
@@ -221,6 +214,7 @@
                     if (g.Id == grupo.IdGrupo)
                     {
                         gruposenCurso.Add(g);
+                        annos.Add(g.Anio);
                     }
                 }
             }
@@ -233,7 +227,7 @@
 
     private void PeriodoSeleccionado(int selection)
     {
-        Console.WriteLine(selection);
+        periodo = selection;
     }
 
 
