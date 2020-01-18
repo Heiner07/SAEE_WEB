@@ -48,11 +48,13 @@
                                         <td>
                                             @if (GruposAgregados.Exists(grupoTemp => grupoTemp.IdGrupo == grupo.Id))
                                             {
-                                                <input type="checkbox" checked="checked" @onclick="@(()=>RemoverGrupo(grupo))">
+                                                <MatCheckbox Value="true" @onclick="@(()=>RemoverGrupo(grupo))"></MatCheckbox>
+                                                @*<input type="checkbox" checked="checked" @onclick="@(()=>RemoverGrupo(grupo))">*@
                                             }
                                             else
                                             {
-                                                <input type="checkbox" @onclick="@(()=>AgregarGrupo(grupo))">
+                                                <MatCheckbox Value="false" @onclick="@(()=>AgregarGrupo(grupo))"></MatCheckbox>
+                                                @*<input type="checkbox" @onclick="@(()=>AgregarGrupo(grupo))">*@
                                             }
                                         </td>
                                     </tr>
