@@ -382,15 +382,14 @@
         {
             tipoMsg = "alert-warning";
             headerMsg = "ERROR!";
-            msjError = "Debe llenar todos los datos requeridos.";
+            msjError = "Debe llenar y seleccionar todos los datos requeridos";
             mostrarError = true;
         }
         else
         {
-            if (!asignacion.Tipo.Equals("Asistencia"))
-            {
-                asignacion.Estado = "Ninguno";
-            }
+
+            asignacion.Estado = "Ninguno";
+
             if (Opcion)
             {
                 //Notificaciones
