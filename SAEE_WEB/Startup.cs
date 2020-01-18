@@ -63,7 +63,7 @@ namespace SAEE_WEB
             services.AddRazorPages();
             services.AddServerSideBlazor();
             //services.AddScoped<AuthenticationStateProvider, RevalidatingIdentityAuthenticationStateProvider<IdentityUser>>();
-           // services.AddSingleton<WeatherForecastService>();
+            // services.AddSingleton<WeatherForecastService>();
             services.AddScoped<CursosServices>();
             services.AddScoped<CursosGruposServices>();
             services.AddScoped<GruposServices>();
@@ -76,6 +76,8 @@ namespace SAEE_WEB
             services.AddScoped<HttpContextAccessor>();
             services.AddHttpClient();
             services.AddScoped<HttpClient>();
+
+            services.AddSingleton<IHostedService, NotificacionesServices>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

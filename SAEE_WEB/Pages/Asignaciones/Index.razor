@@ -6,158 +6,209 @@
 @inject EvaluacionesServices ServicioEvaluaciones
 @{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
 @{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
-    <div class="container">
-        @if (mostrarError)
-        {
-            <div class="alert @tipoMsg alert-dismissible fade show" role="alert">
-                <strong>@headerMsg</strong> @msjError
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError = false)">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        }
-        <h3>Asignaciones</h3>
-        <form class="form-inline">
-            <div class="form-group">
-                <Dropdown TItem="int" OnSelected="@CursoSeleccionado">
-                    <InitialTip>Curso</InitialTip>
-                    <ChildContent>
-                        @if (cursos == null)
-                        {
-
-                        }
-                        else if (cursos.Length == 0)
-                        {
-
-                        }
-                        else
-                        {
-                            @foreach (var curso in cursos)
-                            {
-                                <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
-                            }
-                        }
-                    </ChildContent>
-                </Dropdown>
-            </div>
-            <div class="form-group">
-                <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
-                    <InitialTip>Grupo</InitialTip>
-                    <ChildContent>
-                        @if (gruposenCurso.Count != 0)
-                        {
-                            @foreach (var i in gruposenCurso)
-                            {
-                                <DropdownListItem Item="@i">@i.Grupo</DropdownListItem>
-                            }
-                        }
-                    </ChildContent>
-                </Dropdown>
-            </div>
-            <div class="form-group">
-                <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
-                    <InitialTip>Rubro</InitialTip>
-                    <ChildContent>
-                        <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
-                        <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
-                        <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
-                        <DropdownListItem Item="@list[3]">Proyecto</DropdownListItem>
-                        <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
-                    </ChildContent>
-                </Dropdown>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones"><i class="fa fa-search"></i></button>
-            </div>
-            <div class="form-group">
-                <button type="button" class="btn btn-outline-info mr-4" @onclick="CargarAsignaciones">Listar Todos</button>
-            </div>
-        </form>
-        <p></p>
-        <p>
-            <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
-        </p>
-        @if (mostrarFormulario)
-        {
-            <div class="card-body border rounded">
-                <form>
-                    <div class="form-group">
-                        <label for="InputNombre"><strong>Nombre</strong></label>
-                        <input class="form-control" type="text" placeholder="Nombre" id="InputNombre" @bind="@asignacion.Nombre" />
-
-                    </div>
-                    <div class="form-group">
-                        <label for="InputDescripcion"><strong>Descripcion</strong></label>
-                        <input class="form-control" type="text" placeholder="Descripcion" id="InputDescripcion" @bind="@asignacion.Descripcion" />
-
-                    </div>
-                    @if (MostrarCMBEstado)
+<div class="container">
+    @if (mostrarError)
+    {
+        <div class="alert @tipoMsg alert-dismissible fade show" role="alert">
+            <strong>@headerMsg</strong> @msjError
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError = false)">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    <h3>Asignaciones</h3>
+    <form class="form-inline">
+        <div class="form-group">
+            <Dropdown TItem="int" OnSelected="@CursoSeleccionado">
+                <InitialTip>Curso</InitialTip>
+                <ChildContent>
+                    @if (cursos == null)
                     {
-                        <div class="form-group" id="cmbEstado">
-                            <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
-                                <InitialTip>Estado</InitialTip>
-                                <ChildContent>
-                                    <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
-                                    <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
-                                    <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
-                                    <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
-                                    <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
-                                </ChildContent>
-                            </Dropdown>
+
+                    }
+                    else if (cursos.Length == 0)
+                    {
+
+                    }
+                    else
+                    {
+                        @foreach (var curso in cursos)
+                        {
+                            <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
+                        }
+                    }
+                </ChildContent>
+            </Dropdown>
+        </div>
+        <div class="form-group">
+            <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
+                <InitialTip>Grupo</InitialTip>
+                <ChildContent>
+                    @if (gruposenCurso.Count != 0)
+                    {
+                        @foreach (var i in gruposenCurso)
+                        {
+                            <DropdownListItem Item="@i">@i.Grupo</DropdownListItem>
+                        }
+                    }
+                </ChildContent>
+            </Dropdown>
+        </div>
+        <div class="form-group">
+            <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
+                <InitialTip>Rubro</InitialTip>
+                <ChildContent>
+                    <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
+                    <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
+                    <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
+                    <DropdownListItem Item="@list[3]">Proyecto</DropdownListItem>
+                    <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
+                </ChildContent>
+            </Dropdown>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones"><i class="fa fa-search"></i></button>
+        </div>
+        <div class="form-group">
+            <button type="button" class="btn btn-outline-info mr-4" @onclick="CargarAsignaciones">Listar Todos</button>
+        </div>
+    </form>
+    <p></p>
+    <p>
+        <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+    </p>
+    @if (mostrarFormulario)
+    {
+        <div class="card-body border rounded">
+            <form>
+                <div class="form-group">
+                    <label for="InputNombre"><strong>Nombre</strong></label>
+                    <input class="form-control" type="text" placeholder="Nombre" id="InputNombre" @bind="@asignacion.Nombre" />
+
+                </div>
+                <div class="form-group">
+                    <label for="InputDescripcion"><strong>Descripcion</strong></label>
+                    <input class="form-control" type="text" placeholder="Descripcion" id="InputDescripcion" @bind="@asignacion.Descripcion" />
+
+                </div>
+                @if (MostrarCMBEstado)
+                {
+                    <div class="form-group" id="cmbEstado">
+                        <Dropdown TItem="string" OnSelected="@EstadoSeleccionado">
+                            <InitialTip>Estado</InitialTip>
+                            <ChildContent>
+                                <DropdownListItem Item="@list1[0]">Presente</DropdownListItem>
+                                <DropdownListItem Item="@list1[1]">Escape</DropdownListItem>
+                                <DropdownListItem Item="@list1[2]">Justificada</DropdownListItem>
+                                <DropdownListItem Item="@list1[3]">Injustificada</DropdownListItem>
+                                <DropdownListItem Item="@list1[4]">Tardía</DropdownListItem>
+                            </ChildContent>
+                        </Dropdown>
+                    </div>
+                }
+
+                <div class="form-group">
+                    <label for="InputFecha"><strong>Fecha</strong></label>
+                    <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputFecha" @bind="@asignacion.Fecha" />
+
+                </div>
+                <div class="form-group">
+                    <label for="InputPuntos"><strong>Puntos</strong></label>
+                    <input class="form-control" type="number" placeholder="Puntos" id="InputPuntos" @bind="@asignacion.Puntos" />
+
+                </div>
+                <div class="form-group">
+                    <label for="InputPorcentaje"><strong>Porcentaje</strong></label>
+                    <input class="form-control" type="number" placeholder="Porcentaje" id="InputPorcentaje" @bind="@asignacion.Porcentaje" />
+
+                </div>
+
+                <div class="form-group" id="notificacionCorreo">
+                    <label for="InputNotificacion"><strong>Notificación</strong></label>
+                    <div class=@claseBotonNotificacion>
+                        <button class="btn btn-secondary dropdown-toggle"
+                                type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false"
+                                @onclick="MostrarOpcionesN">
+                            @if (asignacion.Fecha.Date < DateTime.Today.Date)
+                            {
+                                diasNotificacion = 0;
+                                textoBotonNotificacion = "Sin notificación";
+                            }
+                            @textoBotonNotificacion
+                        </button>
+                        <div class=@claseOpcionesNotificacion aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" @onclick="(() => NotificacionSeleccionada(0))">Sin notificación</a>
+                            @if ((asignacion.Fecha.Date - DateTime.Today.Date).Days >= 1)
+                            {
+                                <a class="dropdown-item" @onclick="(() => NotificacionSeleccionada(1))">Un día antes</a>
+                            }
+                            @if ((asignacion.Fecha.Date - DateTime.Today.Date).Days >= 3)
+                            {
+                                <a class="dropdown-item" @onclick="(() => NotificacionSeleccionada(3))">Tres días antes</a>
+                            }
+                            @if ((asignacion.Fecha.Date - DateTime.Today.Date).Days >= 7)
+                            {
+                                <a class="dropdown-item" @onclick="(() => NotificacionSeleccionada(7))">Una semana antes</a>
+                            }
+                            @if ((asignacion.Fecha.Date - DateTime.Today.Date).Days >= 14)
+                            {
+                                <a class="dropdown-item" @onclick="(() => NotificacionSeleccionada(14))">Dos semanas antes</a>
+                            }
                         </div>
-                    }
-
-                    <div class="form-group">
-                        <label for="InputFecha"><strong>Fecha</strong></label>
-                        <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputFecha" @bind="@asignacion.Fecha" />
-
                     </div>
-                    <div class="form-group">
-                        <label for="InputPuntos"><strong>Puntos</strong></label>
-                        <input class="form-control" type="number" placeholder="Puntos" id="InputPuntos" @bind="@asignacion.Puntos" />
+                    @*<Dropdown TItem="int" OnSelected="@NotificacionSeleccionada">
+            <InitialTip>Sin notificación</InitialTip>
+            <ChildContent>
+                <DropdownListItem Item="@diasAnticipacion[0]">Sin notificación</DropdownListItem>
+                @if (asignacion.Fecha.Date > DateTime.Today.Date)
+                {
+                    <DropdownListItem Item="@diasAnticipacion[1]">Un día antes</DropdownListItem>
+                    <DropdownListItem Item="@diasAnticipacion[2]">Tres días antes</DropdownListItem>
+                    <DropdownListItem Item="@diasAnticipacion[3]">Una semana antes</DropdownListItem>
+                    <DropdownListItem Item="@diasAnticipacion[4]">Dos semanas antes</DropdownListItem>
+                }
+            </ChildContent>
+        </Dropdown>*@
+                </div>
 
-                    </div>
-                    <div class="form-group">
-                        <label for="InputPorcentaje"><strong>Porcentaje</strong></label>
-                        <input class="form-control" type="number" placeholder="Porcentaje" id="InputPorcentaje" @bind="@asignacion.Porcentaje" />
-
-                    </div>
-
-                    <button type="button" class="btn btn-success" @onclick="GuardarAsignacion">@MsgBoton</button>
-                    @if(mostrarBotonCancelar){
+                <button type="button" class="btn btn-success" @onclick="GuardarAsignacion">@MsgBoton</button>
+                @if (mostrarBotonCancelar)
+                {
                     <button type="button" class="btn btn-danger mr-4" @onclick="CancelarEdicion">Cancelar</button>
-                    }
-                </form>
-            </div>
-        }
-        @if (asignaciones == null)
-        {
-            <text> Cargando... </text>
-        }
-        else if (asignaciones.Length == 0)
-        {
-            <text> No hay asignaciones de este profesor</text>
+                }
+            </form>
+        </div>
+    }
+    @if (asignaciones == null)
+    {
+        <text> Cargando... </text>
+    }
+    else if (asignaciones.Length == 0)
+    {
+        <text> No hay asignaciones de este profesor</text>
 
-        }
-        else
-        {
+    }
+    else
+    {
 
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Estado</th>
-                        <th>Fecha</th>
-                        <th>Puntos</th>
-                        <th>Porcentaje</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var asig in asignaciones)
-                    {
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Tipo</th>
+                    <th>Nombre</th>
+                    <th>Descripción</th>
+                    <th>Estado</th>
+                    <th>Fecha</th>
+                    <th>Puntos</th>
+                    <th>Porcentaje</th>
+                    <th>Opciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var asig in asignaciones)
+                {
                     <tr>
 
                         <td>@asig.Tipo</td>
@@ -177,14 +228,14 @@
 
                     </tr>
 
-                    }
+                }
 
-                </tbody>
+            </tbody>
 
 
-            </table>
-        }
-    </div>
+        </table>
+    }
+</div>
 @code {
     Boolean MostrarCMBEstado = false;
     Asignaciones asignacion { get; set; }
@@ -203,6 +254,13 @@
     Boolean mostrarFormulario = false;
     String TextoBotonAgregar = "Mostrar Formulario";
     String headerMsg = "ERROR!";
+
+    //Notificaciones
+    int diasNotificacion = 0;
+    string textoBotonNotificacion = "Sin notificación";
+    string claseBotonNotificacion = "dropdown";
+    string claseOpcionesNotificacion = "dropdown-menu";
+    //---
 
     String rubro = "";
     int idcurso = 0, idgrupo = 0;
@@ -277,7 +335,8 @@
         MostrarCMBEstado = false;
         mostrarFormulario = false;
     }
-    private void EditarAsignacion(Asignaciones asig) {
+    private void EditarAsignacion(Asignaciones asig)
+    {
         asignacion = asig;
         if (!asignacion.Estado.Equals("Ninguno"))
         {
@@ -287,6 +346,18 @@
         mostrarFormulario = true;
         mostrarBotonCancelar = true;
         Opcion = true;
+
+        //Notificaciones
+        if(asignacion.NotificacionesCorreo.Count > 0)
+        {
+            diasNotificacion = asignacion.NotificacionesCorreo.ElementAt(0).DiasAnticipacion;
+        }
+        else
+        {
+            diasNotificacion = 0;
+        }
+        EstablecerTextoBoton(diasNotificacion);
+        //--
 
     }
     private void AbrirCerrarFormAgregar()
@@ -304,8 +375,9 @@
 
 
     }
-    async Task GuardarAsignacion() {
-        if(asignacion.Curso == 0 || asignacion.Tipo.Equals("") || asignacion.Grupo == 0 || asignacion.Nombre.Equals("") ||
+    async Task GuardarAsignacion()
+    {
+        if (asignacion.Curso == 0 || asignacion.Tipo.Equals("") || asignacion.Grupo == 0 || asignacion.Nombre.Equals("") ||
             asignacion.Descripcion.Equals("") || asignacion.Fecha.Equals("") || asignacion.Porcentaje == 0 ||
             asignacion.Puntos == 0
             )
@@ -323,6 +395,27 @@
             }
             if (Opcion)
             {
+                //Notificaciones
+                if (diasNotificacion == 0)// Si es cero, entonces desea eliminar la notificación
+                {
+                    asignacion.NotificacionesCorreo.Clear();
+                }
+                else
+                {
+                    if(asignacion.NotificacionesCorreo.Count == 0)
+                    {
+                        asignacion.NotificacionesCorreo.Add(new NotificacionesCorreo()
+                        {
+                            DiasAnticipacion = diasNotificacion
+                        });
+                    }
+                    else
+                    {
+                        asignacion.NotificacionesCorreo.ElementAt(0).DiasAnticipacion = diasNotificacion;
+                    }
+                }
+                //---
+
                 Boolean resultado = await ServicioAsignaciones.PutAsignaciones(asignacion);
                 if (resultado)
                 {
@@ -353,14 +446,20 @@
                     headerMsg = "ALERTA!";
                     msjError = "Error al editar la asignación";
                     mostrarError = true;
-                    await  ServicioAsignaciones.RollbackAsignaciones(asignacion);
+                    await ServicioAsignaciones.RollbackAsignaciones(asignacion);
                     await CargarAsignaciones();
                 }
             }
             else
             {
+                //Notificaciones
+                asignacion.NotificacionesCorreo.Add(new NotificacionesCorreo()
+                {
+                    DiasAnticipacion = diasNotificacion
+                });
+                //---
                 Boolean resultado = await ServicioAsignaciones.PostAsignaciones(asignacion);
-                if(resultado)
+                if (resultado)
                 {
                     tipoMsg = "alert-success";
                     headerMsg = "HECHO!";
@@ -380,7 +479,7 @@
                     int idasignacion = asignaciones[asignaciones.Length - 1].Id;
                     Console.WriteLine(idasignacion);
                     estudiantesXgrupo = await ServicioGrupos.GetEstudiantesXGrupos(grupoSelec);
-                    foreach(var i in estudiantesXgrupo)
+                    foreach (var i in estudiantesXgrupo)
                     {
                         Evaluaciones evaluacion = new Evaluaciones();
                         evaluacion.Asignacion = idasignacion;
@@ -428,8 +527,50 @@
     }
     private void EstadoSeleccionado(string selection)
     {
-        asignacion.Estado= selection;
+        asignacion.Estado = selection;
     }
+    //Notificaciones
+    private void MostrarOpcionesN()
+    {
+        if (claseBotonNotificacion.Equals("dropdown"))
+        {
+            claseBotonNotificacion = "dropdown show";
+            claseOpcionesNotificacion = "dropdown-menu show";
+        }
+        else
+        {
+            claseBotonNotificacion = "dropdown";
+            claseOpcionesNotificacion = "dropdown-menu";
+        }
+    }
+    private void NotificacionSeleccionada(int selection)
+    {
+        diasNotificacion = selection;
+        EstablecerTextoBoton(selection);
+        MostrarOpcionesN();
+    }
+    private void EstablecerTextoBoton(int selection)
+    {
+        switch (selection)
+        {
+            case 1:
+                textoBotonNotificacion = "Un día antes";
+                break;
+            case 3:
+                textoBotonNotificacion = "Tres días antes";
+                break;
+            case 7:
+                textoBotonNotificacion = "Una semana antes";
+                break;
+            case 14:
+                textoBotonNotificacion = "Dos semanas antes";
+                break;
+            default:
+                textoBotonNotificacion = "Sin notificación";
+                break;
+        }
+    }
+    //---
     private void RubroSeleccionado(string selection)
     {
         rubro = selection;

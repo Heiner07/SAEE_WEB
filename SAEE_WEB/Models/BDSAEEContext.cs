@@ -20,6 +20,7 @@ namespace SAEE_WEB.Models
         public virtual DbSet<Estudiantes> Estudiantes { get; set; }
         public virtual DbSet<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
         public virtual DbSet<Grupos> Grupos { get; set; }
+        public virtual DbSet<NotificacionesCorreo> NotificacionesCorreo { get; set; }
         public virtual DbSet<Profesores> Profesores { get; set; }
 
         public virtual DbSet<Asignaciones> Asignaciones { get; set; }
@@ -129,6 +130,15 @@ namespace SAEE_WEB.Models
                     .HasForeignKey(d => d.IdProfesor)
                     .OnDelete(DeleteBehavior.Cascade)
                     .HasConstraintName("FK__Grupos__IdProfes__70DDC3D8");
+            });
+
+            modelBuilder.Entity<NotificacionesCorreo>(entity =>
+            {
+                entity.HasOne(d => d.IdAsignacionNavigation)
+                    .WithMany(p => p.NotificacionesCorreo)
+                    .HasForeignKey(d => d.IdAsignacion)
+                    .OnDelete(DeleteBehavior.Cascade)
+                    .HasConstraintName("FK__Notificac__IdAsi__3587F3E0");
             });
 
             modelBuilder.Entity<Profesores>(entity =>

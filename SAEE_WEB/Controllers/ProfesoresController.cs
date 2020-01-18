@@ -75,6 +75,7 @@ namespace SAEE_WEB.Controllers
             {
                 // Se realiza de esta manera, ya que habría conflicto con la entidad entrante (son iguales),
                 // por lo que se modifica la ultima retornada por el ef
+                profesor.Cedula = profesores.Cedula;
                 profesor.Nombre = profesores.Nombre;
                 profesor.PrimerApellido = profesores.PrimerApellido;
                 profesor.SegundoApellido = profesores.SegundoApellido;

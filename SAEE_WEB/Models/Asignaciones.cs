@@ -8,10 +8,11 @@ namespace SAEE_WEB.Models
     public class Asignaciones
     {
         public Asignaciones() {
-          /*  Cursos = new HashSet<Cursos>();
-            Estudiantes = new HashSet<Estudiantes>();
-            EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
-            Grupos = new HashSet<Grupos>();*/
+            /*  Cursos = new HashSet<Cursos>();
+              Estudiantes = new HashSet<Estudiantes>();
+              EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
+              Grupos = new HashSet<Grupos>();*/
+            NotificacionesCorreo = new HashSet<NotificacionesCorreo>();
         }
         
         public int Id { get; set;}
@@ -26,10 +27,11 @@ namespace SAEE_WEB.Models
         public Decimal Puntos { get; set; }
         public Decimal Porcentaje { get; set; }
 
-     /*   public virtual ICollection<Cursos> Cursos { get; set; }
-        public virtual ICollection<Estudiantes> Estudiantes { get; set; }
-        public virtual ICollection<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
-        public virtual ICollection<Grupos> Grupos { get; set; }*/
+        /*   public virtual ICollection<Cursos> Cursos { get; set; }
+           public virtual ICollection<Estudiantes> Estudiantes { get; set; }
+           public virtual ICollection<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
+           public virtual ICollection<Grupos> Grupos { get; set; }*/
+        public virtual ICollection<NotificacionesCorreo> NotificacionesCorreo { get; set; }
     }
 
 }
