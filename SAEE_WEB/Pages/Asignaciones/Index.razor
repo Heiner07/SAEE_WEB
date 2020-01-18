@@ -108,7 +108,7 @@
                     }
 
                     <div class="form-group">
-                        <label for="InputFecha"><strong>Fecha</strong></label>
+                        <label for="InputFecha"><strong>Fecha (Mes/Día/Año)</strong></label>
                         <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputFecha" @bind="@asignacion.Fecha" />
 
                     </div>
@@ -148,7 +148,6 @@
                         <th>Tipo</th>
                         <th>Nombre</th>
                         <th>Descripción</th>
-                        <th>Estado</th>
                         <th>Fecha</th>
                         <th>Puntos</th>
                         <th>Porcentaje</th>
@@ -163,8 +162,7 @@
                         <td>@asig.Tipo</td>
                         <td>@asig.Nombre</td>
                         <td>@asig.Descripcion</td>
-                        <td>@asig.Estado</td>
-                        <td>@asig.Fecha</td>
+                        <td>@asig.Fecha.ToShortDateString()</td>
                         <td>@asig.Puntos</td>
                         <td>@asig.Porcentaje</td>
                         <td>
@@ -438,14 +436,14 @@
     {
         rubro = selection;
         asignacion.Tipo = selection;
-        if (selection.Equals("Asistencia"))
+      /*  if (selection.Equals("Asistencia"))
         {
             MostrarCMBEstado = true;
         }
         else
         {
             MostrarCMBEstado = false;
-        }
+        }*/
     }
 }
 

@@ -101,7 +101,7 @@
 
     async Task NotaVerificada()
     {
-        if(evaluacion.Nota >= 0 && evaluacion.Porcentaje >= 0 && evaluacion.Puntos >= 0)
+        if(evaluacion.Nota >= 0 && (evaluacion.Porcentaje >= 0 &&  evaluacion.Porcentaje <= asignacion.Porcentaje) && (evaluacion.Puntos >= 0 && evaluacion.Puntos <= asignacion.Puntos))
         {
 
             Boolean resultado = await ServicioEvaluaciones.PutEvaluaciones(evaluacion);
