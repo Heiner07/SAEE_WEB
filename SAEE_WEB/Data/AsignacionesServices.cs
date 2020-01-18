@@ -63,7 +63,12 @@ namespace SAEE_WEB.Data
 
         public async Task<Boolean> DeleteAsignaciones(Asignaciones asignacion)
         {
-
+            Evaluaciones[] evaluaciones = await _context.Evaluaciones.Where(x => x.Asignacion == asignacion.Id).ToArrayAsync();
+            foreach (var i in evaluaciones)
+            {
+                _context.Remove(i);
+                await _context.SaveChangesAsync();
+            }
             _context.Remove(await GetAsignaciones(asignacion.Id));
             await _context.SaveChangesAsync();
 
