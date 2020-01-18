@@ -29,61 +29,61 @@
                     else if (cursos.Length == 0)
                     {
 
-                    }
-                    else
-                    {
-                        @foreach (var curso in cursos)
-                        {
-                            <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
                         }
-                    }
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
-                <InitialTip>Grupo</InitialTip>
-                <ChildContent>
-                    @if (gruposenCurso.Count != 0)
-                    {
-                        @foreach (var i in gruposenCurso)
+                        else
                         {
-                            <DropdownListItem Item="@i">@i.Grupo</DropdownListItem>
+                            @foreach (var curso in cursos)
+                            {
+                                <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
+                            }
                         }
-                    }
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
-                <InitialTip>Rubro</InitialTip>
-                <ChildContent>
-                    <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
-                    <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
-                    <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
-                    <DropdownListItem Item="@list[3]">Proyecto</DropdownListItem>
-                    <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones"><i class="fa fa-search"></i></button>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-outline-info mr-4" @onclick="CargarAsignaciones">Listar Todos</button>
-        </div>
-    </form>
-    <p></p>
-    <p>
-        <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
-    </p>
-    @if (mostrarFormulario)
-    {
-        <div class="card-body border rounded">
-            <form>
-                <div class="form-group">
-                    <label for="InputNombre"><strong>Nombre</strong></label>
-                    <input class="form-control" type="text" placeholder="Nombre" id="InputNombre" @bind="@asignacion.Nombre" />
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
+                    <InitialTip>Grupo</InitialTip>
+                    <ChildContent>
+                        @if (gruposenCurso.Count != 0)
+                        {
+                            @foreach (var i in gruposenCurso)
+                            {
+                                <DropdownListItem Item="@i">@i.Grupo | @i.Anio </DropdownListItem>
+                            }
+                        }
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
+                    <InitialTip>Rubro</InitialTip>
+                    <ChildContent>
+                        <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
+                        <DropdownListItem Item="@list[3]">Proyecto</DropdownListItem>
+                        <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones"><i class="fa fa-search"></i></button>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-outline-info mr-4" @onclick="CargarAsignaciones">Listar Todos</button>
+            </div>
+        </form>
+        <p></p>
+        <p>
+            <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+        </p>
+        @if (mostrarFormulario)
+        {
+            <div class="card-body border rounded">
+                <form>
+                    <div class="form-group">
+                        <label for="InputNombre"><strong>Nombre</strong></label>
+                        <input class="form-control" type="text" placeholder="Nombre" id="InputNombre" @bind="@asignacion.Nombre" />
 
                 </div>
                 <div class="form-group">
@@ -107,9 +107,9 @@
                     </div>
                 }
 
-                <div class="form-group">
-                    <label for="InputFecha"><strong>Fecha</strong></label>
-                    <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputFecha" @bind="@asignacion.Fecha" />
+                    <div class="form-group">
+                        <label for="InputFecha"><strong>Fecha (Mes/Día/Año)</strong></label>
+                        <input class="form-control" type="date" placeholder="Fecha de Ingreso" id="InputFecha" @bind="@asignacion.Fecha" />
 
                 </div>
                 <div class="form-group">
@@ -193,29 +193,27 @@
     else
     {
 
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tipo</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Puntos</th>
-                    <th>Porcentaje</th>
-                    <th>Opciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var asig in asignaciones)
-                {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Fecha</th>
+                        <th>Puntos</th>
+                        <th>Porcentaje</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var asig in asignaciones)
+                    {
                     <tr>
 
                         <td>@asig.Tipo</td>
                         <td>@asig.Nombre</td>
                         <td>@asig.Descripcion</td>
-                        <td>@asig.Estado</td>
-                        <td>@asig.Fecha</td>
+                        <td>@asig.Fecha.ToShortDateString()</td>
                         <td>@asig.Puntos</td>
                         <td>@asig.Porcentaje</td>
                         <td>
@@ -477,18 +475,22 @@
                     asignacion.Tipo = "";
                     await CargarAsignaciones();
                     int idasignacion = asignaciones[asignaciones.Length - 1].Id;
-                    Console.WriteLine(idasignacion);
+                    int periodos = cursoSeleccionado.CantidadPeriodos;
                     estudiantesXgrupo = await ServicioGrupos.GetEstudiantesXGrupos(grupoSelec);
                     foreach (var i in estudiantesXgrupo)
                     {
-                        Evaluaciones evaluacion = new Evaluaciones();
-                        evaluacion.Asignacion = idasignacion;
-                        evaluacion.Estudiante = i.Id;
-                        evaluacion.Puntos = 0;
-                        evaluacion.Porcentaje = 0;
-                        evaluacion.Nota = 0;
-                        evaluacion.Estado = "Ninguno";
-                        await ServicioEvaluaciones.PostEvaluaciones(evaluacion);
+                        for (int j = 1; j <= periodos; j++)
+                        {
+                            Evaluaciones evaluacion = new Evaluaciones();
+                            evaluacion.Asignacion = idasignacion;
+                            evaluacion.Estudiante = i.Id;
+                            evaluacion.Puntos = 0;
+                            evaluacion.Porcentaje = 0;
+                            evaluacion.Nota = 0;
+                            evaluacion.Estado = "Ninguno";
+                            evaluacion.Periodo = j;
+                            await ServicioEvaluaciones.PostEvaluaciones(evaluacion);
+                        }
                     }
                 }
             }
@@ -575,14 +577,14 @@
     {
         rubro = selection;
         asignacion.Tipo = selection;
-        if (selection.Equals("Asistencia"))
+      /*  if (selection.Equals("Asistencia"))
         {
             MostrarCMBEstado = true;
         }
         else
         {
             MostrarCMBEstado = false;
-        }
+        }*/
     }
 }
 

@@ -28,9 +28,9 @@ namespace SAEE_WEB.Data
             return await _context.Evaluaciones.ToArrayAsync();
         }
 
-        public async Task<Evaluaciones[]> GetEvaluacionesXAsignacion(int asignacion)
+        public async Task<Evaluaciones[]> GetEvaluacionesXAsignacion(int asignacion,int periodo)
         {
-            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion).ToArrayAsync();
+            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion && evaluacion.Periodo == periodo).ToArrayAsync();
         }
 
         /* private async Task<Profesores> GetProfesorCompleteData(int id)

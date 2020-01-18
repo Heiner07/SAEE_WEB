@@ -72,6 +72,7 @@
 @code{
     [Parameter] public EventCallback CerrarEditar { get; set; }
     [Parameter] public Asignaciones asignacion { get; set; }
+    [Parameter] public int periodo { get; set; }
     Evaluaciones [] evaluaciones { get; set; }
     List<EstudianteEvaluacion> estudiantes { get; set; }
     Evaluaciones evaluacion { get; set; }
@@ -102,7 +103,7 @@
     async Task cargarEvaluaciones()
     {
         estudiantes = new List<EstudianteEvaluacion>();
-        evaluaciones = await ServicioEvaluaciones.GetEvaluacionesXAsignacion(asignacion.Id);
+        evaluaciones = await ServicioEvaluaciones.GetEvaluacionesXAsignacion(asignacion.Id,periodo);
         foreach(var i in evaluaciones)
         {
             EstudianteEvaluacion nuevo = new EstudianteEvaluacion();
