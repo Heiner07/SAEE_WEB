@@ -15,8 +15,10 @@
 </div>
 
 @code {
-    [Parameter] public Profesores Profesor { get; set; }
-    [Parameter] public EventCallback CerrarEditar { get; set; }
+    [Parameter]
+    public Profesores Profesor { get; set; }
+    [Parameter]
+    public EventCallback CerrarEditar { get; set; }
 
     async Task EditarProfesor()
     {

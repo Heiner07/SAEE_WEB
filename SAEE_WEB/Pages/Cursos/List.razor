@@ -67,13 +67,15 @@ else
 }
 
 @code {
+    [Parameter]
+    public int IdProfesor { get; set; }
+
     Cursos[] cursos { get; set; }
     CursosGrupos[] CursosGrupos { get; set; }
     CursosGrupos[] CursosGruposFiltrados { get; set; }
     Cursos cursoEditar;
     Boolean mostrarEditar = false, mostrarGrupos = false, mostrarBorrar = false;
     String TextoBuscar = "";
-    [Parameter] public int IdProfesor { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -98,7 +100,7 @@ else
 
     void MostrarPanelGrupos(Cursos curso)
     {
-        cursoEditar = curso;//Revisar
+        cursoEditar = curso;
         mostrarGrupos = true;
     }
 

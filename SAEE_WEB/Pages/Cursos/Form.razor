@@ -11,27 +11,25 @@
             <input class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
             <ValidationMessage For="@(() => Curso.CantidadPeriodos)" />
         </div>
-        @*<div class="form-group">
-            <button type="button" class="btn btn-outline-secondary" @onclick="MostarGruposAgregar">Grupos del curso</button>
-        </div>
-        @if (MostrarGrupos)
-        {
-            <div>
-                <ListGrupos OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" IdProfesor="IdProfesor" />
-            </div>
-        }*@
         <button type="submit" class="btn btn-success">@TextoBoton</button>
         <DataAnnotationsValidator />
     </EditForm>
 </div>
 
 @code {
-    [Parameter] public Cursos Curso { get; set; }
-    [Parameter] public String Titulo { get; set; }
-    [Parameter] public String TextoBoton { get; set; }
-    [Parameter] public List<CursosGrupos> GruposAgregados { get; set; }
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
-    [Parameter] public int IdProfesor { get; set; }
+    [Parameter]
+    public Cursos Curso { get; set; }
+    [Parameter]
+    public String Titulo { get; set; }
+    [Parameter]
+    public String TextoBoton { get; set; }
+    [Parameter]
+    public List<CursosGrupos> GruposAgregados { get; set; }
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+    [Parameter]
+    public int IdProfesor { get; set; }
+
     Boolean MostrarGrupos = false;
 
     void MostarGruposAgregar()

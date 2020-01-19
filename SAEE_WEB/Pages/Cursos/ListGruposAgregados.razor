@@ -61,9 +61,6 @@
             </div>
             <div class="modal-footer">
                 <label>*Presione Guardar para almacenar cambios realizados.</label>
-                @*<label class="alert-danger">*Presione Guardar para almacenar cambios realizados.</label>*@
-                @*<h6>*Presione Guardar para almacenar cambios realizados.</h6>*@
-                @*<div>*Presione Guardar para almacenar cambios realizados.</div>*@
                 <button type="button" class="btn btn-secondary" @onclick="MostarGruposAgregar">Agregar</button>
                 <button type="button" class="btn btn-secondary" @onclick="OcultarGruposAgregados">Cancelar</button>
                 <button type="button" class="btn btn-primary" @onclick="GuardarCursosGrupos">Guardar</button>
@@ -73,10 +70,15 @@
 </div>
 
 @code {
-    [Parameter] public List<CursosGrupos> GruposAgregados { get; set; }
-    [Parameter] public Cursos Curso { get; set; }
-    [Parameter] public int IdProfesor { get; set; }
-    [Parameter] public EventCallback OcultarGruposAgregados { get; set; }
+    [Parameter]
+    public List<CursosGrupos> GruposAgregados { get; set; }
+    [Parameter]
+    public Cursos Curso { get; set; }
+    [Parameter]
+    public int IdProfesor { get; set; }
+    [Parameter]
+    public EventCallback OcultarGruposAgregados { get; set; }
+
     bool MostrarGrupos = false;
     string TextoBuscar = string.Empty;
 

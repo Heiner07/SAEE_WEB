@@ -72,12 +72,17 @@
 </div>
 
 @code {
+    [Parameter]
+    public List<CursosGrupos> GruposAgregados { get; set; }
+    [Parameter]
+    public int IdCurso { get; set; }
+    [Parameter]
+    public int IdProfesor { get; set; }
+    [Parameter]
+    public EventCallback OcultarModel { get; set; }
+
     public List<Grupos> grupos;
     String TextoBuscar = "";
-    [Parameter] public List<CursosGrupos> GruposAgregados { get; set; }
-    [Parameter] public int IdCurso { get; set; }
-    [Parameter] public int IdProfesor { get; set; }
-    [Parameter] public EventCallback OcultarModel { get; set; }
 
     protected override async Task OnInitializedAsync()
     {

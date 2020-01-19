@@ -21,9 +21,13 @@
 </div>
 
 @code {
-    [Parameter] public Cursos curso { get; set; }
-    [Parameter] public int IdProfesor { get; set; }
-    [Parameter] public EventCallback CerrarEditar { get; set; }
+    [Parameter]
+    public Cursos curso { get; set; }
+    [Parameter]
+    public int IdProfesor { get; set; }
+    [Parameter]
+    public EventCallback CerrarEditar { get; set; }
+
     List<CursosGrupos> GruposAgregados;
 
     protected override Task OnParametersSetAsync()

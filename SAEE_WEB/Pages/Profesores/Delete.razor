@@ -34,8 +34,10 @@
 </div>
 
 @code {
-    [Parameter] public Profesores Profesor { get; set; }
-    [Parameter] public EventCallback CerrarEliminar { get; set; }
+    [Parameter]
+    public Profesores Profesor { get; set; }
+    [Parameter]
+    public EventCallback CerrarEliminar { get; set; }
 
     async Task EliminarProfesor()
     {

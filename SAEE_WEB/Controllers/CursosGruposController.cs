@@ -123,17 +123,6 @@ namespace SAEE_WEB.Controllers
             return NoContent();
         }
 
-        // POST: api/CursosGrupos
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPost]
-        //public async Task<ActionResult<CursosGrupos>> PostCursosGrupos(CursosGrupos cursosGrupos)
-        //{
-        //    _context.CursosGrupos.Add(cursosGrupos);
-        //    await _context.SaveChangesAsync();
-
-        //    return CreatedAtAction("GetCursosGrupos", new { id = cursosGrupos.Id }, cursosGrupos);
-        //}
         [HttpPut]
         [Route("PostCursosGrupos")]
         public async Task<IActionResult> PostCursosGrupos(List<CursosGrupos> cursosGrupos)
@@ -157,22 +146,6 @@ namespace SAEE_WEB.Controllers
 
             return NoContent();
         }
-
-        // DELETE: api/CursosGrupos/5
-        //[HttpDelete("{id}")]
-        //public async Task<ActionResult<CursosGrupos>> DeleteCursosGrupos(int id)
-        //{
-        //    var cursosGrupos = await _context.CursosGrupos.FindAsync(id);
-        //    if (cursosGrupos == null)
-        //    {
-        //        return NotFound();
-        //    }
-
-        //    _context.CursosGrupos.Remove(cursosGrupos);
-        //    await _context.SaveChangesAsync();
-
-        //    return cursosGrupos;
-        //}
 
         private bool CursosGruposExists(int id)
         {

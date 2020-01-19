@@ -44,10 +44,15 @@
 </div>
 
 @code {
-    [Parameter] public Profesores Profesor { get; set; }
-    [Parameter] public String Titulo { get; set; }
-    [Parameter] public String TextoBoton { get; set; }
-    [Parameter] public EventCallback OnValidSubmit { get; set; }
+    [Parameter]
+    public Profesores Profesor { get; set; }
+    [Parameter]
+    public String Titulo { get; set; }
+    [Parameter]
+    public String TextoBoton { get; set; }
+    [Parameter]
+    public EventCallback OnValidSubmit { get; set; }
+
     String claseContrasenia = "password", claseEye = "fa fa-eye";
 
     void MostrarOcultarContrasenia()

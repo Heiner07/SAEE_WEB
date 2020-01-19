@@ -24,17 +24,17 @@
                                 <ValidationMessage For="@(() => Usuario.Contrasenia)" />
                             </div>
                          </div>
-                            @if (Error)
-                            {
-                                <div class="form-group">
-                                    <label class="alert-danger">La cédula o contraseña es incorrecta</label>
-                                </div>
-                            }
+                        @if (Error)
+                        {
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary">Entrar</button>
+                                <label class="alert-danger">La cédula o contraseña es incorrecta</label>
                             </div>
-                            <DataAnnotationsValidator />
-</EditForm>
+                        }
+                        <div class="form-group">
+                            <button type="submit" class="btn btn-primary">Entrar</button>
+                        </div>
+                        <DataAnnotationsValidator />
+                    </EditForm>
                 </section>
             </div>
         </div>
@@ -49,7 +49,8 @@
 @code {
 
     InfoUsuario Usuario = new InfoUsuario();
-    [Parameter] public bool Error { get; set; }
+    [Parameter]
+    public bool Error { get; set; }
 
     void IniciarSesion()
     {

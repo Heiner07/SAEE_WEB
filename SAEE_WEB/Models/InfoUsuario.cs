@@ -8,9 +8,9 @@ namespace SAEE_WEB.Models
 {
     public class InfoUsuario
     {
-        [Required]
+        [Required(ErrorMessage = "Ingrese la cédula")]
         public string Cedula { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Ingrese la contraseña")]
         public string Contrasenia { get; set; }
     }
 }

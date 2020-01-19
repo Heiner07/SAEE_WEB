@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SAEE_WEB.Models
 {
@@ -14,11 +15,17 @@ namespace SAEE_WEB.Models
         }
 
         public int Id { get; set; }
+        [Required(ErrorMessage = "Ingrese la cédula")]
         public string Cedula { get; set; }
+        [Required(ErrorMessage = "Ingrese el nombre")]
         public string Nombre { get; set; }
+        [Required(ErrorMessage = "Ingrese el primer apellido")]
         public string PrimerApellido { get; set; }
+        [Required(ErrorMessage = "Ingrese el segundo apellido")]
         public string SegundoApellido { get; set; }
+        [Required(ErrorMessage = "Ingrese el correo")]
         public string Correo { get; set; }
+        [Required(ErrorMessage = "Ingrese la contraseña")]
         public string Contrasenia { get; set; }
         public bool Administrador { get; set; }
 

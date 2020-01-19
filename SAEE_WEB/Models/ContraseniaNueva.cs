@@ -8,11 +8,11 @@ namespace SAEE_WEB.Models
 {
     public class ContraseniaNueva
     {
-        [Required]
+        [Required(ErrorMessage = "La contraseña actual es requerida.")]
         public string Actual { get; set; }
-        [Required]
+        [Required(ErrorMessage = "La contraseña nueva es requerida.")]
         public string Nueva { get; set; }
-        [Required]
+        [Required(ErrorMessage = "La confirmación de la contraseña nueva es requerida")]
         public string Confirmada { get; set; }
     }
 }
