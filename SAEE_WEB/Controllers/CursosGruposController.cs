@@ -30,7 +30,7 @@ namespace SAEE_WEB.Controllers
                 return BadRequest();
             }
 
-            return await _context.CursosGrupos.ToListAsync();
+            return await _context.CursosGrupos.Include(cursoGrupo => cursoGrupo.IdGrupoNavigation).ToListAsync();
         }
 
         // GET: api/CursosGrupos/5
