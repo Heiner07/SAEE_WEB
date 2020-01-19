@@ -27,16 +27,17 @@ namespace SAEE_WEB.Controllers
         [HttpPost]
         public async Task<ActionResult<Usuario>> PostInicioSesion(Usuario usuario)
         {
-            Profesores profesor = await ComprobarInicioSesion(usuario, _context);
-            if (profesor == null)
-            {
-                return usuario;
-            }
-            else
-            {
-                usuario.Profesor = profesor;
-                return usuario;
-            }
+            //Profesores profesor = await ComprobarInicioSesion(usuario, _context);
+            return usuario;
+            //if (profesor == null)
+            //{
+            //    return usuario;
+            //}
+            //else
+            //{
+            //    usuario.Profesor = profesor;
+            //    return usuario;
+            //}
         }
 
         static async Task<Profesores> ComprobarInicioSesion(Usuario usuario, BDSAEEContext _context)
