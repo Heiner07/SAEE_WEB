@@ -49,9 +49,6 @@ namespace SAEE_WEB.Controllers
             return estudiantes;
         }
 
-        // PUT: api/Estudiantes/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut]
         [Route("PutEstudiantes")]
         public async Task<IActionResult> PutEstudiantes(Estudiantes estudiantes)
@@ -75,9 +72,6 @@ namespace SAEE_WEB.Controllers
             return NoContent();
         }
 
-        // POST: api/Estudiantes
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         [Route("PostEstudiantes")]
         public async Task<ActionResult<Estudiantes>> PostEstudiantes(Estudiantes estudiantes)

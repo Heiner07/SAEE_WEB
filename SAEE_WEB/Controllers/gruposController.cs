@@ -51,6 +51,21 @@ namespace SAEE_WEB.Controllers
             //              select EG.IdEstudianteNavigation).ToListAsync();
         }
 
+        [HttpGet]
+        [Route("GetEGOffline")]
+        public async Task<ActionResult<IEnumerable<EstudiantesXgrupos>>> GetEGOffline()
+        {
+            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+            var lista = _context.EstudiantesXgrupos.Include(z => z.IdEstudianteNavigation).ToListAsync();
+            return await lista;
+        }
+
+
+
         // PUT: api/Grupos/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
@@ -149,9 +164,6 @@ namespace SAEE_WEB.Controllers
             await _context.SaveChangesAsync();
             return CreatedAtAction("GetEG", new { id = eg.Id }, eg);
         }
-        private bool GruposExists(int id)
-        {
-            return _context.Grupos.Any(e => e.Id == id);
-        }
+       
     }
 }
