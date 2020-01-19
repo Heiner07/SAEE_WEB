@@ -1,5 +1,8 @@
 ﻿<div class="card-body border rounded">
-    <h4>@Titulo</h4>
+    @if (!Editando)
+    {
+        <h4>Agregando curso</h4>
+    }
     <EditForm Model="@Curso" OnValidSubmit="@OnValidSubmit">
         <div class="form-group">
             <label for="InputNombre"><strong>Nombre</strong></label>
@@ -11,12 +14,24 @@
             <input class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
             <ValidationMessage For="@(() => Curso.CantidadPeriodos)" />
         </div>
-        <button type="submit" class="btn btn-success">@TextoBoton</button>
+        @if (Editando)
+        {
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="OcultarModal">Cancelar</button>
+                <button type="submit" class="btn btn-success">@TextoBoton</button>
+            </div>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-success">@TextoBoton</button>
+        }
         <DataAnnotationsValidator />
     </EditForm>
 </div>
 
 @code {
+    [Parameter]
+    public bool Editando { get; set; }
     [Parameter]
     public Cursos Curso { get; set; }
     [Parameter]
@@ -27,6 +42,8 @@
     public List<CursosGrupos> GruposAgregados { get; set; }
     [Parameter]
     public EventCallback OnValidSubmit { get; set; }
+    [Parameter]
+    public EventCallback OcultarModal { get; set; }
     [Parameter]
     public int IdProfesor { get; set; }
 

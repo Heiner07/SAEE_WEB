@@ -1,5 +1,8 @@
 ﻿<div class="card-body border rounded">
-    <h4>@Titulo</h4>
+    @if (!Editando)
+    {
+        <h4>Agregando profesor</h4>
+    }
     <EditForm Model="@Profesor" OnValidSubmit="@OnValidSubmit">
         <div class="form-group">
             <label for="InputCedula"><strong>Cédula</strong></label>
@@ -35,15 +38,27 @@
                         <i class=@claseEye @onclick="MostrarOcultarContrasenia"></i>
                     </span>
                 </div>
-                <ValidationMessage For="@(() => Profesor.Contrasenia)" />
             </div>
+            <ValidationMessage For="@(() => Profesor.Contrasenia)" />
         </div>
-        <button type="submit" class="btn btn-success">@TextoBoton</button>
+        @if (Editando)
+        {
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="OcultarModal">Cancelar</button>
+                <button type="submit" class="btn btn-success">@TextoBoton</button>
+            </div>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-success">@TextoBoton</button>
+        }
         <DataAnnotationsValidator />
     </EditForm>
 </div>
 
 @code {
+    [Parameter]
+    public bool Editando { get; set; }
     [Parameter]
     public Profesores Profesor { get; set; }
     [Parameter]
@@ -52,6 +67,8 @@
     public String TextoBoton { get; set; }
     [Parameter]
     public EventCallback OnValidSubmit { get; set; }
+    [Parameter]
+    public EventCallback OcultarModal { get; set; }
 
     String claseContrasenia = "password", claseEye = "fa fa-eye";
 

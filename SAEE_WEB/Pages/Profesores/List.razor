@@ -50,11 +50,11 @@ else
 }
 @if (mostrarEditar)
 {
-    <Edit Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
+    <Edit dialogIsOpen="mostrarEditar" Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
 }
 @if (mostrarBorrar)
 {
-    <Delete Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
+    <Delete dialogIsOpen="mostrarBorrar" Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
 }
 
 @code {

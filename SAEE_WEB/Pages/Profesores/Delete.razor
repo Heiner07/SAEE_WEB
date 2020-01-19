@@ -1,39 +1,38 @@
 ﻿@inject ProfesoresServices ServicioProfesores
 @inject NavigationManager Navigation
 
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Borrando profesor</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CerrarEliminar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+<MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+    <MatDialogTitle>Borrando profesor</MatDialogTitle>
+    <MatDialogContent>
+        @if (Profesor.Administrador)
+        {
+            <text>El profesor "@Profesor.Nombre  @Profesor.PrimerApellido  @Profesor.SegundoApellido" es administrador, por lo tanto no puede ser borrado.</text>
+        }
+        else
+        {
+            <text>¿Realmente desea borrar al profesor "@Profesor.Nombre  @Profesor.PrimerApellido  @Profesor.SegundoApellido" y toda su información relacionada ?</text>
+        }
+    </MatDialogContent>
+    <MatDialogActions>
+        @if (Profesor.Administrador)
+        {
+            <div>
+                <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cerrar</button>
             </div>
-            @if (Profesor.Administrador)
-            {
-                <div class="modal-body">
-                     El profesor "@Profesor.Nombre  @Profesor.PrimerApellido  @Profesor.SegundoApellido" es administrador, por lo tanto no puede ser borrado.
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cerrar</button>
-                </div>
-            }
-            else
-            {
-                <div class="modal-body">
-                    ¿Realmente desea borrar al profesor "@Profesor.Nombre  @Profesor.PrimerApellido  @Profesor.SegundoApellido" y toda su información relacionada?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
-                    <button type="button" class="btn btn-primary" @onclick="EliminarProfesor">Borrar</button>
-                </div>
-            }
-        </div>
-    </div>
-</div>
+        }
+        else
+        {
+            <div>
+                <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
+                <button type="button" class="btn btn-primary" @onclick="EliminarProfesor">Borrar</button>
+            </div>
+        }
+    </MatDialogActions>
+</MatDialog>
 
 @code {
+    [Parameter]
+    public bool dialogIsOpen { get; set; }
     [Parameter]
     public Profesores Profesor { get; set; }
     [Parameter]

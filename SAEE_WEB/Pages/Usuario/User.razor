@@ -1,6 +1,7 @@
 ﻿@page "/Usuario"
 @inject ProfesoresServices ServicioProfesores
 @inject NavigationManager Navigation
+
 <div class="container">
     <h3>Administrar perfil</h3>
     <div class="card-body border rounded">
@@ -64,9 +65,9 @@
     </div>
     @if (MostrarCambioContrasenia)
     {
-        <Password Profesor="Profesor" GuardarProfesor="GuardarProfesor" OcultarModal="OcultarCambioContrasenia" />
+        <Password dialogIsOpen="MostrarCambioContrasenia" Profesor="Profesor" GuardarProfesor="GuardarProfesor" OcultarModal="OcultarCambioContrasenia" />
     }
-    <br/>
+    <br />
     <div>
         <button type="button" class="btn btn-danger" @onclick="MostrarCambio">Cambiar contraseña</button>
     </div>

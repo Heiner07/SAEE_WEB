@@ -1,7 +1,7 @@
 ﻿@inject ProfesoresServices ServicioProfesores
 @inject NavigationManager Navigation
 
-<Form OnValidSubmit="AgregarProfesor" Titulo="Agregando profesor" TextoBoton="Agregar" Profesor="@profesor" />
+<Form Editando="false" OnValidSubmit="AgregarProfesor" Titulo="Agregando profesor" TextoBoton="Agregar" Profesor="@profesor" />
 
 @code {
     Profesores profesor = new Profesores();

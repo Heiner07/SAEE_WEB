@@ -55,15 +55,15 @@ else
 }
 @if (mostrarEditar)
 {
-    <Edit curso="cursoEditar" IdProfesor="@IdProfesor" CerrarEditar="@OcultarPanelEditar" />
+    <Edit dialogIsOpen="mostrarEditar" curso="cursoEditar" IdProfesor="@IdProfesor" CerrarEditar="@OcultarPanelEditar" />
 }
 @if (mostrarGrupos)
 {
-    <ListGruposAgregados Curso="cursoEditar" IdProfesor="@IdProfesor" OcultarGruposAgregados="OcultarPanelGrupos" />
+    <ListGruposAgregados dialogIsOpen="mostrarGrupos" Curso="cursoEditar" IdProfesor="@IdProfesor" OcultarGruposAgregados="OcultarPanelGrupos" />
 }
 @if (mostrarBorrar)
 {
-    <Delete Curso="@cursoEditar" CerrarEliminar="@OcultarPanelBorrar" />
+    <Delete dialogIsOpen="mostrarBorrar" Curso="@cursoEditar" CerrarEliminar="@OcultarPanelBorrar" />
 }
 
 @code {

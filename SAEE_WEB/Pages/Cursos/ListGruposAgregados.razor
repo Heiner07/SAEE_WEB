@@ -1,75 +1,71 @@
 ﻿@inject CursosServices ServicioCursos
 @inject NavigationManager Navigation
 
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 class="modal-title">Grupos del curso</h3>
-                <button type="button" class="close" @onclick="OcultarGruposAgregados">
-                    <span aria-hidden="true">X</span>
+<MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+    <MatDialogTitle>Grupos del curso</MatDialogTitle>
+    <MatDialogContent>
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
+            <div class="input-group-append">
+                <button class="btn btn-info">
+                    <i>Buscar</i>
                 </button>
             </div>
-            <div class="modal-body">
-                <div class="input-group">
-                    <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
-                    <div class="input-group-append">
-                        <button class="btn btn-info">
-                            <i>Buscar</i>
-                        </button>
-                    </div>
-                </div>
-
-                @if (GruposAgregados.Count == 0)
-                {
-                    <text>No hay grupos</text>
-                }
-                else
-                {
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Grupo</th>
-                                <th>Año</th>
-                                <th>Opciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var cursoGrupo in GruposAgregados)
-                            {
-                                if (cursoGrupo.IdGrupoNavigation.Grupo.ToLower().StartsWith(TextoBuscar.ToLower()))
-                                {
-                                    <tr>
-                                        <td>@cursoGrupo.IdGrupoNavigation.Grupo</td>
-                                        <td>@cursoGrupo.IdGrupoNavigation.Anio</td>
-                                        <td>
-                                            <button type="button" class="btn btn-outline-danger" @onclick="() => RemoverGrupo(cursoGrupo)">Borrar</button>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        </tbody>
-                    </table>
-                }
-
-                @if (MostrarGrupos)
-                {
-                    <div>
-                        <ListGruposAgregar OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" IdProfesor="IdProfesor" />
-                    </div>
-                }
-            </div>
-            <div class="modal-footer">
-                <label>*Presione Guardar para almacenar cambios realizados.</label>
-                <button type="button" class="btn btn-secondary" @onclick="MostarGruposAgregar">Agregar</button>
-                <button type="button" class="btn btn-secondary" @onclick="OcultarGruposAgregados">Cancelar</button>
-                <button type="button" class="btn btn-primary" @onclick="GuardarCursosGrupos">Guardar</button>
-            </div>
         </div>
-    </div>
-</div>
+
+        @if (GruposAgregados.Count == 0)
+        {
+            <text>No hay grupos</text>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Grupo</th>
+                        <th>Año</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cursoGrupo in GruposAgregados)
+                    {
+                        if (cursoGrupo.IdGrupoNavigation.Grupo.ToLower().StartsWith(TextoBuscar.ToLower()))
+                        {
+                            <tr>
+                                <td>@cursoGrupo.IdGrupoNavigation.Grupo</td>
+                                <td>@cursoGrupo.IdGrupoNavigation.Anio</td>
+                                <td>
+                                    <button type="button" class="btn btn-outline-danger" @onclick="() => RemoverGrupo(cursoGrupo)">Borrar</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        }
+
+        @if (MostrarGrupos)
+        {
+            <div>
+                <ListGruposAgregar dialogIsOpen="MostrarGrupos" OcultarModel="OcultarGruposAgregar" IdCurso="@Curso.Id" GruposAgregados="@GruposAgregados" IdProfesor="IdProfesor" />
+            </div>
+        }
+    </MatDialogContent>
+    <MatDialogActions>
+        <div>
+            <label>*Presione Guardar para almacenar cambios realizados.</label>
+            <br />
+            <button type="button" class="btn btn-secondary" @onclick="MostarGruposAgregar">Agregar</button>
+            <button type="button" class="btn btn-secondary" @onclick="OcultarGruposAgregados">Cancelar</button>
+            <button type="button" class="btn btn-primary" @onclick="GuardarCursosGrupos">Guardar</button>
+        </div>
+    </MatDialogActions>
+</MatDialog>
 
 @code {
+    [Parameter]
+    public bool dialogIsOpen { get; set; } = false;
     [Parameter]
     public List<CursosGrupos> GruposAgregados { get; set; }
     [Parameter]

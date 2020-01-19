@@ -1,26 +1,23 @@
 ﻿@inject CursosServices ServicioCursos
 @inject NavigationManager Navigation
 
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <Form OnValidSubmit="EditarCurso"
-                      Titulo="Editando curso"
-                      TextoBoton="Guardar"
-                      Curso="@curso"
-                      GruposAgregados="@GruposAgregados"
-                      IdProfesor="@IdProfesor"
-                 />
-            </div>
-        </div>
-    </div>
-</div>
+<MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+    <MatDialogTitle>Editando curso</MatDialogTitle>
+    <MatDialogContent>
+        <Form Editando="true"
+              OnValidSubmit="EditarCurso"
+              OcultarModal="CerrarEditar"
+              Titulo="Editando curso"
+              TextoBoton="Guardar"
+              Curso="@curso"
+              GruposAgregados="@GruposAgregados"
+              IdProfesor="@IdProfesor" />
+    </MatDialogContent>
+</MatDialog>
 
 @code {
+    [Parameter]
+    public bool dialogIsOpen { get; set; }
     [Parameter]
     public Cursos curso { get; set; }
     [Parameter]
