@@ -30,7 +30,7 @@ namespace SAEE_WEB.Controllers
             Profesores profesor = await ComprobarInicioSesion(usuario, _context);
             if (profesor == null)
             {
-                return BadRequest();
+                return usuario;
             }
             else
             {

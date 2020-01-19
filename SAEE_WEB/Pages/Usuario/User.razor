@@ -2,73 +2,80 @@
 @inject ProfesoresServices ServicioProfesores
 @inject NavigationManager Navigation
 
-    <div class="container">
-        <h3>Administrar perfil</h3>
-        <div class="card-body border rounded">
-            <EditForm Model="@Profesor" OnValidSubmit="ManejarEvento">
+<div class="container">
+    <h3>Administrar perfil</h3>
+    <div class="card-body border rounded">
+        <EditForm Model="@Profesor" OnValidSubmit="ManejarEvento">
+            <div class="form-group">
+                <label for="InputCedula"><strong>Cédula</strong></label>
+                <input disabled class="form-control" type="text" placeholder="Cedula" @bind="Profesor.Cedula" id="InputCedula" />
+                <ValidationMessage For="@(() => Profesor.Cedula)" />
+            </div>
+            @if (Editando)
+            {
                 <div class="form-group">
-                    <label for="InputCedula"><strong>Cédula</strong></label>
-                    <input disabled class="form-control" type="text" placeholder="Cedula" @bind="Profesor.Cedula" id="InputCedula" />
-                    <ValidationMessage For="@(() => Profesor.Cedula)" />
+                    <label for="InputNombre"><strong>Nombre</strong></label>
+                    <input class="form-control" type="text" placeholder="Nombre" @bind="Profesor.Nombre" id="InputNombre" />
+                    <ValidationMessage For="@(() => Profesor.Nombre)" />
                 </div>
-                @if (Editando)
-                {
-                    <div class="form-group">
-                        <label for="InputNombre"><strong>Nombre</strong></label>
-                        <input class="form-control" type="text" placeholder="Nombre" @bind="Profesor.Nombre" id="InputNombre" />
-                        <ValidationMessage For="@(() => Profesor.Nombre)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="InputPrimerApellido"><strong>Primer apellido</strong></label>
-                        <input class="form-control" type="text" placeholder="Primer apellido" @bind="Profesor.PrimerApellido" id="InputPrimerApellido" />
-                        <ValidationMessage For="@(() => Profesor.PrimerApellido)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="InputSegundoApellido"><strong>Segundo apellido</strong></label>
-                        <input class="form-control" type="text" placeholder="Segundo apellido" @bind="Profesor.SegundoApellido" id="InputSegundoApellido" />
-                        <ValidationMessage For="@(() => Profesor.SegundoApellido)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="InputCorreo"><strong>Correo</strong></label>
-                        <input class="form-control" type="email" placeholder="Correo" @bind="Profesor.Correo" id="InputCorreo" />
-                        <ValidationMessage For="@(() => Profesor.Correo)" />
-                    </div>
-                    <button type="submit" class="btn btn-success">Guardar</button>
-                    <button type="button" class="btn btn-secondary" @onclick="CancelarEditar">Cancelar</button>
-                }
-                else
-                {
-                    <div class="form-group">
-                        <label for="InputNombre"><strong>Nombre</strong></label>
-                        <input disabled class="form-control" type="text" placeholder="Nombre" @bind="Profesor.Nombre" id="InputNombre" />
-                        <ValidationMessage For="@(() => Profesor.Nombre)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="InputPrimerApellido"><strong>Primer apellido</strong></label>
-                        <input disabled class="form-control" type="text" placeholder="Primer apellido" @bind="Profesor.PrimerApellido" id="InputPrimerApellido" />
-                        <ValidationMessage For="@(() => Profesor.PrimerApellido)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="InputSegundoApellido"><strong>Segundo apellido</strong></label>
-                        <input disabled class="form-control" type="text" placeholder="Segundo apellido" @bind="Profesor.SegundoApellido" id="InputSegundoApellido" />
-                        <ValidationMessage For="@(() => Profesor.SegundoApellido)" />
-                    </div>
-                    <div class="form-group">
-                        <label for="InputCorreo"><strong>Correo</strong></label>
-                        <input disabled class="form-control" type="email" placeholder="Correo" @bind="Profesor.Correo" id="InputCorreo" />
-                        <ValidationMessage For="@(() => Profesor.Correo)" />
-                    </div>
-                    <button type="submit" class="btn btn-success">Editar</button>
-                }
-                <DataAnnotationsValidator />
-            </EditForm>
-        </div>
-        <Password dialogIsOpen="MostrarCambioContrasenia" Profesor="Profesor" GuardarProfesor="GuardarProfesor" OcultarModal="OcultarCambioContrasenia" />
-        <br />
-        <div>
-            <button type="button" class="btn btn-danger" @onclick="MostrarCambio">Cambiar contraseña</button>
-        </div>
+                <div class="form-group">
+                    <label for="InputPrimerApellido"><strong>Primer apellido</strong></label>
+                    <input class="form-control" type="text" placeholder="Primer apellido" @bind="Profesor.PrimerApellido" id="InputPrimerApellido" />
+                    <ValidationMessage For="@(() => Profesor.PrimerApellido)" />
+                </div>
+                <div class="form-group">
+                    <label for="InputSegundoApellido"><strong>Segundo apellido</strong></label>
+                    <input class="form-control" type="text" placeholder="Segundo apellido" @bind="Profesor.SegundoApellido" id="InputSegundoApellido" />
+                    <ValidationMessage For="@(() => Profesor.SegundoApellido)" />
+                </div>
+                <div class="form-group">
+                    <label for="InputCorreo"><strong>Correo</strong></label>
+                    <input class="form-control" type="email" placeholder="Correo" @bind="Profesor.Correo" id="InputCorreo" />
+                    <ValidationMessage For="@(() => Profesor.Correo)" />
+                </div>
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" @onclick="CancelarEditar">Cancelar</button>
+            }
+            else
+            {
+                <div class="form-group">
+                    <label for="InputNombre"><strong>Nombre</strong></label>
+                    <input disabled class="form-control" type="text" placeholder="Nombre" @bind="Profesor.Nombre" id="InputNombre" />
+                    <ValidationMessage For="@(() => Profesor.Nombre)" />
+                </div>
+                <div class="form-group">
+                    <label for="InputPrimerApellido"><strong>Primer apellido</strong></label>
+                    <input disabled class="form-control" type="text" placeholder="Primer apellido" @bind="Profesor.PrimerApellido" id="InputPrimerApellido" />
+                    <ValidationMessage For="@(() => Profesor.PrimerApellido)" />
+                </div>
+                <div class="form-group">
+                    <label for="InputSegundoApellido"><strong>Segundo apellido</strong></label>
+                    <input disabled class="form-control" type="text" placeholder="Segundo apellido" @bind="Profesor.SegundoApellido" id="InputSegundoApellido" />
+                    <ValidationMessage For="@(() => Profesor.SegundoApellido)" />
+                </div>
+                <div class="form-group">
+                    <label for="InputCorreo"><strong>Correo</strong></label>
+                    <input disabled class="form-control" type="email" placeholder="Correo" @bind="Profesor.Correo" id="InputCorreo" />
+                    <ValidationMessage For="@(() => Profesor.Correo)" />
+                </div>
+                <button type="submit" class="btn btn-success">Editar</button>
+            }
+            <DataAnnotationsValidator />
+        </EditForm>
     </div>
+    <Password dialogIsOpen="MostrarCambioContrasenia" Profesor="Profesor" GuardarProfesor="GuardarProfesor" OcultarModal="OcultarCambioContrasenia" />
+    <br />
+    <div>
+        <button type="button" class="btn btn-danger" @onclick="MostrarCambio">Cambiar contraseña</button>
+    </div>
+</div>
+<MatSnackbar @bind-IsOpen="@snackBarIsOpen">
+    <MatSnackbarContent>Guardado correctamente</MatSnackbarContent>
+    <MatSnackbarActions>
+        @*<MatIcon Icon="save"></MatIcon>*@
+        <span class="oi oi-person" aria-hidden="true"></span>
+    </MatSnackbarActions>
+</MatSnackbar>
 
 @code {
 
@@ -76,7 +83,7 @@
     private Task<AuthenticationState> AuthenticationState { get; set; }
 
     Profesores Profesor = new Profesores();
-    bool Editando = false, MostrarCambioContrasenia = false;
+    bool Editando = false, MostrarCambioContrasenia = false, snackBarIsOpen = false;
 
     protected override async Task OnInitializedAsync()
     {
@@ -112,6 +119,7 @@
     {
         await ServicioProfesores.PutProfesores(Profesor);
         //Navigation.NavigateTo("profesores", true);
+        snackBarIsOpen = true;// Muestra el mensaje
     }
 
     void MostrarCambio()
