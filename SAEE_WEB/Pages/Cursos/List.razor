@@ -53,18 +53,11 @@ else
         </table>
     </div>
 }
-@if (mostrarEditar)
-{
-    <Edit dialogIsOpen="mostrarEditar" curso="cursoEditar" IdProfesor="@IdProfesor" CerrarEditar="@OcultarPanelEditar" />
-}
-@if (mostrarGrupos)
-{
-    <ListGruposAgregados dialogIsOpen="mostrarGrupos" Curso="cursoEditar" IdProfesor="@IdProfesor" OcultarGruposAgregados="OcultarPanelGrupos" />
-}
-@if (mostrarBorrar)
-{
-    <Delete dialogIsOpen="mostrarBorrar" Curso="@cursoEditar" CerrarEliminar="@OcultarPanelBorrar" />
-}
+<Edit dialogIsOpen="mostrarEditar" curso="cursoEditar" IdProfesor="@IdProfesor" CerrarEditar="@OcultarPanelEditar" />
+
+<ListGruposAgregados dialogIsOpen="mostrarGrupos" Curso="cursoEditar" IdProfesor="@IdProfesor" OcultarGruposAgregados="OcultarPanelGrupos" />
+
+<Delete dialogIsOpen="mostrarBorrar" Curso="@cursoEditar" CerrarEliminar="@OcultarPanelBorrar" />
 
 @code {
     [Parameter]
@@ -73,7 +66,7 @@ else
     Cursos[] cursos { get; set; }
     CursosGrupos[] CursosGrupos { get; set; }
     CursosGrupos[] CursosGruposFiltrados { get; set; }
-    Cursos cursoEditar;
+    Cursos cursoEditar = new Cursos();
     Boolean mostrarEditar = false, mostrarGrupos = false, mostrarBorrar = false;
     String TextoBuscar = "";
 

@@ -48,14 +48,10 @@ else
         </table>
     </div>
 }
-@if (mostrarEditar)
-{
-    <Edit dialogIsOpen="mostrarEditar" Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
-}
-@if (mostrarBorrar)
-{
-    <Delete dialogIsOpen="mostrarBorrar" Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
-}
+
+<Edit dialogIsOpen="mostrarEditar" Profesor="@profesorEditar" CerrarEditar="@OcultarPanelEditar" />
+
+<Delete dialogIsOpen="mostrarBorrar" Profesor="@profesorEditar" CerrarEliminar="@OcultarPanelBorrar" />
 
 @code {
     [Parameter]
@@ -64,7 +60,7 @@ else
     public EventCallback Borrar { get; set; }
 
     Profesores[] profesores { get; set; }
-    Profesores profesorEditar;
+    Profesores profesorEditar = new Profesores();
     Boolean mostrarEditar = false;
     Boolean mostrarBorrar = false;
     String TextoBuscar = "";

@@ -6,11 +6,10 @@
     <MatDialogContent>
         <Form Editando="true"
               OnValidSubmit="EditarCurso"
-              OcultarModal="CerrarEditar"
+              OcultarModal="RevertirCambios"
               Titulo="Editando curso"
               TextoBoton="Guardar"
               Curso="@curso"
-              GruposAgregados="@GruposAgregados"
               IdProfesor="@IdProfesor" />
     </MatDialogContent>
 </MatDialog>
@@ -25,17 +24,13 @@
     [Parameter]
     public EventCallback CerrarEditar { get; set; }
 
-    List<CursosGrupos> GruposAgregados;
-
     protected override Task OnParametersSetAsync()
     {
-        GruposAgregados = curso.CursosGrupos.ToList();
         return base.OnParametersSetAsync();
     }
 
     async Task EditarCurso()
     {
-        curso.CursosGrupos = GruposAgregados;
         await ServicioCursos.PutCursos(curso);
         Navigation.NavigateTo("cursos", true);
     }
