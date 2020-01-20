@@ -25,6 +25,8 @@ namespace SAEE_WEB.Data
                 .ThenInclude(EG => EG.IdEstudianteNavigation).Include(curso => curso.CursosGrupos)
                 .Where(curso => curso.IdProfesor == idProfesor).ToListAsync();
         }
+
+        
         [HttpGet("{id}", Name = "obtenerGrupo")]
         public async Task<Grupos> GetGrupo(int id)
         {

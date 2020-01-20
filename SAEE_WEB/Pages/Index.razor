@@ -1,13 +1,13 @@
-﻿@page "/"
+﻿@page "/Index"
 @inject NavigationManager navigationManager
 
 <h1>¡Bienvenido!</h1>
-<AuthorizeView>
+@*<AuthorizeView>
     <Authorized>
         Hola @context.User.Identity.Name
         Su Id es @context.User.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value
     </Authorized>
-</AuthorizeView>
+</AuthorizeView>*@
 Sistema para la Administración de Evaluaciones de los Estudiantes
 
 @code{
