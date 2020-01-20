@@ -1,23 +1,26 @@
 ﻿<div class="card-body border rounded">
-    <h4>@Titulo</h4>
+    @if (!Editando)
+    {
+        <h4>Agregando Estudiante</h4>
+    }
     <EditForm Model="@Estudiante" OnValidSubmit="@OnValidSubmit">
         <div class="form-group">
-            <label for="InputCedula"><strong>Cédula</strong></label>
+            <label for="InputCedula"><strong>Cédula (obligatorio)</strong></label>
             <input class="form-control" type="text" placeholder="Cédula" @bind="Estudiante.Cedula" id="InputCedula" />
             <ValidationMessage For="@(() => Estudiante.Cedula)" />
         </div>
         <div class="form-group">
-            <label for="InputNombre"><strong>Nombre</strong></label>
+            <label for="InputNombre"><strong>Nombre (obligatorio)</strong></label>
             <input class="form-control" type="text" placeholder="Nombre" @bind="Estudiante.Nombre" id="InputNombre" />
             <ValidationMessage For="@(() => Estudiante.Nombre)" />
         </div>
         <div class="form-group">
-            <label for="InputPrimerApellido"><strong>Primer apellido</strong></label>
+            <label for="InputPrimerApellido"><strong>Primer apellido (obligatorio)</strong></label>
             <input class="form-control" type="text" placeholder="Primer apellido" @bind="Estudiante.PrimerApellido" id="InputPrimerApellido" />
             <ValidationMessage For="@(() => Estudiante.PrimerApellido)" />
         </div>
         <div class="form-group">
-            <label for="InputSegundoApellido"><strong>Segundo apellido</strong></label>
+            <label for="InputSegundoApellido"><strong>Segundo apellido (obligatorio)</strong></label>
             <input class="form-control" type="text" placeholder="Segundo apellido" @bind="Estudiante.SegundoApellido" id="InputSegundoApellido" />
             <ValidationMessage For="@(() => Estudiante.SegundoApellido)" />
         </div>
@@ -25,28 +28,46 @@
         <div class="form-group">
             <label for="InputPin"><strong>Pin</strong></label>
             <div class="input-group">
-                <input type="password" class="form-control" ID="Password" placeholder="Pin (No Obligatorio)" @bind="Estudiante.Pin" data-toggle="password">
+                <input type=@claseContrasenia class="form-control" ID="Password" placeholder="Pin (Si no lo ingresa, se genera automáticamente)" @bind="Estudiante.Pin" data-toggle="password">
                 <div class="input-group-append">
-                    <span class="input-group-text"><i class="fa fa-eye" id = "MyEye" onclick="myFunction()"> </i></span>
+                    <span class="input-group-text">
+                        <i class=@claseEye @onclick="MostrarOcultarContrasenia"></i>
+                    </span>
                 </div>
                 <ValidationMessage For="@(() => Estudiante.Pin)" />
             </div>
         </div>
 
-        <button type="submit" class="btn btn-success">@TextoBoton</button>
+        @if (Editando)
+        {
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="OcultarModal">Cancelar</button>
+                <button type="submit" class="btn btn-success">@TextoBoton</button>
+            </div>
+        }
+        else
+        {
+            <button type="submit" class="btn btn-success">@TextoBoton</button>
+        }
         <DataAnnotationsValidator />
     </EditForm>
 </div>
 
 
 @code {
+    [Parameter]
+    public bool Editando { get; set; }
     [Parameter] public Estudiantes Estudiante { get; set; }
     [Parameter] public String Titulo { get; set; }
     [Parameter] public String TextoBoton { get; set; }
     [Parameter] public EventCallback OnValidSubmit { get; set; }
-    void mostrarContrasenia(EventArgs e)
+    [Parameter]
+    public EventCallback OcultarModal { get; set; }
+
+    String claseContrasenia = "password", claseEye = "fa fa-eye";
+    void MostrarOcultarContrasenia()
     {
-        // string controlType = txtPassword.GetType().FullName;
-        //Console.WriteLine(controlType);
+        claseContrasenia = claseContrasenia == "password" ? "text" : "password";
+        claseEye = claseContrasenia == "password" ? "fa fa-eye" : "fa fa-eye-slash";
     }
 }

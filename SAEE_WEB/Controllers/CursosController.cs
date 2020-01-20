@@ -24,7 +24,7 @@ namespace SAEE_WEB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Cursos>>> GetCursos()
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -39,7 +39,7 @@ namespace SAEE_WEB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Cursos>> GetCursos(int id)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -61,7 +61,7 @@ namespace SAEE_WEB.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCursos(int id, Cursos cursos)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -99,7 +99,7 @@ namespace SAEE_WEB.Controllers
         [HttpPost]
         public async Task<ActionResult<Cursos>> PostCursos(Cursos cursos)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -116,7 +116,7 @@ namespace SAEE_WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cursos>> DeleteCursos(int id)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();

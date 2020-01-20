@@ -1,35 +1,27 @@
 ﻿@inject EstudiantesServices estudiantesServices
-@inject GruposServices gruposServices
-
+@inject EstudiantesGruposServices EGServices
 @inject NavigationManager Navigation
-
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLongTitle">Eliminando Estudiante</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CerrarEliminar">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+        <MatDialogTitle>Borrando Estudiante</MatDialogTitle>
+        <MatDialogContent>
+            <text>¿Realmente desea borrar al estudiante "@Estudiante.Nombre  @Estudiante.PrimerApellido  @Estudiante.SegundoApellido"?</text>
+        </MatDialogContent>
+        <MatDialogActions>
+            <div>
+                    <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
+                    <button type="button" class="btn btn-primary" @onclick="EliminarEstudiante">Borrar</button>
             </div>
-            <div class="modal-body">
-                ¿Realmente desea borrar al estudiante "@Estudiante.Nombre  @Estudiante.PrimerApellido  @Estudiante.SegundoApellido"?
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
-                <button type="button" class="btn btn-primary" @onclick="EditarEstudiante">Borrar</button>
-            </div>
-        </div>
-    </div>
-</div>
-
+        </MatDialogActions>
+    </MatDialog>
 @code {
+    [Parameter]
+    public bool dialogIsOpen { get; set; }
     [Parameter] public Estudiantes Estudiante { get; set; }
     [Parameter] public Boolean EnGrupos { get; set; }
     [Parameter] public Grupos Grupo { get; set; }
     [Parameter] public EventCallback CerrarEliminar { get; set; }
 
-    async Task EditarEstudiante()
+    async Task EliminarEstudiante()
     {
         if (!EnGrupos)
         {
@@ -38,7 +30,7 @@
         }
         else
         {
-            await gruposServices.DeleteEstudianteXGrupos(Estudiante.Id,Grupo);
+            await EGServices.DeleteEstudianteXGrupos(Estudiante.Id,Grupo);
             await CerrarEliminar.InvokeAsync(null);
         }
     }

@@ -4,6 +4,7 @@
 @inject GruposServices ServicioGrupos
 @inject AsignacionesServices ServicioAsignaciones
 @inject EvaluacionesServices ServicioEvaluaciones
+@inject EstudiantesGruposServices ServicioEG
 @{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
 @{ var list1 = new List<string> { "Presente", "Escape", "Justificada", "Injustificada", "Tardía" }; }
 <div class="container">
@@ -475,7 +476,7 @@
                     await CargarAsignaciones();
                     int idasignacion = asignaciones[asignaciones.Length - 1].Id;
                     int periodos = cursoSeleccionado.CantidadPeriodos;
-                    estudiantesXgrupo = await ServicioGrupos.GetEstudiantesXGrupos(grupoSelec);
+                    estudiantesXgrupo = await ServicioEG.GetEstudiantesXGrupos(grupoSelec);
                     foreach (var i in estudiantesXgrupo)
                     {
                         for (int j = 1; j <= periodos; j++)

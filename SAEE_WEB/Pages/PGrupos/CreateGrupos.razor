@@ -6,7 +6,7 @@
     <EditForm Context="formContext" Model="@nuevoGrupo">
         <div class="form-group">
             <h4>Agregando Grupo</h4>
-            <label for="InputGrupo"><strong>Grupo</strong></label>
+            <label for="InputGrupo"><strong>Grupo (Obligatorio)</strong></label>
             <input class="form-control" type="text" id="InputGrupo" placeholder="Grupo" @bind="nuevoGrupo.Grupo" />
             <ValidationMessage For="@(() => nuevoGrupo.Grupo)" />
         </div>

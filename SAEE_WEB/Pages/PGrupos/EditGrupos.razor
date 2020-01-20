@@ -3,40 +3,40 @@
 
 
 
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
 
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <EditForm Model="@grupo">
-                    <h1>Editando Grupo</h1>
-                    <label for="InputGrupo"><strong>Grupo</strong></label>
-                    <p>
-                        <input class="form-control" type="text" placeholder="Grupo" @bind="grupo.Grupo" id="InputGrupo" />
-                        <ValidationMessage For="@(() => grupo.Grupo)" />
-                    </p>
-                    <p>
-                        <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="@(() => modificarGrupo(grupo))">Guardar</button>
-
-                        <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="@RevertirCambios">Cancelar</button>
-                    </p>
-                    <DataAnnotationsValidator />
-                </EditForm>
-            </div>
-        </div>
-    </div>
-</div>
+<MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+        <MatDialogTitle>Editando Grupos</MatDialogTitle>
+        <MatDialogContent>
+            <EditForm Model="@grupo">
+                <div class="form-group">
+                <label for="InputGrupo"><strong>Grupo</strong></label>
+               
+                    <input class="form-control" type="text" placeholder="Grupo" @bind="grupo.Grupo" id="InputGrupo" />
+                    <ValidationMessage For="@(() => grupo.Grupo)" />
+               </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" @onclick="@RevertirCambios">Cancelar</button>
+                    <button type="button" class="btn btn-success" data-dismiss="modal" @onclick="@(() => modificarGrupo(grupo))">Guardar</button>
+                </div>
+                <DataAnnotationsValidator />
+            </EditForm>
+        </MatDialogContent>
+</MatDialog>
+              
+          
 
 @code {
+    [Parameter]
+    public bool dialogIsOpen { get; set; }
     [Parameter] public Grupos grupo { get; set; }
     [Parameter] public EventCallback CerrarEditar { get; set; }
     [Parameter] public Boolean MostrarError { get; set; }
     [Parameter] public String msjError { get; set; }
 
-
+    protected override Task OnParametersSetAsync()
+    {
+        return base.OnParametersSetAsync();
+    }
     protected async Task modificarGrupo(Grupos grupo)
     {
         if (grupo.Grupo != null)

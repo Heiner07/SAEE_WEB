@@ -1,87 +1,71 @@
-﻿@inject GruposServices gruposServices
+﻿@inject EstudiantesGruposServices EGServices
 
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OcultarPanelEstudiantes">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-
-                @if (estudiantes == null)
-                {
-                    <text>Cargando estudiantes...</text>
-                }
-                else if (estudiantes.Count == 0)
-                {
-                    <text>No hay estudiantes</text>
-                }
-                else
-                {
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
-                        <div class="input-group-append">
-                            <button class="btn btn-info">
-                                <i>Buscar</i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Cédula</th>
-                                    <th>Nombre</th>
-                                    <th>Opciones</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var estudiante in estudiantes)
-                                {
-                                    if (estudiante.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
-                                    {
-                                        <tr>
-                                            <td>@estudiante.Cedula</td>
-                                            <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
-                                            <td>
-                                                <button class="btn btn-outline-danger" @onclick="(() => MostrarPanelBorrar(estudiante))">Borrar</button>
-                                            </td>
-                                        </tr>
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-
-                <button type="button" class="btn btn-success" @onclick="MostrarPanelAniadir"><span class="glyphicon glyphicon-plus"></span> Añadir</button>
-
+    <MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+        <MatDialogTitle>Lista de estudiantes</MatDialogTitle>
+        <MatDialogContent>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
+                <div class="input-group-append">
+                    <button class="btn btn-info">
+                        <i>Buscar</i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+        </MatDialogContent>
+        <MatDialogContent>
 
+            @if (estudiantes == null)
+            {
+                <text>Cargando estudiantes...</text>
+            }
+            else if (estudiantes.Count == 0)
+            {
+                <text>No hay estudiantes</text>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var estudiante in estudiantes)
+                        {
+                            if (estudiante.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
+                            {
+                                <tr>
+                                    <td>@estudiante.Cedula</td>
+                                    <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                                    <td>
+                                        <button class="btn btn-outline-danger" @onclick="(() => MostrarPanelBorrar(estudiante))">Borrar</button>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
 
-@if (mostrarBorrar)
-{
-    
-    <SAEE_WEB.Pages.PEstudiantes.Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="true" Grupo="@Grupo" />
-
-
-}
-@if (mostrarAniadir)
-{
-    <ListaAgregarEstudiantes OcultarPanelAniadir="@OcultarPanelAniadir" Grupo="@Grupo" estudiantes="@estudiantes" IdProfesor="IdProfesor"/>
-
-
-}
-
-
+            }
+        </MatDialogContent>
+        <MatDialogActions>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="OcultarPanelEstudiantes">Cerrar</button>
+                <button type="button" class="btn btn-success" @onclick="MostrarPanelAniadir">Añadir</button>
+            </div>
+        </MatDialogActions>
+    </MatDialog>
+<SAEE_WEB.Pages.PEstudiantes.Delete dialogIsOpen="@mostrarBorrar" Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="true" Grupo="@Grupo" />
+<ListaAgregarEstudiantes dialogIsOpen="@mostrarAniadir" OcultarPanelAniadir="@OcultarPanelAniadir" Grupo="@Grupo" estudiantes="@estudiantes" IdProfesor="IdProfesor" />
 
 @code {
-
-    public List<Estudiantes> estudiantes;
-    Estudiantes estudianteEditar;
+    [Parameter]
+    public bool dialogIsOpen { get; set; }
+    public List<Estudiantes> estudiantes = new List<Estudiantes>();
+    Estudiantes estudianteEditar = new Estudiantes();
     Boolean mostrarBorrar = false;
     Boolean mostrarAniadir = false;
     String TextoBuscar = "";
@@ -91,6 +75,7 @@
     [Parameter] public Grupos Grupo { get; set; }
     [Parameter] public int IdProfesor { get; set; }
 
+
     protected override async Task OnInitializedAsync()
     {
         await CargarEstudiantes();
@@ -98,9 +83,8 @@
 
     async Task CargarEstudiantes()
     {
-        estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
+        estudiantes = await EGServices.GetEstudiantesXGrupos(Grupo);
     }
-
     void MostrarPanelBorrar(Estudiantes estudiante)
     {
         estudianteEditar = estudiante;
@@ -112,20 +96,11 @@
     }
     void OcultarPanelAniadir()
     {
-        
         mostrarAniadir = false;
     }
-
     async Task OcultarPanelBorrar()
     {
         await CargarEstudiantes();
         mostrarBorrar = false;
     }
-    /*  async Task RevertirCambios()
-       {
-           // await estudiantesServices.RollbackEstudiantes(Estudiante);
-           //await CerrarEditar.InvokeAsync(null);
-       }*/
-
-
 }

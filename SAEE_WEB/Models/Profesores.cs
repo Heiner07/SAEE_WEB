@@ -24,6 +24,8 @@ namespace SAEE_WEB.Models
         [Required(ErrorMessage = "Ingrese el segundo apellido")]
         public string SegundoApellido { get; set; }
         [Required(ErrorMessage = "Ingrese el correo")]
+        [DataType(DataType.EmailAddress)]
+        [EmailAddress]
         public string Correo { get; set; }
         [Required(ErrorMessage = "Ingrese la contraseña")]
         public string Contrasenia { get; set; }

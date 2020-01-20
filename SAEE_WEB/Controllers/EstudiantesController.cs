@@ -25,7 +25,7 @@ namespace SAEE_WEB.Controllers
         [Route("GetEstudiantes")]
         public async Task<ActionResult<IEnumerable<Estudiantes>>> GetEstudiantes()
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -55,7 +55,7 @@ namespace SAEE_WEB.Controllers
         {
             try
             {
-                Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+                Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
                 if (profesor == null)
                 {
                     return BadRequest();
@@ -76,7 +76,7 @@ namespace SAEE_WEB.Controllers
         [Route("PostEstudiantes")]
         public async Task<ActionResult<Estudiantes>> PostEstudiantes(Estudiantes estudiantes)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -93,7 +93,7 @@ namespace SAEE_WEB.Controllers
         [Route("DeleteEstudiantes")]
         public async Task<ActionResult<Estudiantes>> DeleteEstudiantes(Estudiantes estudiante)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
