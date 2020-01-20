@@ -22,7 +22,7 @@ namespace SAEE_WEB.Data
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            timer = new Timer(VerificarNotificaciones, null, TimeSpan.Zero, TimeSpan.FromMinutes(5));
+            timer = new Timer(VerificarNotificaciones, null, TimeSpan.Zero, TimeSpan.FromDays(1));
             return Task.CompletedTask;
         }
 
