@@ -55,7 +55,7 @@ namespace SAEE_WEB.Data
 
 
             Document doc = new Document(iTextSharp.text.PageSize.LETTER, 10, 10, 42, 35);
-            PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("Notas_"+grupo+"_"+anio+".pdf", FileMode.Create));
+           // PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("Notas_"+grupo+"_"+anio+".pdf", FileMode.Create));
             doc.Open();
             string fecha = DateTime.Now.ToShortDateString();
             Phrase cabecera = new Phrase("Profesor: "+profesor.Nombre+" "+profesor.PrimerApellido+" "+profesor.SegundoApellido+"             Fecha: "+fecha+"\n"+
