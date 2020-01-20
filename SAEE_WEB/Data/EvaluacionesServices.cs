@@ -7,10 +7,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAEE_WEB.Models;
 using System.IO;
-
+using iTextSharp.text;
+using iTextSharp.text.pdf;
 
 namespace SAEE_WEB.Data
 {
+
     public class EvaluacionesServices
     {
         private readonly BDSAEEContext _context;
@@ -18,6 +20,28 @@ namespace SAEE_WEB.Data
         public EvaluacionesServices(BDSAEEContext context)
         {
             _context = context;
+        }
+
+
+        public void CrearPdf(List<EstudianteEvaluacion> estudiantes, Asignaciones asignacion, Profesores profesor, String curso, String grupo, int anio, int periodo)
+        {
+            BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
+            PdfPTable pdftable = new PdfPTable(estudiantes.Count);
+            pdftable.DefaultCell.Padding = 3;
+            pdftable.WidthPercentage = 100;
+            pdftable.HorizontalAlignment = Element.ALIGN_LEFT;
+            pdftable.DefaultCell.BorderWidth = 1;
+
+            iTextSharp.text.Font text = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.NORMAL);
+
+
+            Document doc = new Document(iTextSharp.text.PageSize.LETTER, 10, 10, 42, 35);
+            PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("Notas.pdf", FileMode.Create));
+            doc.Open();
+            Paragraph linea = new Paragraph("Primera Linea");
+            doc.Add(linea);
+            doc.Close();
+
         }
 
         public async Task<Evaluaciones> GetEvaluaciones(int id)

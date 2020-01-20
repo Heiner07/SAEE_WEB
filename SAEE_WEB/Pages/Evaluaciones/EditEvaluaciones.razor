@@ -92,24 +92,15 @@
     Evaluaciones evaluacion { get; set; }
     Boolean mostrarEditar = false;
     Profesores profesor { get; set; }
-    public class EstudianteEvaluacion
-    {
-        public Evaluaciones evaluacion { get; set; }
-        public string Cedula { get; set; }
-        public string Nombre { get; set; }
-        public Decimal Puntos { get; set; }
-        public Decimal Porcentaje { get; set; }
-        public int Nota { get; set; }
-        public string Estado { get; set; }
-    }
+
     public void EnviarInforme()
     {
         Console.WriteLine(cursoSeleccionado);
         Console.WriteLine(grupoSeleccionado);
         Console.WriteLine(anno);
-        Console.WriteLine(cursoSeleccionado);
         Console.WriteLine(asignacion.Tipo);
         Console.WriteLine(profesor.Correo);
+        ServicioEvaluaciones.CrearPdf(estudiantes,asignacion,profesor,cursoSeleccionado,grupoSeleccionado,anno,periodo);
 
     }
     private void EditarEvaluacionEstudiante(Evaluaciones estu)
@@ -139,7 +130,7 @@
             nuevo.Puntos = i.Puntos;
             nuevo.Porcentaje = i.Porcentaje;
             nuevo.Nota = i.Nota;
-            nuevo.Estado = i.Estado;
+            nuevo.Estado = i.Estado; 
             estudiantes.Add(nuevo);
         }
     }
