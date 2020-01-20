@@ -44,7 +44,9 @@ namespace SAEE_WEB.Controllers
             {
                 return BadRequest();
             }
-            return await _context.Grupos.Where(grupo => grupo.IdProfesor == profesor.Id).Include(x=>x.EstudiantesXgrupos).ThenInclude(estudiante=>estudiante.IdEstudianteNavigation).ToListAsync();
+            return await _context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
+                .ThenInclude(EG => EG.IdEstudianteNavigation)
+                .Where(x => x.IdProfesor == profesor.Id).ToListAsync();
         }
 
         // GET: api/Grupos/GetEstudiantes?id=IDGRUPO
