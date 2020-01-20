@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAEE_WEB.Models;
+using iTextSharp.text;
+using iTextSharp.text.pdf;
+
 
 namespace SAEE_WEB.Data
 {
@@ -32,9 +35,9 @@ namespace SAEE_WEB.Data
             return await _context.Evaluaciones.ToArrayAsync();
         }
 
-        public async Task<Evaluaciones[]> GetEvaluacionesXAsignacion(int asignacion,int periodo)
+        public async Task<Evaluaciones[]> GetEvaluacionesXAsignacion(int asignacion,int periodo,int profesor)
         {
-            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion && evaluacion.Periodo == periodo).ToArrayAsync();
+            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion && evaluacion.Periodo == periodo && evaluacion.Profesor == profesor).ToArrayAsync();
         }
 
         /* private async Task<Profesores> GetProfesorCompleteData(int id)

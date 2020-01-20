@@ -206,6 +206,9 @@ namespace SAEE_WEB.Models
                 entity.Property(e => e.Asignacion)
                     .IsRequired()
                     .HasMaxLength(100);
+                entity.Property(e => e.Profesor)
+                    .IsRequired()
+                    .HasMaxLength(100);
                 entity.Property(e => e.Estudiante)
                     .IsRequired()
                     .HasMaxLength(100);

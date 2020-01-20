@@ -15,6 +15,7 @@ namespace SAEE_WEB.Models
         }
         
         public int Id { get; set;}
+        public int Profesor { get; set; }
         public int Asignacion { get; set; }
         public int Estudiante { get; set; }
         public Decimal Puntos { get; set; }

@@ -9,7 +9,7 @@
     <h3>Evaluaciones</h3>
     <form class="form-inline" action="/">
         <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@CursoSeleccionado">
+            <Dropdown TItem="Cursos" OnSelected="@CursoSeleccionado">
                 <InitialTip>Curso</InitialTip>
                 <ChildContent>
                     @if (cursos == null)
@@ -24,7 +24,7 @@
                     {
                         @foreach(var curso in cursos)
                         {
-                            <DropdownListItem Item="@curso.Id">@curso.Nombre</DropdownListItem>
+                            <DropdownListItem Item="@curso">@curso.Nombre</DropdownListItem>
                         }
                     }
                 </ChildContent>
@@ -45,14 +45,14 @@
             </Dropdown>
         </div>
         <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@GrupoSeleccionado">
+            <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
                 <InitialTip>Grupo</InitialTip>
                 <ChildContent>
                     @if (gruposenCurso.Count != 0)
                     {
                         @foreach (var i in gruposenCurso)
                         {
-                            <DropdownListItem Item="@i.Id">@i.Grupo | @i.Anio</DropdownListItem>
+                            <DropdownListItem Item="@i">@i.Grupo | @i.Anio</DropdownListItem>
                         }
                     }
                 </ChildContent>
@@ -117,8 +117,9 @@
                             <td>@asig.Puntos</td>
                             <td>@asig.Porcentaje</td>
                             <td>
-                                <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacion(asig))">Evaluar</button>
+                                <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacion(asig))">Ver notas</button>
                             </td>
+
                         </tr>
 
                     }
@@ -133,7 +134,7 @@
     <p></p>
     @if (mostrarEditar)
     {
-        <EditEvaluaciones CerrarEditar="@cerrarEditar" dialogIsOpen="@mostrarEditar" asignacion ="@asignacion" periodo="@periodo" ></EditEvaluaciones>
+        <EditEvaluaciones CerrarEditar="@cerrarEditar" dialogIsOpen="@mostrarEditar" anno="@anno" grupoSeleccionado="@nombreGrupoSeleccionado" cursoSeleccionado="@nombreCursoSeleccionado" idProfesor="@idProfesor" asignacion ="@asignacion" periodo="@periodo" ></EditEvaluaciones>
     }
 </div>
 
@@ -145,10 +146,12 @@
     List<Grupos> gruposenCurso { get; set; }
     List<int> periodos { get; set; }
     List<int> annos { get; set; }
+    int anno = 0;
     Asignaciones [] asignaciones { get; set; }
     Asignaciones asignacion { get; set;}
     Boolean mostrarEditar = false;
     String rubro = "";
+    String nombreGrupoSeleccionado = "",nombreCursoSeleccionado="";
     int periodo = 0;
     int idcurso = 0, idgrupo = 0;
     [CascadingParameter]
@@ -183,22 +186,25 @@
     {
         cursos = await ServicioCursos.GetCursos(idProfesor);
     }
-    private void GrupoSeleccionado(int selection)
+    private void GrupoSeleccionado(Grupos selection)
     {
-        idgrupo = selection;
+        nombreGrupoSeleccionado = selection.Grupo;
+        anno = selection.Anio;
+        idgrupo = selection.Id;
     }
     private void RubroSeleccionado(string selection)
     {
         rubro = selection;
     }
 
-    async Task CursoSeleccionado(int selection)
+    async Task CursoSeleccionado(Cursos selection)
     {
-        idcurso = selection;
+        idcurso = selection.Id;
+        nombreCursoSeleccionado = selection.Nombre;
         gruposenCurso = new List<Grupos>();
         periodos = new List<int>();
         annos = new List<int>();
-        cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor, selection);
+        cursoSeleccionado = await ServicioCursos.GetCursos(idProfesor, selection.Id);
         CursosGrupos[] gruposid = await ServicioGruposCursos.GetCursosGrupos();
         List<Grupos> grupos = await ServicioGrupos.GetGrupos(idProfesor);
         int idCurso = cursoSeleccionado.Id;
