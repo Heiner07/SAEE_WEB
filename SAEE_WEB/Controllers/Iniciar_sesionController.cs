@@ -30,23 +30,5 @@ namespace SAEE_WEB.Controllers
             }
             return profesor;
         }
-
-        // POST: api/Iniciar_sesion
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
-        public async Task<ActionResult<Usuario>> PostIniciar_sesion(Usuario usuario)
-        {
-            Profesores profesor = await _context.Profesores.
-                Where(P => P.Cedula.Equals(usuario.Profesor.Cedula) && P.Contrasenia.Equals(usuario.Profesor.Contrasenia)).
-                FirstOrDefaultAsync();
-            if (profesor == null)
-            {
-                BadRequest();
-            }
-            usuario.Profesor = profesor;
-
-            return usuario;
-        }
     }
 }
