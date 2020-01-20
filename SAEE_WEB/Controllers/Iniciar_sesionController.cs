@@ -26,7 +26,7 @@ namespace SAEE_WEB.Controllers
             Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
-                BadRequest();
+                return BadRequest();
             }
             return profesor;
         }
