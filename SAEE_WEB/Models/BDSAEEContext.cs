@@ -86,7 +86,7 @@ namespace SAEE_WEB.Models
                     .HasMaxLength(100);
 
                 entity.Property(e => e.SegundoApellido)
-                    //.IsRequired()
+                    .IsRequired()
                     .HasMaxLength(100);
 
                 entity.HasOne(d => d.IdProfesorNavigation)
