@@ -25,21 +25,47 @@ namespace SAEE_WEB.Data
 
         public void CrearPdf(List<EstudianteEvaluacion> estudiantes, Asignaciones asignacion, Profesores profesor, String curso, String grupo, int anio, int periodo)
         {
+            List<string> list = new List<string> { "Cédula", "Nombre", "Puntos", "Porcentaje", "Nota" };
             BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
-            PdfPTable pdftable = new PdfPTable(estudiantes.Count);
+            PdfPTable pdftable = new PdfPTable(5);
             pdftable.DefaultCell.Padding = 3;
             pdftable.WidthPercentage = 100;
             pdftable.HorizontalAlignment = Element.ALIGN_LEFT;
             pdftable.DefaultCell.BorderWidth = 1;
 
             iTextSharp.text.Font text = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.NORMAL);
+            iTextSharp.text.Font text1 = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.BOLD);
+            foreach (string i in list){
+                PdfPCell cell = new PdfPCell(new Phrase(i, text));
+                cell.BackgroundColor = new iTextSharp.text.BaseColor(240, 240, 240);
+                pdftable.AddCell(cell);
+            }
+            
+            foreach(EstudianteEvaluacion estu in estudiantes)
+            {
+                pdftable.AddCell(new Phrase(estu.Cedula, text));
+                pdftable.AddCell(new Phrase(estu.Nombre, text));
+                pdftable.AddCell(new Phrase(estu.Puntos.ToString(), text));
+                pdftable.AddCell(new Phrase(estu.Porcentaje.ToString(), text));
+                pdftable.AddCell(new Phrase(estu.Nota.ToString(), text));
+            }
+
+
+
 
 
             Document doc = new Document(iTextSharp.text.PageSize.LETTER, 10, 10, 42, 35);
-            PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("Notas.pdf", FileMode.Create));
+           // PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("Notas_"+grupo+"_"+anio+".pdf", FileMode.Create));
             doc.Open();
-            Paragraph linea = new Paragraph("Primera Linea");
-            doc.Add(linea);
+            string fecha = DateTime.Now.ToShortDateString();
+            Phrase cabecera = new Phrase("Profesor: "+profesor.Nombre+" "+profesor.PrimerApellido+" "+profesor.SegundoApellido+"             Fecha: "+fecha+"\n"+
+                "Curso: "+curso+"     Grupo: "+grupo+"      Anio: "+anio+"     Rubro: "+asignacion.Tipo+"    Asignación: "+asignacion.Nombre+"\n"+
+                "Puntos: "+asignacion.Puntos+"      Porcentaje: "+asignacion.Porcentaje+"\n"+
+                "Periodo: " + periodo, text1);
+            doc.Add(cabecera);
+            doc.Add(pdftable);
+            //Paragraph linea = new Paragraph("Primera Linea");
+           // doc.Add(linea);
             doc.Close();
 
         }
