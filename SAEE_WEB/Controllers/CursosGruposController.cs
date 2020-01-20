@@ -24,7 +24,7 @@ namespace SAEE_WEB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<CursosGrupos>>> GetCursosGrupos()
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -37,7 +37,7 @@ namespace SAEE_WEB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<IEnumerable<CursosGrupos>>> GetCursosGrupos(int id)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -60,7 +60,7 @@ namespace SAEE_WEB.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCursosGrupos(int id, CursosGrupos cursosGrupos)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -96,7 +96,7 @@ namespace SAEE_WEB.Controllers
         [Route("DeleteCursosGrupos")]
         public async Task<IActionResult> DeleteCursosGrupos(List<CursosGrupos> cursosGrupos)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -127,7 +127,7 @@ namespace SAEE_WEB.Controllers
         [Route("PostCursosGrupos")]
         public async Task<IActionResult> PostCursosGrupos(List<CursosGrupos> cursosGrupos)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();

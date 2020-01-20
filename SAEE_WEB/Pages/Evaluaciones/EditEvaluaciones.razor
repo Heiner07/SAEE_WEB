@@ -11,68 +11,71 @@
         border-radius: 4px;
         box-sizing: border-box;
     }
+
+.mdc-dialog .mdc-dialog__container { width: 100%;}
+.mdc-dialog .mdc-dialog__surface {
+    max-width: none;
+    width: 55%;
+}
 </style>
 
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Estudiantes</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="RevertirCambios">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-                <div class="modal-body">
-                    <div class="container">
-                        @if (estudiantes.Count != 0)
+<MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+    <MatDialogTitle>Evaluando estudiantes</MatDialogTitle>
+    <MatDialogContent>
+        <div class="container">
+            @if (estudiantes.Count != 0)
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Cedula</th>
+                            <th>Nombre</th>
+                            <th>Puntos</th>
+                            <th>Porcentaje</th>
+                            <th>Nota</th>
+                            <th>Opciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var estu in estudiantes)
                         {
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th>Cedula</th>
-                                        <th>Nombre</th>
-                                        <th>Puntos</th>
-                                        <th>Porcentaje</th>
-                                        <th>Nota</th>
-                                        <th>Opciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (var estu in estudiantes)
-                                    {
-                                        <tr>
+                            <tr>
 
-                                            <td>@estu.Cedula</td>
-                                            <td>@estu.Nombre</td>
-                                            <td>@estu.Puntos</td>
-                                            <td>@estu.Porcentaje</td>
-                                            <td>@estu.Nota</td>
-                                            <td>
-                                                <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacionEstudiante(estu.evaluacion))" >Editar</button>
-                                            </td>
-                                        </tr>
+                                <td>@estu.Cedula</td>
+                                <td>@estu.Nombre</td>
+                                <td>@estu.Puntos</td>
+                                <td>@estu.Porcentaje</td>
+                                <td>@estu.Nota</td>
+                                <td>
+                                    <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacionEstudiante(estu.evaluacion))">Editar</button>
+                                </td>
+                            </tr>
 
-                                    }
-
-                                </tbody>
-
-
-                            </table>
                         }
-                    </div>
-                </div>
-            </div>
+
+                    </tbody>
+
+
+                </table>
+            }
+        </div>
         @if (mostrarEditar)
         {
             <ModalNota CerrarEditar2="@cerrarEditar2" asignacion="@asignacion" evaluacion="@evaluacion"></ModalNota>
         }
-        </div>
-</div>
+    </MatDialogContent>
+    <MatDialogActions>
+        <button type="button" class="btn btn-danger" @onclick="RevertirCambios">
+            Cerrar
+        </button>
+    </MatDialogActions>
+</MatDialog>
 
 @code{
     [Parameter] public EventCallback CerrarEditar { get; set; }
     [Parameter] public Asignaciones asignacion { get; set; }
     [Parameter] public int periodo { get; set; }
+    [Parameter] public bool dialogIsOpen { get; set; }
     Evaluaciones [] evaluaciones { get; set; }
     List<EstudianteEvaluacion> estudiantes { get; set; }
     Evaluaciones evaluacion { get; set; }
