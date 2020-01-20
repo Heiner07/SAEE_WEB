@@ -21,14 +21,14 @@ namespace SAEE_WEB.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Profesores>>> GetProfesores()
+        public async Task<ActionResult<Profesores>> GetProfesor()
         {
             Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 BadRequest();
             }
-            return await _context.Profesores.ToListAsync();
+            return profesor;
         }
 
         // POST: api/Iniciar_sesion
