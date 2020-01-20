@@ -20,6 +20,12 @@ namespace SAEE_WEB.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Profesores>>> GetProfesores()
+        {
+            return await _context.Profesores.ToListAsync();
+        }
+
         // POST: api/Iniciar_sesion
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
