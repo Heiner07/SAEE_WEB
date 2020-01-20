@@ -1,4 +1,5 @@
-﻿@page "/evaluaciones"
+﻿@page "/"
+@page "/evaluaciones"
 @inject CursosServices ServicioCursos
 @inject CursosGruposServices ServicioGruposCursos
 @inject GruposServices ServicioGrupos
@@ -22,7 +23,7 @@
                     }
                     else
                     {
-                        @foreach(var curso in cursos)
+                        @foreach (var curso in cursos)
                         {
                             <DropdownListItem Item="@curso">@curso.Nombre</DropdownListItem>
                         }
@@ -134,7 +135,7 @@
     <p></p>
     @if (mostrarEditar)
     {
-        <EditEvaluaciones CerrarEditar="@cerrarEditar" dialogIsOpen="@mostrarEditar" anno="@anno" grupoSeleccionado="@nombreGrupoSeleccionado" cursoSeleccionado="@nombreCursoSeleccionado" idProfesor="@idProfesor" asignacion ="@asignacion" periodo="@periodo" ></EditEvaluaciones>
+        <EditEvaluaciones CerrarEditar="@cerrarEditar" dialogIsOpen="@mostrarEditar" anno="@anno" grupoSeleccionado="@nombreGrupoSeleccionado" cursoSeleccionado="@nombreCursoSeleccionado" idProfesor="@idProfesor" asignacion="@asignacion" periodo="@periodo"></EditEvaluaciones>
     }
 </div>
 
@@ -147,11 +148,11 @@
     List<int> periodos { get; set; }
     List<int> annos { get; set; }
     int anno = 0;
-    Asignaciones [] asignaciones { get; set; }
-    Asignaciones asignacion { get; set;}
+    Asignaciones[] asignaciones { get; set; }
+    Asignaciones asignacion { get; set; }
     Boolean mostrarEditar = false;
     String rubro = "";
-    String nombreGrupoSeleccionado = "",nombreCursoSeleccionado="";
+    String nombreGrupoSeleccionado = "", nombreCursoSeleccionado = "";
     int periodo = 0;
     int idcurso = 0, idgrupo = 0;
     [CascadingParameter]
