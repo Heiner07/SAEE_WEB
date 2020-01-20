@@ -27,7 +27,7 @@ namespace SAEE_WEB.Controllers
         [Route("GetGrupos")]
         public async Task<ActionResult<IEnumerable<Grupos>>> GetGrupos()
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -40,7 +40,7 @@ namespace SAEE_WEB.Controllers
         [Route("GetEG")]
         public async Task<ActionResult<IEnumerable<EstudiantesXgrupos>>> GetEG(int id)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -55,7 +55,7 @@ namespace SAEE_WEB.Controllers
         [Route("GetEGOffline")]
         public async Task<ActionResult<IEnumerable<EstudiantesXgrupos>>> GetEGOffline()
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -76,7 +76,7 @@ namespace SAEE_WEB.Controllers
 
             try
             {
-                Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+                Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
                 if (profesor == null)
                 {
                     return BadRequest();
@@ -99,7 +99,7 @@ namespace SAEE_WEB.Controllers
         [Route("PostGrupos")]
         public async Task<ActionResult<Grupos>> PostGrupos(Grupos grupos)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
@@ -116,7 +116,7 @@ namespace SAEE_WEB.Controllers
         [Route("DeleteGrupos")]
         public async Task<ActionResult<Grupos>> DeleteGrupos(Grupos grupo)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();

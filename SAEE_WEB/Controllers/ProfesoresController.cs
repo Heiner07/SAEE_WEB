@@ -25,7 +25,7 @@ namespace SAEE_WEB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Profesores>>> GetProfesores()
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
@@ -38,7 +38,7 @@ namespace SAEE_WEB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Profesores>> GetProfesor(int id)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
@@ -60,7 +60,7 @@ namespace SAEE_WEB.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutProfesores(int id, Profesores profesores)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
@@ -112,7 +112,7 @@ namespace SAEE_WEB.Controllers
         [Route("PutProfesor")]//Actualiza el perfil
         public async Task<IActionResult> PutProfesor(Profesores profesores)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Id != profesores.Id)
             {
                 return BadRequest();
@@ -146,7 +146,7 @@ namespace SAEE_WEB.Controllers
         [HttpPost]
         public async Task<ActionResult<Profesores>> PostProfesores(Profesores profesores)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
@@ -162,7 +162,7 @@ namespace SAEE_WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Profesores>> DeleteProfesores(int id)
         {
-            Profesores profesor = await InicioSesionController.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null && profesor.Administrador)
             {
                 return BadRequest();
