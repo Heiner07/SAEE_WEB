@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAEE_WEB.Models;
 using System.IO;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
 
 
 namespace SAEE_WEB.Data
