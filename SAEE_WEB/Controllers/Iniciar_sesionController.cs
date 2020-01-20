@@ -23,6 +23,11 @@ namespace SAEE_WEB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Profesores>>> GetProfesores()
         {
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                BadRequest();
+            }
             return await _context.Profesores.ToListAsync();
         }
 
