@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace SAEE_WEB.Models
 {
@@ -13,6 +14,7 @@ namespace SAEE_WEB.Models
 
         public int Id { get; set; }
         public int IdProfesor { get; set; }
+        [Required(ErrorMessage = "El grupo es requerido")]
         public string Grupo { get; set; }
         public int Anio { get; set; }
 

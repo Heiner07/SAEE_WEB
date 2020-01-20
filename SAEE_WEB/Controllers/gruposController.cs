@@ -47,8 +47,6 @@ namespace SAEE_WEB.Controllers
             }
             var lista = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == id).Include(z => z.IdEstudianteNavigation).ToListAsync();
             return await lista;
-            //return await (from EG in lista
-            //              select EG.IdEstudianteNavigation).ToListAsync();
         }
 
         [HttpGet]

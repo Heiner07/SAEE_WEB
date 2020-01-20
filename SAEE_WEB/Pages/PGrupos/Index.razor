@@ -22,12 +22,17 @@
         </p>
         @if (MostrarPanelAgregar)
         {
-            <CreateGrupos nuevoGrupo="@nuevoGrupo" MostrarError="@mostrarError" IdProfesor="idProfesor"/>
+            <CreateGrupos nuevoGrupo="@nuevoGrupo" MostrarError="@mostrarError" IdProfesor="idProfesor" />
 
         }
-
-
-
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Buscar grupo" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
+            <div class="input-group-append">
+                <button class="btn btn-info">
+                    <i>Buscar</i>
+                </button>
+            </div>
+        </div>
         @if (grupos == null)
         {
             <text> Cargando... </text>
@@ -39,81 +44,74 @@
         }
         else
         {
-
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Grupo</th>
-                        <th>Año</th>
-                        <th>Opciones</th>
-
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var grupo in grupos)
-                    {
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
                         <tr>
-
-                            <td>@grupo.Grupo</td>
-                            <td>@grupo.Anio</td>
-                            <td>
-
-                                <button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>
-                                <button class="btn btn-outline-danger" @onclick="@(() => MostrarPanelBorrar(grupo))">Borrar</button>
-
-                                <button class="btn btn-outline-secondary" @onclick="@(() => MostrarPanelEstudiantes(grupo))">Estudiantes</button>
-                            </td>
-
-
+                            <th>Grupo</th>
+                            <th>Año</th>
+                            <th>Opciones</th>
 
                         </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var grupo in grupos)
+                        {
 
-                    }
+                            if (grupo.Grupo.ToLower().StartsWith(TextoBuscar.ToLower()))
+                            {
+                                <tr>
+                                    <td>@grupo.Grupo</td>
+                                    <td>@grupo.Anio</td>
+                                    <td>
+                                        <div>
+                                            <button class="btn btn-outline-info" @onclick="@(() => cambiarEdicion(grupo))">Editar</button>
+                                            <button class="btn btn-outline-secondary" @onclick="@(() => MostrarPanelEstudiantes(grupo))">Estudiantes</button>
+                                            <button class="btn btn-outline-danger" @onclick="@(() => MostrarPanelBorrar(grupo))">Borrar</button>
+                                        </div>
 
-                </tbody>
+                                    </td>
+                                </tr>
+                            }
+
+                        }
+
+                    </tbody>
 
 
-            </table>
+                </table>
+            </div>
         }
-        @if (mostrarBorrar)
-        {
-            <DeleteGrupos grupo="@eliminarGrupo" CerrarEliminar="@OcultarPanelBorrar" MostrarError="@mostrarError" />
-        }
 
 
-        @if (mostrarEditar)
-        {
-            <EditGrupos grupo="@editarGrupo" CerrarEditar="@cerrarEditar" MostrarError="@mostrarError" msjError="@msjError" />
-        }
-        @if (mostrarListaEstudiantes)
-        {
-            <ListaEstudiantes OcultarPanelEstudiantes="@OcultarPanelEstudiantes" Grupo="@grupoEstudiantes" IdProfesor="idProfesor"/>
-        }
     </div>
+
 }
 else
 {
 
     <text>No tiene permisos para ver el contenido</text>
 }
+<DeleteGrupos dialogIsOpen="@mostrarBorrar" grupo="@eliminarGrupo" CerrarEliminar="@OcultarPanelBorrar" MostrarError="@mostrarError" />
+<EditGrupos dialogIsOpen="@mostrarEditar" grupo="@editarGrupo" CerrarEditar="@cerrarEditar" MostrarError="@mostrarError" msjError="@msjError" />
+@if(@mostrarListaEstudiantes){
+    <ListaEstudiantes dialogIsOpen="@mostrarListaEstudiantes" OcultarPanelEstudiantes="@OcultarPanelEstudiantes" Grupo="@grupoEstudiantes" IdProfesor="idProfesor" />
 
+    }
 @code{
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
-    public List<Grupos> grupos;
+    public List<Grupos> grupos = new List<Grupos>();
     Grupos editarGrupo = new Grupos();
     Grupos nuevoGrupo = new Grupos();
     Grupos eliminarGrupo = new Grupos();
     Grupos grupoEstudiantes = new Grupos();
-    Boolean mostrarBorrar = false;
-    Boolean mostrarError = false;
-    Boolean mostrarEditar = false;
-    Boolean mostrarListaEstudiantes = false;
+    Boolean mostrarBorrar = false, mostrarError = false, mostrarEditar = false, mostrarListaEstudiantes = false, MostrarPanelAgregar = false;
     String msjError = "";
-    Boolean MostrarPanelAgregar = false;
     String TextoBotonAgregar = "Agregar Grupo";
     String ROL = "";
     int idProfesor = 0;
+    string TextoBuscar = "";
 
     protected override async Task OnInitializedAsync()
     {

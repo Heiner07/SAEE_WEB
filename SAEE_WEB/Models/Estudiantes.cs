@@ -21,7 +21,7 @@ namespace SAEE_WEB.Models
         public string Nombre { get; set; }
         [Required(ErrorMessage = "El primer apellido es requerido")]
         public string PrimerApellido { get; set; }
-        [Required(ErrorMessage = "El segundo apellido es requerido")]
+       // [Required(ErrorMessage = "El segundo apellido es requerido")]
         public string SegundoApellido { get; set; }
         [StringLength(10, ErrorMessage = "Máximo 10 caracteres")]
         public string Pin { get; set; }

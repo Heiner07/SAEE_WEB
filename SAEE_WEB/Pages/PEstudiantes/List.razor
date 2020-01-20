@@ -46,19 +46,17 @@ else
         </table>
     </div>
 }
-@if (mostrarEditar)
-{
-    <Edit Estudiante="@estudianteEditar" CerrarEditar="@OcultarPanelEditar" />
-}
-@if (mostrarBorrar)
-{
-    <Delete Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="false"/>
-}
+
+   <Edit dialogIsOpen="@mostrarEditar" Estudiante="@estudianteEditar" CerrarEditar="@OcultarPanelEditar" />
+
+
+   <Delete dialogIsOpen="@mostrarBorrar" Estudiante="@estudianteEditar" CerrarEliminar="@OcultarPanelBorrar" EnGrupos="false"/>
+
 
 
 @code {
-    public List<Estudiantes> estudiantes;
-    Estudiantes estudianteEditar;
+    public List<Estudiantes> estudiantes = new List<Estudiantes>();
+    Estudiantes estudianteEditar = new Estudiantes();
     Boolean mostrarEditar = false;
     Boolean mostrarBorrar = false;
     String TextoBuscar = "";

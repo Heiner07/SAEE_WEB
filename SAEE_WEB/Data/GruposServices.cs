@@ -25,15 +25,6 @@ namespace SAEE_WEB.Data
                 .ThenInclude(EG => EG.IdEstudianteNavigation).Include(curso => curso.CursosGrupos)
                 .Where(curso => curso.IdProfesor == idProfesor).ToListAsync();
         }
-
-        public async Task<List<Estudiantes>> GetEstudiantesXGrupos(Grupos grupo)
-        {
-            var lista = context.EstudiantesXgrupos.Where(x => x.IdGrupo == grupo.Id).Include(z => z.IdEstudianteNavigation);
-            return await (from EG in lista
-                          select EG.IdEstudianteNavigation).ToListAsync();
-        }
-
-
         [HttpGet("{id}", Name = "obtenerGrupo")]
         public async Task<Grupos> GetGrupo(int id)
         {
@@ -90,26 +81,7 @@ namespace SAEE_WEB.Data
             }return true;
         }
 
-        public async Task<Boolean> DeleteEstudianteXGrupos(int idEstudiante,Grupos grupo) {
-            var grupos = context.EstudiantesXgrupos.Where(x=>x.IdEstudiante==idEstudiante && x.IdGrupo==grupo.Id)
-                .FirstOrDefault();
-            if (grupos == null)
-            {
-                return false;
-            }
-            try
-            {
-                context.EstudiantesXgrupos.Remove(grupos);
-                await context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                return false;
-            }
-            return true;
-
-
-        }
+        
         public async Task<Boolean> RollbackGrupos(Grupos grupo)
         {
             context.Entry(grupo).CurrentValues.SetValues(context.Entry(grupo).OriginalValues);

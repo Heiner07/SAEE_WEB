@@ -1,10 +1,6 @@
 ﻿@page "/indice-estudiantes"
 @attribute [Authorize]
-@if (ROL.Equals("Profesor") || ROL.Equals("Administrador"))
-{
     <div class="container">
-
-
         <h3>Administración de estudiantes</h3>
 
         <p>
@@ -17,12 +13,7 @@
         <br />
         <List IdProfesor="idProfesor"/>
     </div>
-}
-else
-{
-    <text>No tiene permisos para ver el contenido</text>
 
-}
 @code {
 
     [CascadingParameter]

@@ -1,31 +1,33 @@
 ﻿@inject GruposServices gruposServices
 @inject NavigationManager navegar
-  
-    <div class="modal" tabindex="-1" style="display:block" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Eliminando Grupo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="CerrarEliminar">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    ¿Realmente desea borrar el grupo "@grupo.Grupo"?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
-                    <button type="button" class="btn btn-primary" @onclick="eliminarGrupo">Borrar</button>
-                </div>
+
+
+
+    <MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+        <MatDialogTitle>Borrando Grupo</MatDialogTitle>
+        <MatDialogContent>
+            <text> ¿Realmente desea borrar el grupo "@grupo.Grupo"?</text>
+        </MatDialogContent>
+        <MatDialogActions>
+            <div>
+                <button type="button" class="btn btn-secondary" @onclick="CerrarEliminar">Cancelar</button>
+                <button type="button" class="btn btn-primary" @onclick="eliminarGrupo">Borrar</button>
             </div>
-        </div>
-    </div>
+        </MatDialogActions>
+    </MatDialog>
+   
 
 @code {
+    [Parameter]
+    public bool dialogIsOpen { get; set; }
     [Parameter] public Grupos grupo { get; set; }
     [Parameter] public EventCallback CerrarEliminar { get; set; }
     [Parameter] public Boolean MostrarError { get; set; }
     [Parameter] public String msjError { get; set; }
+    protected override Task OnParametersSetAsync()
+    {
+        return base.OnParametersSetAsync();
+    }
     protected async Task eliminarGrupo()
     {
         Boolean exito = await gruposServices.DeleteGrupo(grupo);

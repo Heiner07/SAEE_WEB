@@ -1,86 +1,86 @@
 ﻿@inject GruposServices gruposServices
 @inject EstudiantesServices  estudiantesServices
 
-<div class="modal" tabindex="-1" style="display:block" role="dialog">
-    <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" @onclick="OcultarPanelAniadir">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-
-                @if (todosEstudiantes == null)
-                {
-                    <text>Cargando estudiantes...</text>
-                }
-                else if (todosEstudiantes.Count == 0)
-                {
-                    <text>No hay estudiantes</text>
-                }
-                else
-                {
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
-                        <div class="input-group-append">
-                            <button class="btn btn-info">
-                                <i>Buscar</i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Cédula</th>
-                                    <th>Nombre</th>
-                                    <th>Agregar</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var estudiante in todosEstudiantes)
-                                {
-                                    if (estudiante.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
-                                    {
-                                        @if (estudiantes.Count == 0)
-                                        {
-                                            <tr>
-                                                <td>@estudiante.Cedula</td>
-                                                <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
-                                                <td>
-
-                                                    <input name="ListaAgregar" type="checkbox" bind="@agregado" @onchange="eventArgs => { CheckboxClicked(estudiante, eventArgs.Value); }">
-                                                </td>
-                                            </tr>
-                                        }
-                                        else if (!(estudiantes.Exists(grupoTemp => grupoTemp.Id == estudiante.Id)))
-                                        {
-
-                                            <tr>
-                                                <td>@estudiante.Cedula</td>
-                                                <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
-                                                <td>
-
-                                                    <input name="ListaAgregar" type="checkbox" bind="@agregado" @onchange="eventArgs => { CheckboxClicked(estudiante, eventArgs.Value); }" > 
-                                                </td>
-                                            </tr>
-
-
-                                        }
-                                    }
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-
-                <button type="button" class="btn btn-success" @onclick="AgregarEstudiantes"><span class="glyphicon glyphicon-plus"></span>Agregar</button>
-
+    <MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
+        <MatDialogTitle>Agregar grupos al curso</MatDialogTitle>
+        <MatDialogContent  >
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
+                <div class="input-group-append">
+                    <button class="btn btn-info">
+                        <i>Buscar</i>
+                    </button>
+                </div>
             </div>
-        </div>
-    </div>
-</div>
+        </MatDialogContent>
+        <MatDialogContent>
+
+            @if (todosEstudiantes == null)
+            {
+                <text>Cargando estudiantes...</text>
+            }
+            else if (todosEstudiantes.Count == 0)
+            {
+                <text>No hay estudiantes para agregar</text>
+            }
+            else
+            {
+
+                <table class="table">
+
+                    <thead>
+                        <tr>
+                            <th>Cédula</th>
+                            <th>Nombre</th>
+                            <th>Agregar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var estudiante in todosEstudiantes)
+                        {
+                            if (estudiante.Nombre.ToLower().StartsWith(TextoBuscar.ToLower()))
+                            {
+                                @if (estudiantes.Count == 0)
+                                {
+                                    <tr>
+                                        <td>@estudiante.Cedula</td>
+                                        <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                                        <td>
+
+                                            <input name="ListaAgregar" type="checkbox" bind="@agregado" @onchange="eventArgs => { CheckboxClicked(estudiante, eventArgs.Value); }">
+                                        </td>
+                                    </tr>
+                                }
+                                else if (!(estudiantes.Exists(grupoTemp => grupoTemp.Id == estudiante.Id)))
+                                {
+
+                                    <tr>
+                                        <td>@estudiante.Cedula</td>
+                                        <td>@estudiante.Nombre @estudiante.PrimerApellido @estudiante.SegundoApellido</td>
+                                        <td>
+                                            <input name="ListaAgregar" type="checkbox" bind="@agregado" @onchange="eventArgs => { CheckboxClicked(estudiante, eventArgs.Value); }">
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        }
+                    </tbody>
+                </table>
+
+            }
+        </MatDialogContent>
+        <MatDialogActions>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" @onclick="OcultarPanelAniadir">Cerrar</button>
+                <button type="button" class="btn btn-success" @onclick="AgregarEstudiantes">Agregar</button>
+            </div>
+        </MatDialogActions>
+    </MatDialog>
+
 @code {
-    public List<Estudiantes> todosEstudiantes;
+    [Parameter]
+    public bool dialogIsOpen { get; set; } = false;
+    public List<Estudiantes> todosEstudiantes = new List<Estudiantes>();
     public List<Estudiantes> estudiantesAgregar = new List<Estudiantes>();
     public List<EstudiantesXgrupos> EG = new List<EstudiantesXgrupos>();
     String TextoBuscar = "";
@@ -89,14 +89,16 @@
     [Parameter] public List<Estudiantes> estudiantes { get; set; } = new List<Estudiantes>();
     public bool agregado { get; set; } = false;
     [Parameter] public int IdProfesor { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
         await CargarEstudiantes();
+        
     }
+    
 
     async Task CargarEstudiantes()
     {
-        //estudiantes = await gruposServices.GetEstudiantesXGrupos(Grupo);
         todosEstudiantes = await estudiantesServices.GetEstudiantes(IdProfesor);
     }
 
