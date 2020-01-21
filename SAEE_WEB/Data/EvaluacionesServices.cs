@@ -7,8 +7,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAEE_WEB.Models;
 using System.IO;
-using iTextSharp.text;
-using iTextSharp.text.pdf;
+using System.Net;
+using System.Net.Mail;
+using Syncfusion.Pdf;
+using Syncfusion.Pdf.Graphics;
+using Syncfusion.Pdf.Grid;
+using Syncfusion.Drawing;
+using System.Data;
+using Syncfusion.Pdf.Tables;
 
 namespace SAEE_WEB.Data
 {
@@ -23,52 +29,86 @@ namespace SAEE_WEB.Data
         }
 
 
-        public void CrearPdf(List<EstudianteEvaluacion> estudiantes, Asignaciones asignacion, Profesores profesor, String curso, String grupo, int anio, int periodo)
+        public MemoryStream CrearPdf(List<EstudianteEvaluacion> estudiantes, Asignaciones asignacion, Profesores profesor, String curso, String grupo, int anio, int periodo)
         {
-            List<string> list = new List<string> { "Cédula", "Nombre", "Puntos", "Porcentaje", "Nota" };
-            BaseFont bf = BaseFont.CreateFont(BaseFont.TIMES_ROMAN, BaseFont.CP1250, BaseFont.EMBEDDED);
-            PdfPTable pdftable = new PdfPTable(5);
-            pdftable.DefaultCell.Padding = 3;
-            pdftable.WidthPercentage = 100;
-            pdftable.HorizontalAlignment = Element.ALIGN_LEFT;
-            pdftable.DefaultCell.BorderWidth = 1;
-
-            iTextSharp.text.Font text = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.NORMAL);
-            iTextSharp.text.Font text1 = new iTextSharp.text.Font(bf, 10, iTextSharp.text.Font.BOLD);
-            foreach (string i in list){
-                PdfPCell cell = new PdfPCell(new Phrase(i, text));
-                cell.BackgroundColor = new iTextSharp.text.BaseColor(240, 240, 240);
-                pdftable.AddCell(cell);
-            }
-            
-            foreach(EstudianteEvaluacion estu in estudiantes)
+            using (PdfDocument pdfDocument = new PdfDocument())
             {
-                pdftable.AddCell(new Phrase(estu.Cedula, text));
-                pdftable.AddCell(new Phrase(estu.Nombre, text));
-                pdftable.AddCell(new Phrase(estu.Puntos.ToString(), text));
-                pdftable.AddCell(new Phrase(estu.Porcentaje.ToString(), text));
-                pdftable.AddCell(new Phrase(estu.Nota.ToString(), text));
+
+                int paragraphAfterSpacing = 8;
+                int cellMargin = 8;
+
+                //Add page to the PDF document
+                PdfPage page = pdfDocument.Pages.Add();
+
+                //Create a new font
+                PdfStandardFont font = new PdfStandardFont(PdfFontFamily.TimesRoman, 16);
+
+                //Create a text element to draw a text in PDF page
+                PdfTextElement title = new PdfTextElement("Informe de notas "+grupo, font, PdfBrushes.Black);
+                PdfLayoutResult result = title.Draw(page, new PointF(0, 0));
+                string fecha = DateTime.Now.ToShortDateString();
+
+                PdfStandardFont contentFont = new PdfStandardFont(PdfFontFamily.TimesRoman, 12);
+                PdfTextElement content = new PdfTextElement("Profesor: " + profesor.Nombre + " " + profesor.PrimerApellido + " " + profesor.SegundoApellido + "             Fecha: " + fecha + "\n" +
+                "Curso: " + curso + "     Grupo: " + grupo + "      Anio: " + anio + "     Rubro: " + asignacion.Tipo + "    Asignación: " + asignacion.Nombre + "\n" +
+                "Puntos: " + asignacion.Puntos + "      Porcentaje: " + asignacion.Porcentaje + "\n" +
+                "Periodo: " + periodo, contentFont, PdfBrushes.Black);
+                PdfLayoutFormat format = new PdfLayoutFormat();
+                format.Layout = PdfLayoutType.Paginate;
+
+                //Draw a text to the PDF document
+                result = content.Draw(page, new RectangleF(0, result.Bounds.Bottom + paragraphAfterSpacing, page.GetClientSize().Width, page.GetClientSize().Height), format);
+
+                PdfGrid pdfGrid = new PdfGrid();
+
+                pdfGrid.Style.CellPadding.Left = cellMargin;
+                pdfGrid.Style.CellPadding.Right = cellMargin;
+
+                //Applying built-in style to the PDF grid
+                pdfGrid.ApplyBuiltinStyle(PdfGridBuiltinStyle.GridTable4Accent1);
+                // Initialize DataTable to assign as DateSource to the light table.
+
+                DataTable table = new DataTable();
+
+                //Include columns to the DataTable.
+
+                table.Columns.Add("Cédula");
+
+                table.Columns.Add("Nombre");
+
+                table.Columns.Add("Puntos");
+
+                table.Columns.Add("Porcentaje");
+
+                table.Columns.Add("Nota");
+                //Include rows to the DataTable.
+                foreach(EstudianteEvaluacion estu in estudiantes)
+                {
+                    table.Rows.Add(new object[] { estu.Cedula,estu.Nombre,estu.Puntos.ToString(),estu.Porcentaje.ToString(),estu.Nota.ToString() });
+                }
+
+
+                //Assign data source.
+
+                pdfGrid.DataSource = table;
+
+                pdfGrid.Style.Font = contentFont;
+
+                //Draw PDF grid into the PDF page
+                pdfGrid.Draw(page, new Syncfusion.Drawing.PointF(0, result.Bounds.Bottom + paragraphAfterSpacing));
+
+                using (MemoryStream stream = new MemoryStream())
+                {
+                    //Saving the PDF document into the stream
+                    pdfDocument.Save(stream);
+                    //Closing the PDF document
+                    pdfDocument.Close(true);
+                    return stream;
+
+                }
             }
 
-
-
-
-
-            Document doc = new Document(iTextSharp.text.PageSize.LETTER, 10, 10, 42, 35);
-           // PdfWriter wri = PdfWriter.GetInstance(doc, new FileStream("Notas_"+grupo+"_"+anio+".pdf", FileMode.Create));
-            doc.Open();
-            string fecha = DateTime.Now.ToShortDateString();
-            Phrase cabecera = new Phrase("Profesor: "+profesor.Nombre+" "+profesor.PrimerApellido+" "+profesor.SegundoApellido+"             Fecha: "+fecha+"\n"+
-                "Curso: "+curso+"     Grupo: "+grupo+"      Anio: "+anio+"     Rubro: "+asignacion.Tipo+"    Asignación: "+asignacion.Nombre+"\n"+
-                "Puntos: "+asignacion.Puntos+"      Porcentaje: "+asignacion.Porcentaje+"\n"+
-                "Periodo: " + periodo, text1);
-            doc.Add(cabecera);
-            doc.Add(pdftable);
-            //Paragraph linea = new Paragraph("Primera Linea");
-           // doc.Add(linea);
-            doc.Close();
-
-        }
+            }
 
         public async Task<Evaluaciones> GetEvaluaciones(int id)
         {

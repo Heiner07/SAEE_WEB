@@ -2,6 +2,8 @@
 @inject EvaluacionesServices ServicioEvaluaciones
 @inject EstudiantesServices ServicioEstudiantes
 @inject ProfesoresServices ServicioProfesores
+@using System.IO
+@inject Microsoft.JSInterop.IJSRuntime JS
 <style>
     input[type=text], select {
         width: 20%;
@@ -13,18 +15,21 @@
         box-sizing: border-box;
     }
 
-.mdc-dialog .mdc-dialog__container { width: 100%;}
-.mdc-dialog .mdc-dialog__surface {
-    max-width: none;
-    width: 55%;
-}
+    .mdc-dialog .mdc-dialog__container {
+        width: 100%;
+    }
+
+    .mdc-dialog .mdc-dialog__surface {
+        max-width: none;
+        width: 55%;
+    }
 </style>
 
 <MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
     <MatDialogTitle>Evaluando estudiantes</MatDialogTitle>
     <MatDialogActions>
         <button type="button" class="btn btn-warning" @onclick="EnviarInforme">
-            Enviar Informe
+            Guardar Informe
         </button>
     </MatDialogActions>
     <MatDialogContent>
@@ -77,30 +82,30 @@
     </MatDialogActions>
 </MatDialog>
 
+
 @code{
-    [Parameter] public String cursoSeleccionado { get; set;}
-    [Parameter] public String grupoSeleccionado { get; set;}
-    [Parameter] public int anno { get; set;}
-    [Parameter] public String rubroSeleccionado { get; set;}
+    [Parameter] public String cursoSeleccionado { get; set; }
+    [Parameter] public String grupoSeleccionado { get; set; }
+    [Parameter] public int anno { get; set; }
+    [Parameter] public String rubroSeleccionado { get; set; }
     [Parameter] public EventCallback CerrarEditar { get; set; }
     [Parameter] public Asignaciones asignacion { get; set; }
     [Parameter] public int periodo { get; set; }
     [Parameter] public bool dialogIsOpen { get; set; }
     [Parameter] public int idProfesor { get; set; }
-    Evaluaciones [] evaluaciones { get; set; }
+    Evaluaciones[] evaluaciones { get; set; }
     List<EstudianteEvaluacion> estudiantes { get; set; }
     Evaluaciones evaluacion { get; set; }
     Boolean mostrarEditar = false;
     Profesores profesor { get; set; }
 
-    public void EnviarInforme()
+    protected async Task EnviarInforme()
     {
-        Console.WriteLine(cursoSeleccionado);
-        Console.WriteLine(grupoSeleccionado);
-        Console.WriteLine(anno);
-        Console.WriteLine(asignacion.Tipo);
-        Console.WriteLine(profesor.Correo);
-        ServicioEvaluaciones.CrearPdf(estudiantes,asignacion,profesor,cursoSeleccionado,grupoSeleccionado,anno,periodo);
+        using (MemoryStream excelStream = ServicioEvaluaciones.CrearPdf(estudiantes, asignacion, profesor, cursoSeleccionado, grupoSeleccionado, anno, periodo))
+        {
+            await JS.SaveAs("Notas_"+grupoSeleccionado+"_"+anno.ToString()+".pdf", excelStream.ToArray());
+        }
+        //ServicioEvaluaciones.CrearPdf(estudiantes, asignacion, profesor, cursoSeleccionado, grupoSeleccionado, anno, periodo);
 
     }
     private void EditarEvaluacionEstudiante(Evaluaciones estu)
@@ -119,8 +124,8 @@
     async Task cargarEvaluaciones()
     {
         estudiantes = new List<EstudianteEvaluacion>();
-        evaluaciones = await ServicioEvaluaciones.GetEvaluacionesXAsignacion(asignacion.Id,periodo,idProfesor);
-        foreach(var i in evaluaciones)
+        evaluaciones = await ServicioEvaluaciones.GetEvaluacionesXAsignacion(asignacion.Id, periodo, idProfesor);
+        foreach (var i in evaluaciones)
         {
             EstudianteEvaluacion nuevo = new EstudianteEvaluacion();
             Estudiantes estudiante = await ServicioEstudiantes.GetEstudiante(i.Estudiante);
@@ -130,7 +135,7 @@
             nuevo.Puntos = i.Puntos;
             nuevo.Porcentaje = i.Porcentaje;
             nuevo.Nota = i.Nota;
-            nuevo.Estado = i.Estado; 
+            nuevo.Estado = i.Estado;
             estudiantes.Add(nuevo);
         }
     }
