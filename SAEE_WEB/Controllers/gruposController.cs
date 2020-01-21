@@ -32,23 +32,9 @@ namespace SAEE_WEB.Controllers
             {
                 return BadRequest();
             }
-            return await _context.Grupos.Where(grupo => grupo.IdProfesor == profesor.Id).ToListAsync();
+            return await _context.Grupos.Where(grupo => grupo.IdProfesor == profesor.Id).Include(grupo => grupo.EstudiantesXgrupos).ToListAsync();
         }
-        //GET GRUPOS OFFLINE
-        [HttpGet]
-        [Route("GetGruposOffline")]
-        public async Task<ActionResult<IEnumerable<Grupos>>> GetGruposOffline()
-        {
-            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
-            {
-                return BadRequest();
-            }
-            return await _context.Grupos.Include(grupo => grupo.EstudiantesXgrupos)
-                .ThenInclude(EG => EG.IdEstudianteNavigation)
-                .Where(x => x.IdProfesor == profesor.Id).ToListAsync();
-        }
-
+       
         // GET: api/Grupos/GetEstudiantes?id=IDGRUPO
         [HttpGet]
         [Route("GetEG")]
