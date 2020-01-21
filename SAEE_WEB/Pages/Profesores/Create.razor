@@ -9,6 +9,6 @@
     async Task AgregarProfesor(){
         profesor.Administrador = false;
         await ServicioProfesores.PostProfesores(profesor);
-        Navigation.NavigateTo("profesores", true);
+        Navigation.NavigateTo("profesores/1", true);
     }
 }

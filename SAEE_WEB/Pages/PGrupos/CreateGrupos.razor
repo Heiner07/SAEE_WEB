@@ -34,7 +34,7 @@
             Boolean exito = await gruposServices.PutGrupo(nuevoGrupo);
             if (exito)
             {
-                navegar.NavigateTo("indice-grupos", true);
+                navegar.NavigateTo("indice-grupos/1", true);
             }
             else { msjError = "No se pudo crear este grupo."; MostrarError = true; }
         }

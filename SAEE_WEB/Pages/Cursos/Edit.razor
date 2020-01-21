@@ -32,7 +32,7 @@
     async Task EditarCurso()
     {
         await ServicioCursos.PutCursos(curso);
-        Navigation.NavigateTo("cursos", true);
+        Navigation.NavigateTo("cursos/2", true);
     }
 
     async Task RevertirCambios()

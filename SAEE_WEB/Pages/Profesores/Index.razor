@@ -1,4 +1,5 @@
 ﻿@page "/profesores"
+@page "/profesores/{Success:int}"
 @attribute [Authorize]
 
 @if (ROL.Equals("Administrador"))
@@ -21,21 +22,38 @@ else
 {
     <text>No tiene permisos para ver el contenido</text>
 }
+<MatSnackbar @bind-IsOpen="@snackBarIsOpen">
+    <MatSnackbarContent>@TextoMsg</MatSnackbarContent>
+    <MatSnackbarActions>
+        <MatIcon Icon="@IconoMsg" Style="@ColorIcono"></MatIcon>
+    </MatSnackbarActions>
+</MatSnackbar>
 
 @code {
 
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
+    [Parameter]
+    public int Success { get; set; }
 
-    Boolean MostrarPanelAgregar = false;
-    String TextoBotonAgregar = "Agregar profesor";
-    String ROL = "";
+    bool MostrarPanelAgregar = false, snackBarIsOpen = false;
+    string TextoBotonAgregar = "Agregar profesor";
+    string ROL = "";
+    string IconoMsg = "save", ColorIcono = "color:blue;", TextoMsg = "Guardado correctamente";
 
     protected override async Task OnInitializedAsync()
     {
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
         ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
+    }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        // Configuro los valores para el mensaje
+        snackBarIsOpen = ConstructorMensajeMatSnackBar.
+            AsignarValoresSnackBar(Success, ref TextoMsg, ref IconoMsg, ref ColorIcono);
     }
 
     void AbrirCerrarFormAgregar()

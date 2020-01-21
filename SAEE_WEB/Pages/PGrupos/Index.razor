@@ -1,4 +1,5 @@
 ﻿@page "/indice-grupos"
+@page "/indice-grupos/{Success:int}"
 @inject GruposServices gruposServices
 @attribute [Authorize]
 @inject NavigationManager  navegar
@@ -94,14 +95,27 @@ else
 }
 <DeleteGrupos dialogIsOpen="@mostrarBorrar" grupo="@eliminarGrupo" CerrarEliminar="@OcultarPanelBorrar" MostrarError="@mostrarError" />
 <EditGrupos dialogIsOpen="@mostrarEditar" grupo="@editarGrupo" CerrarEditar="@cerrarEditar" MostrarError="@mostrarError" msjError="@msjError" />
-@if(@mostrarListaEstudiantes){
+@if (@mostrarListaEstudiantes)
+{
     <ListaEstudiantes dialogIsOpen="@mostrarListaEstudiantes" OcultarPanelEstudiantes="@OcultarPanelEstudiantes" Grupo="@grupoEstudiantes" IdProfesor="idProfesor" />
 
-    }
+}
+
+<MatSnackbar @bind-IsOpen="@snackBarIsOpen">
+    <MatSnackbarContent>@TextoMsg</MatSnackbarContent>
+    <MatSnackbarActions>
+        <MatIcon Icon="@IconoMsg" Style="@ColorIcono"></MatIcon>
+    </MatSnackbarActions>
+</MatSnackbar>
+
 @code{
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
+    [Parameter]
+    public int Success { get; set; }
+
     public List<Grupos> grupos = new List<Grupos>();
+    bool snackBarIsOpen = false;
     Grupos editarGrupo = new Grupos();
     Grupos nuevoGrupo = new Grupos();
     Grupos eliminarGrupo = new Grupos();
@@ -112,6 +126,7 @@ else
     String ROL = "";
     int idProfesor = 0;
     string TextoBuscar = "";
+    string IconoMsg = "save", ColorIcono = "color:blue;", TextoMsg = "Guardado correctamente";
 
     protected override async Task OnInitializedAsync()
     {
@@ -123,6 +138,15 @@ else
         await CargarGrupos();
 
     }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        // Configuro los valores para el mensaje
+        snackBarIsOpen = ConstructorMensajeMatSnackBar.
+            AsignarValoresSnackBar(Success, ref TextoMsg, ref IconoMsg, ref ColorIcono);
+    }
+
     async Task CargarGrupos()
     {
         grupos = await gruposServices.GetGrupos(idProfesor);

@@ -24,7 +24,7 @@
     async Task EditarProfesor()
     {
         await ServicioProfesores.PutProfesores(Profesor);
-        Navigation.NavigateTo("profesores", true);
+        Navigation.NavigateTo("profesores/2", true);
     }
 
     async Task RevertirCambios()

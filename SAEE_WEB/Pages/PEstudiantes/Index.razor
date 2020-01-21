@@ -1,27 +1,38 @@
 ﻿@page "/indice-estudiantes"
+@page "/indice-estudiantes/{Success:int}"
 @attribute [Authorize]
-    <div class="container">
-        <h3>Administración de estudiantes</h3>
+<div class="container">
+    <h3>Administración de estudiantes</h3>
 
-        <p>
-            <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
-        </p>
-        @if (MostrarPanelAgregar)
-        {
-            <Create IdProfesor="idProfesor"/>
-        }
-        <br />
-        <List IdProfesor="idProfesor"/>
-    </div>
+    <p>
+        <button type="button" class="btn btn-primary" @onclick="AbrirCerrarFormAgregar">@TextoBotonAgregar</button>
+    </p>
+    @if (MostrarPanelAgregar)
+    {
+        <Create IdProfesor="idProfesor" />
+    }
+    <br />
+    <List IdProfesor="idProfesor" />
+</div>
+<MatSnackbar @bind-IsOpen="@snackBarIsOpen">
+    <MatSnackbarContent>@TextoMsg</MatSnackbarContent>
+    <MatSnackbarActions>
+        <MatIcon Icon="@IconoMsg" Style="@ColorIcono"></MatIcon>
+    </MatSnackbarActions>
+</MatSnackbar>
 
 @code {
 
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
-    Boolean MostrarPanelAgregar = false;
+    [Parameter]
+    public int Success { get; set; }
+
+    bool MostrarPanelAgregar = false, snackBarIsOpen = false;
     String TextoBotonAgregar = "Agregar estudiante";
     String ROL = "";
     int idProfesor = 0;
+    string IconoMsg = "save", ColorIcono = "color:blue;", TextoMsg = "Guardado correctamente";
 
     protected override async Task OnInitializedAsync()
     {
@@ -31,6 +42,15 @@
         idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
 
     }
+
+    protected override void OnParametersSet()
+    {
+        base.OnParametersSet();
+        // Configuro los valores para el mensaje
+        snackBarIsOpen = ConstructorMensajeMatSnackBar.
+            AsignarValoresSnackBar(Success, ref TextoMsg, ref IconoMsg, ref ColorIcono);
+    }
+
     void AbrirCerrarFormAgregar()
     {
         MostrarPanelAgregar = !MostrarPanelAgregar;
