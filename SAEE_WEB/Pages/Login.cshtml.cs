@@ -21,7 +21,7 @@ namespace SAEE_WEB
         //CON: Contraseña
         public async Task<IActionResult> OnGetAsync(string NC, string CON)
         {
-            string returnUrl = Url.Content("~/");
+            string returnUrl = Url.Content("~/true");
             try
             {
                 // Clear the existing external cookie

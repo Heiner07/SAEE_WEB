@@ -1,9 +1,11 @@
 ﻿@page "/"
 @page "/evaluaciones"
+@page "/{Saludo:bool}"
 @inject CursosServices ServicioCursos
 @inject CursosGruposServices ServicioGruposCursos
 @inject GruposServices ServicioGrupos
 @inject AsignacionesServices ServicioAsignaciones
+@inject NavigationManager navigationManager
 
 @{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
 <div class="container">
@@ -138,6 +140,12 @@
         <EditEvaluaciones CerrarEditar="@cerrarEditar" dialogIsOpen="@mostrarEditar" anno="@anno" grupoSeleccionado="@nombreGrupoSeleccionado" cursoSeleccionado="@nombreCursoSeleccionado" idProfesor="@idProfesor" asignacion="@asignacion" periodo="@periodo"></EditEvaluaciones>
     }
 </div>
+<MatSnackbar @bind-IsOpen="@Saludo">
+    <MatSnackbarContent>¡Bienvenido @NombreUsuario!</MatSnackbarContent>
+    <MatSnackbarActions>
+        <MatIcon Icon="mood" Style="color:blue"></MatIcon>
+    </MatSnackbarActions>
+</MatSnackbar>
 
 @code{
 
@@ -157,7 +165,12 @@
     int idcurso = 0, idgrupo = 0;
     [CascadingParameter]
     private Task<AuthenticationState> AuthenticationState { get; set; }
+    [Parameter]
+    public bool Saludo { get; set; }
+
     int idProfesor = 0;
+    string NombreUsuario = "";
+
     protected override async Task OnInitializedAsync()
     {
         asignacion = new Asignaciones();
@@ -166,8 +179,20 @@
         gruposenCurso = new List<Grupos>();
         AuthenticationState authState = await AuthenticationState;
         var usuario = authState.User;
-        idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
-        await CargarCursos();
+
+        if (!usuario.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("Inicio-Sesion");
+        }
+        else
+        {
+            if (Saludo)
+            {
+                NombreUsuario = $"{usuario.Identity.Name} {usuario.Claims.Where(U => U.Type.Equals("Ap1")).FirstOrDefault().Value}";
+            }
+            idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
+            await CargarCursos();
+        }
     }
 
     async Task VerEvaluaciones()

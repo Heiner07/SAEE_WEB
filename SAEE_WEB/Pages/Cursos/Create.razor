@@ -21,6 +21,6 @@
         curso.IdProfesor = IdProfesor;
         curso.CursosGrupos = GruposAgregados;
         await ServicioCursos.PostCursos(curso);
-        Navigation.NavigateTo("cursos", true);
+        Navigation.NavigateTo("cursos/1", true);
     }
 }

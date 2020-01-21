@@ -33,7 +33,7 @@
         Boolean exito = await gruposServices.DeleteGrupo(grupo);
         if (exito)
         {
-            navegar.NavigateTo("indice-grupos", true);
+            navegar.NavigateTo("indice-grupos/3", true);
 
         }
         else { msjError = "No se pudo borrar este grupo."; MostrarError = true; }
