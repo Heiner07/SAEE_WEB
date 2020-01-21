@@ -24,12 +24,12 @@ namespace SAEE_WEB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Asignaciones>>> GetAsignaciones()
         {
-            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+           Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
                 return BadRequest();
             }
-
+            
             return await _context.Asignaciones.Where(asignacion => asignacion.Profesor == profesor.Id).ToListAsync();
         }
 
