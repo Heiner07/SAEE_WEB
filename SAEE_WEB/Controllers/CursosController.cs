@@ -137,6 +137,7 @@ namespace SAEE_WEB.Controllers
         }
         //ELIMINAR TODOS LOS CURSOS
         [HttpDelete("{id}")]
+        [Route("DeleteAllCursos")]
         public async Task<Boolean> DeleteAllCursos()
         {
             Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
