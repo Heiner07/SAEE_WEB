@@ -135,6 +135,29 @@ namespace SAEE_WEB.Controllers
 
             return cursos;
         }
+        //ELIMINAR TODOS LOS CURSOS
+        [HttpDelete("{id}")]
+        [Route("DeleteAllCursos")]
+        public async Task<Boolean> DeleteAllCursos()
+        {
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return false;
+            }
+            try
+            {
+                var listaCursos = await _context.Cursos.Include(curso => curso.CursosGrupos)
+                .Where(curso => curso.IdProfesor == profesor.Id).FirstOrDefaultAsync();
+                _context.Cursos.RemoveRange(listaCursos);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+        }
 
         private bool CursosExists(int id)
         {

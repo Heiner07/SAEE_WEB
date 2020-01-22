@@ -69,7 +69,10 @@ namespace SAEE_WEB.Data
             }
             try
             {
-                context.Remove(estudiante);
+                Estudiantes estudianteEliminar = context.Estudiantes.Where(x => x.Id == estudiante.Id).Include(EG => EG.EstudiantesXgrupos)
+                    .FirstOrDefault();
+                    
+                context.Remove(estudianteEliminar);
                 await context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
