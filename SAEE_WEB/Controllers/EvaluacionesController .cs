@@ -33,7 +33,7 @@ namespace SAEE_WEB.Controllers
         }
 
         // GET: api/Evaluaciones
-        [HttpGet]
+        [HttpGet("{asignacion}")]
         public async Task<ActionResult<IEnumerable<Evaluaciones>>> GetEvaluacionesXAsignatura(int asignacion)
         {
             Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
@@ -58,7 +58,7 @@ namespace SAEE_WEB.Controllers
             return await _context.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion && evaluacion.Periodo == periodo && evaluacion.Profesor == profesor.Id).ToArrayAsync();
         }
 
-        // GET: api/Evaluaciones/5
+     /*   // GET: api/Evaluaciones/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Evaluaciones>> GetEvaluaciones(int id)
         {
@@ -77,7 +77,7 @@ namespace SAEE_WEB.Controllers
 
             return evaluacion;
         }
-
+        */
         // PUT: api/Evaluaciones/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
