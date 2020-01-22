@@ -132,7 +132,7 @@ namespace SAEE_WEB.Controllers
             _context.Evaluaciones.Add(evaluacion);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAsignaciones", new { id = evaluacion.Id }, evaluacion);
+            return CreatedAtAction("GetEvaluaciones", new { id = evaluacion.Id }, evaluacion);
         }
 
         // DELETE: api/Evaluaciones/5
