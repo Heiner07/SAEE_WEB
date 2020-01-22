@@ -148,7 +148,7 @@ namespace SAEE_WEB.Controllers
             try
             {
                 var listaCursos = await _context.Cursos.Include(curso => curso.CursosGrupos)
-                .Where(curso => curso.IdProfesor == profesor.Id).FirstOrDefaultAsync();
+                .Where(curso => curso.IdProfesor == profesor.Id).ToListAsync();
                 _context.Cursos.RemoveRange(listaCursos);
                 await _context.SaveChangesAsync();
             }
