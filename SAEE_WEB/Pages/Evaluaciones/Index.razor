@@ -6,140 +6,147 @@
 @inject GruposServices ServicioGrupos
 @inject AsignacionesServices ServicioAsignaciones
 @inject NavigationManager navigationManager
-
 @{ var list = new List<string> { "Tareas", "Exámenes", "Cotidiano", "Proyecto", "Asistencia" }; }
-<div class="container">
-    <h3>Evaluaciones</h3>
-    <form class="form-inline" action="/">
-        <div class="form-group">
-            <Dropdown TItem="Cursos" OnSelected="@CursoSeleccionado">
-                <InitialTip>Curso</InitialTip>
-                <ChildContent>
-                    @if (cursos == null)
-                    {
 
-                    }
-                    else if (cursos.Length == 0)
-                    {
+@if (ROL.Equals("Profesor") || ROL.Equals("Administrador"))
+{
+    <div class="container">
+        <h3>Evaluaciones</h3>
+        <form class="form-inline" action="/">
+            <div class="form-group">
+                <Dropdown TItem="Cursos" OnSelected="@CursoSeleccionado">
+                    <InitialTip>Curso</InitialTip>
+                    <ChildContent>
+                        @if (cursos == null)
+                        {
 
-                    }
-                    else
-                    {
-                        @foreach (var curso in cursos)
-                        {
-                            <DropdownListItem Item="@curso">@curso.Nombre</DropdownListItem>
                         }
-                    }
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
-                <InitialTip>Periodo</InitialTip>
-                <ChildContent>
-                    @if (periodos.Count != 0)
-                    {
-                        @foreach (var i in periodos)
+                        else if (cursos.Length == 0)
                         {
-                            <DropdownListItem Item="@i">@i</DropdownListItem>
-                        }
-                    }
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
-                <InitialTip>Grupo</InitialTip>
-                <ChildContent>
-                    @if (gruposenCurso.Count != 0)
-                    {
-                        @foreach (var i in gruposenCurso)
-                        {
-                            <DropdownListItem Item="@i">@i.Grupo | @i.Anio</DropdownListItem>
-                        }
-                    }
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
-                <InitialTip>Rubro</InitialTip>
-                <ChildContent>
-                    <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
-                    <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
-                    <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
-                    <DropdownListItem Item="@list[3]">Proyectos</DropdownListItem>
-                    <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
-                </ChildContent>
-            </Dropdown>
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones"><i class="fa fa-search"></i></button>
-        </div>
-    </form>
-    <p></p>
-    <div class="table-responsive">
-        @if (asignaciones == null)
-        {
-            <text> Seleccione las opciones para mostrar las evaluaciones </text>
-        }
-        else if (asignaciones.Length == 0)
-        {
-            <text> No hay asignaciones de este profesor</text>
 
-        }
-        else
-        {
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Tipo</th>
-                        <th>Nombre</th>
-                        <th>Descripción</th>
-                        <th>Fecha</th>
-                        <th>Puntos</th>
-                        <th>Porcentaje</th>
-                        <th>Opciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var asig in asignaciones)
-                    {
+                        }
+                        else
+                        {
+                            @foreach (var curso in cursos)
+                            {
+                                <DropdownListItem Item="@curso">@curso.Nombre</DropdownListItem>
+                            }
+                        }
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <Dropdown TItem="int" OnSelected="@PeriodoSeleccionado">
+                    <InitialTip>Periodo</InitialTip>
+                    <ChildContent>
+                        @if (periodos.Count != 0)
+                        {
+                            @foreach (var i in periodos)
+                            {
+                                <DropdownListItem Item="@i">@i</DropdownListItem>
+                            }
+                        }
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <Dropdown TItem="Grupos" OnSelected="@GrupoSeleccionado">
+                    <InitialTip>Grupo</InitialTip>
+                    <ChildContent>
+                        @if (gruposenCurso.Count != 0)
+                        {
+                            @foreach (var i in gruposenCurso)
+                            {
+                                <DropdownListItem Item="@i">@i.Grupo | @i.Anio</DropdownListItem>
+                            }
+                        }
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <Dropdown TItem="string" OnSelected="@RubroSeleccionado">
+                    <InitialTip>Rubro</InitialTip>
+                    <ChildContent>
+                        <DropdownListItem Item="@list[0]">Tareas</DropdownListItem>
+                        <DropdownListItem Item="@list[1]">Exámenes</DropdownListItem>
+                        <DropdownListItem Item="@list[2]">Cotidiano</DropdownListItem>
+                        <DropdownListItem Item="@list[3]">Proyectos</DropdownListItem>
+                        <DropdownListItem Item="@list[4]">Asistencia</DropdownListItem>
+                    </ChildContent>
+                </Dropdown>
+            </div>
+            <div class="form-group">
+                <button type="button" class="btn btn-outline-warning mr-4" @onclick="VerEvaluaciones"><i class="fa fa-search"></i></button>
+            </div>
+        </form>
+        <p></p>
+        <div class="table-responsive">
+            @if (asignaciones == null)
+            {
+                <text> Seleccione las opciones para mostrar las evaluaciones </text>
+            }
+            else if (asignaciones.Length == 0)
+            {
+                <text> No hay asignaciones de este profesor</text>
+
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
                         <tr>
-
-                            <td>@asig.Tipo</td>
-                            <td>@asig.Nombre</td>
-                            <td>@asig.Descripcion</td>
-                            <td>@asig.Fecha.ToShortDateString()</td>
-                            <td>@asig.Puntos</td>
-                            <td>@asig.Porcentaje</td>
-                            <td>
-                                <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacion(asig))">Ver notas</button>
-                            </td>
-
+                            <th>Tipo</th>
+                            <th>Nombre</th>
+                            <th>Descripción</th>
+                            <th>Fecha</th>
+                            <th>Puntos</th>
+                            <th>Porcentaje</th>
+                            <th>Opciones</th>
                         </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var asig in asignaciones)
+                        {
+                            <tr>
 
-                    }
+                                <td>@asig.Tipo</td>
+                                <td>@asig.Nombre</td>
+                                <td>@asig.Descripcion</td>
+                                <td>@asig.Fecha.ToShortDateString()</td>
+                                <td>@asig.Puntos</td>
+                                <td>@asig.Porcentaje</td>
+                                <td>
+                                    <button class="btn btn-outline-info" @onclick="(() => EditarEvaluacion(asig))">Ver notas</button>
+                                </td>
 
-                </tbody>
+                            </tr>
+
+                        }
+
+                    </tbody>
 
 
-            </table>
+                </table>
+            }
+
+        </div>
+        <p></p>
+        @if (mostrarEditar)
+        {
+            <EditEvaluaciones CerrarEditar="@cerrarEditar" dialogIsOpen="@mostrarEditar" anno="@anno" grupoSeleccionado="@nombreGrupoSeleccionado" cursoSeleccionado="@nombreCursoSeleccionado" idProfesor="@idProfesor" asignacion="@asignacion" periodo="@periodo"></EditEvaluaciones>
         }
-
     </div>
-    <p></p>
-    @if (mostrarEditar)
-    {
-        <EditEvaluaciones CerrarEditar="@cerrarEditar" dialogIsOpen="@mostrarEditar" anno="@anno" grupoSeleccionado="@nombreGrupoSeleccionado" cursoSeleccionado="@nombreCursoSeleccionado" idProfesor="@idProfesor" asignacion="@asignacion" periodo="@periodo"></EditEvaluaciones>
-    }
-</div>
-<MatSnackbar @bind-IsOpen="@Saludo">
-    <MatSnackbarContent>¡Bienvenido @NombreUsuario!</MatSnackbarContent>
-    <MatSnackbarActions>
-        <MatIcon Icon="mood" Style="color:blue"></MatIcon>
-    </MatSnackbarActions>
-</MatSnackbar>
+    <MatSnackbar @bind-IsOpen="@Saludo">
+        <MatSnackbarContent>¡Bienvenido @NombreUsuario!</MatSnackbarContent>
+        <MatSnackbarActions>
+            <MatIcon Icon="mood" Style="color:blue"></MatIcon>
+        </MatSnackbarActions>
+    </MatSnackbar>
+}
+else
+{
+    <text>No tiene permisos para ver el contenido</text>
+}
 
 @code{
 
@@ -164,6 +171,7 @@
 
     int idProfesor = 0;
     string NombreUsuario = "";
+    string ROL = "";
 
     protected override async Task OnInitializedAsync()
     {
@@ -185,7 +193,15 @@
                 NombreUsuario = $"{usuario.Identity.Name} {usuario.Claims.Where(U => U.Type.Equals("Ap1")).FirstOrDefault().Value}";
             }
             idProfesor = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
-            await CargarCursos();
+            ROL = usuario.Claims.Where(U => U.Type.Equals("Rol")).FirstOrDefault().Value;
+            if (ROL.Equals("Estudiante"))
+            {
+                navigationManager.NavigateTo("evaluaciones-estudiante");
+            }
+            else
+            {
+                await CargarCursos();
+            }
         }
     }
 

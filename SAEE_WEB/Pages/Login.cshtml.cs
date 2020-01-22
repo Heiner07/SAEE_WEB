@@ -21,7 +21,8 @@ namespace SAEE_WEB
         //CON: Contraseña
         public async Task<IActionResult> OnGetAsync(string NC, string CON)
         {
-            string returnUrl = Url.Content("~/true");
+            string inicioProfesor = Url.Content("~/true");
+            string inicioEstudiante = Url.Content("~/evaluaciones-estudiante/true");
             try
             {
                 // Clear the existing external cookie
@@ -92,7 +93,15 @@ namespace SAEE_WEB
                 {
                     string error = ex.Message;
                 }
-                return LocalRedirect(returnUrl);
+
+                if (profesor == null)
+                {
+                    return LocalRedirect(inicioEstudiante);
+                }
+                else
+                {
+                    return LocalRedirect(inicioProfesor);
+                }
             }
             else
             {
