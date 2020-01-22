@@ -34,6 +34,19 @@ namespace SAEE_WEB.Controllers
 
         // GET: api/Evaluaciones
         [HttpGet]
+        public async Task<ActionResult<IEnumerable<Evaluaciones>>> GetEvaluacionesXAsignatura(int asignacion)
+        {
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
+
+            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion && evaluacion.Profesor == profesor.Id).ToArrayAsync();
+        }
+
+        // GET: api/Evaluaciones
+        [HttpGet]
         public async Task<ActionResult<IEnumerable<Evaluaciones>>> GetEvaluacionesXAsignatura(int asignacion,int periodo)
         {
            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
