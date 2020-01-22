@@ -24,7 +24,6 @@ namespace SAEE_WEB.Models
         public int Nota { get; set; }
         public string Estado { get; set; }
         public int Periodo { get; set; }
-        public virtual Estudiantes IdEstudianteNavigation { get; set; }
 
         /*   public virtual ICollection<Estudiantes> Estudiantes { get; set; }
         public virtual ICollection<Cursos> Cursos { get; set; }
