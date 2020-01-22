@@ -8,12 +8,13 @@ namespace SAEE_WEB.Models
     public class Evaluaciones
     {
         public Evaluaciones() {
-          /*  Cursos = new HashSet<Cursos>();
-            Estudiantes = new HashSet<Estudiantes>();
-            EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
-            Grupos = new HashSet<Grupos>();*/
+            /*   
+               Estudiantes = new HashSet<Estudiantes>();
+               Cursos = new HashSet<Cursos>();
+               EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
+               Grupos = new HashSet<Grupos>();*/
         }
-        
+
         public int Id { get; set;}
         public int Profesor { get; set; }
         public int Asignacion { get; set; }
@@ -23,11 +24,12 @@ namespace SAEE_WEB.Models
         public int Nota { get; set; }
         public string Estado { get; set; }
         public int Periodo { get; set; }
+        public virtual Estudiantes IdEstudianteNavigation { get; set; }
 
-     /*   public virtual ICollection<Cursos> Cursos { get; set; }
-        public virtual ICollection<Estudiantes> Estudiantes { get; set; }
+        /*   public virtual ICollection<Estudiantes> Estudiantes { get; set; }
+        public virtual ICollection<Cursos> Cursos { get; set; }
         public virtual ICollection<EstudiantesXgrupos> EstudiantesXgrupos { get; set; }
-        public virtual ICollection<Grupos> Grupos { get; set; }*/
+           public virtual ICollection<Grupos> Grupos { get; set; }*/
     }
 
 }

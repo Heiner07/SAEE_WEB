@@ -130,6 +130,31 @@ namespace SAEE_WEB.Controllers
 
             return grupo;
         }
+
+        //ELIMINAR TODOS LOS GRUPOS
+        [HttpDelete("{id}")]
+        [Route("DeleteAllGrupos")]
+        public async Task<Boolean> DeleteAllGrupos()
+        {
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return false;
+            }
+            try
+            {
+                var listaGrupos = await _context.Grupos.Where(grupo => grupo.IdProfesor == profesor.Id).Include(grupo => grupo.EstudiantesXgrupos)
+                    .Include(x=>x.CursosGrupos).ToListAsync();
+                _context.Grupos.RemoveRange(listaGrupos);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+
+        }
         [HttpDelete]
         [Route("DeleteEG")]
         public async Task<Boolean> DeleteEG(EstudiantesXgrupos eg)

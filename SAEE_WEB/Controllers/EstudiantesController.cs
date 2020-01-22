@@ -98,13 +98,39 @@ namespace SAEE_WEB.Controllers
             {
                 return BadRequest();
             }
-
+           
             _context.Estudiantes.Remove(estudiante);
             await _context.SaveChangesAsync();
 
             return estudiante;
         }
 
-        
+
+
+        //DELETE TODOS LOS ESTUDIANTES
+        [HttpDelete]
+        [Route("DeleteAllEstudiantes")]
+        public async Task<Boolean> DeleteAllEstudiantes()
+        {
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return false;
+            }
+             try
+            {
+                var listaEstudiantes = _context.Estudiantes.Where(x => x.IdProfesor == profesor.Id).Include(EG => EG.EstudiantesXgrupos);
+                _context.Estudiantes.RemoveRange(listaEstudiantes);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+
+        }
+
+
     }
 }

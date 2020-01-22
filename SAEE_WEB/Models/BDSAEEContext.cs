@@ -86,7 +86,7 @@ namespace SAEE_WEB.Models
                     .HasMaxLength(100);
 
                 entity.Property(e => e.SegundoApellido)
-                    //.IsRequired()
+                    .IsRequired()
                     .HasMaxLength(100);
 
                 entity.HasOne(d => d.IdProfesorNavigation)
@@ -105,13 +105,11 @@ namespace SAEE_WEB.Models
                     .HasForeignKey(d => d.IdEstudiante)
                     .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK__Estudiant__IdEst__787EE5A0");
-
                 entity.HasOne(d => d.IdGrupoNavigation)
                     .WithMany(p => p.EstudiantesXgrupos)
                     .HasForeignKey(d => d.IdGrupo)
                     .OnDelete(DeleteBehavior.ClientCascade)
                     .HasConstraintName("FK__Estudiant__IdGru__778AC167");
-
                 entity.HasOne(d => d.IdProfesorNavigation)
                     .WithMany(p => p.EstudiantesXgrupos)
                     .HasForeignKey(d => d.IdProfesor)
@@ -227,6 +225,7 @@ namespace SAEE_WEB.Models
                 entity.Property(e => e.Periodo)
                     .IsRequired()
                     .HasMaxLength(100);
+               
             });
 
 

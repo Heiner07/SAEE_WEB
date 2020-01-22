@@ -9,6 +9,7 @@ namespace SAEE_WEB.Models
         public Estudiantes()
         {
             EstudiantesXgrupos = new HashSet<EstudiantesXgrupos>();
+           
         }
 
 
