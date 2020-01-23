@@ -116,11 +116,11 @@ namespace SAEE_WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cursos>> DeleteCursos(int id)
         {
-            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
-            {
-                return BadRequest();
-            }
+            //Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            //if (profesor == null)
+            //{
+            //    return BadRequest();
+            //}
 
             var cursos = await _context.Cursos.Include(curso => curso.CursosGrupos)
                 .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
@@ -136,7 +136,7 @@ namespace SAEE_WEB.Controllers
             return cursos;
         }
         //ELIMINAR TODOS LOS CURSOS
-        [HttpDelete("{id}")]
+        [HttpDelete]
         [Route("DeleteAllCursos")]
         public async Task<Boolean> DeleteAllCursos()
         {
