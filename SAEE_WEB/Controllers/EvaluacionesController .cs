@@ -29,7 +29,7 @@ namespace SAEE_WEB.Controllers
                 return BadRequest();
             }
 
-            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Profesor == profesor.Id).ToArrayAsync();
+            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Profesor == profesor.Id).ToListAsync();
         }
 
         // GET: api/Evaluaciones
