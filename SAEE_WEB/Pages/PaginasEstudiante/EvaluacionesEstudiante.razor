@@ -109,13 +109,13 @@
                     </button>
                     <div class=@claseOpcionesAsignacion aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                            @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroAsignacion, ref claseFiltroAsignacion, ref claseOpcionesAsignacion))">
+                           @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroAsignacion, ref claseFiltroAsignacion, ref claseOpcionesAsignacion))">
                             Sin filtro
                         </a>
                         @foreach (string asignacion in Asignaciones)
                         {
                             <a class="dropdown-item"
-                                @onclick="(() => OpcionSeleccionada(asignacion, ref textoFiltroAsignacion, ref claseFiltroAsignacion, ref claseOpcionesAsignacion))">
+                               @onclick="(() => OpcionSeleccionada(asignacion, ref textoFiltroAsignacion, ref claseFiltroAsignacion, ref claseOpcionesAsignacion))">
                                 @asignacion
                             </a>
                         }
@@ -134,20 +134,33 @@
                     </button>
                     <div class=@claseOpcionesPeriodo aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item"
-                            @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroPeriodo, ref claseFiltroPeriodo, ref claseOpcionesPeriodo))">
+                           @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroPeriodo, ref claseFiltroPeriodo, ref claseOpcionesPeriodo))">
                             Sin filtro
                         </a>
                         @foreach (string periodo in Periodos)
                         {
                             <a class="dropdown-item"
-                                @onclick="(() => OpcionSeleccionada(periodo, ref textoFiltroPeriodo, ref claseFiltroPeriodo, ref claseOpcionesPeriodo))">
+                               @onclick="(() => OpcionSeleccionada(periodo, ref textoFiltroPeriodo, ref claseFiltroPeriodo, ref claseOpcionesPeriodo))">
                                 @periodo
                             </a>
                         }
                     </div>
                 </div>
             </div>
+            <div class="container">
+                <label><strong>Filtros</strong></label>
+                <div class=@claseFiltroPeriodo>
+                    <button class="btn btn-secondary"
+                            type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            @onclick="LimpiarFiltros">
+                        Limpiar
+                    </button>
+                </div>
+            </div>
         </div>
+        <br />
         <div class="table-responsive">
             <table class="table">
                 <thead>
@@ -302,5 +315,14 @@
     {
         textoFiltro = string.IsNullOrEmpty(valor)? "Sin filtro" : valor;
         MostrarOpciones(ref claseFiltro, ref claseFiltroOpciones);
+    }
+
+    private void LimpiarFiltros()
+    {
+        textoFiltroGrupo = "Sin filtro";
+        textoFiltroCurso = "Sin filtro";
+        textoFiltroProfesor = "Sin filtro";
+        textoFiltroAsignacion = "Sin filtro";
+        textoFiltroPeriodo = "Sin filtro";
     }
 }
