@@ -69,6 +69,9 @@ namespace SAEE_WEB.Data
             }
             try
             {
+                var listaAsignaciones = context.Evaluaciones.Where(x => x.Estudiante == estudiante.Id).ToList();
+                context.Evaluaciones.RemoveRange(listaAsignaciones);
+                await context.SaveChangesAsync();
                 Estudiantes estudianteEliminar = context.Estudiantes.Where(x => x.Id == estudiante.Id).Include(EG => EG.EstudiantesXgrupos)
                     .FirstOrDefault();
                     

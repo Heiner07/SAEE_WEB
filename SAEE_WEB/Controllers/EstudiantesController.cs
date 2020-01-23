@@ -98,7 +98,9 @@ namespace SAEE_WEB.Controllers
             {
                 return BadRequest();
             }
-           
+            var listaAsignaciones = _context.Evaluaciones.Where(x => x.Estudiante == estudiante.Id).ToList();
+            _context.Evaluaciones.RemoveRange(listaAsignaciones);
+            await _context.SaveChangesAsync();
             _context.Estudiantes.Remove(estudiante);
             await _context.SaveChangesAsync();
 
