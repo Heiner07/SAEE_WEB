@@ -157,6 +157,28 @@ namespace SAEE_WEB.Controllers
             return evaluacion;
         }
 
+        //OFFLINE
+        [HttpDelete("{id}")]
+        [Route("DeleteAllEvaluaciones")]
+        public async Task<Boolean> DeleteAllEvaluaciones()
+        {
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return false;
+            }
+            try
+            {
+                var listaEvaluaciones = await _context.Evaluaciones.Where(x => x.Profesor == profesor.Id).ToListAsync();
+                _context.Evaluaciones.RemoveRange(listaEvaluaciones);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+        }
         private bool EvaluacionExists(int id)
         {
             return _context.Evaluaciones.Any(e => e.Id == id);

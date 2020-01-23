@@ -132,6 +132,30 @@ namespace SAEE_WEB.Controllers
             return asignacion;
         }
 
+        //OFFLINE
+        [HttpDelete("{id}")]
+        [Route("DeleteAllAsignaciones")]
+        public async Task<Boolean> DeleteAllAsignaciones()
+        {
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return false;
+            }
+            try
+            {
+                var listaAsignaciones = await _context.Asignaciones.Where(x=>x.Profesor == profesor.Id).ToListAsync();
+                _context.Asignaciones.RemoveRange(listaAsignaciones);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return false;
+            }
+            return true;
+
+
+        }
         private bool AsignacionExists(int id)
         {
             return _context.Asignaciones.Any(e => e.Id == id);
