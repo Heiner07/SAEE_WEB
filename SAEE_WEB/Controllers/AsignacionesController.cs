@@ -110,6 +110,7 @@ namespace SAEE_WEB.Controllers
 
         // DELETE: api/Asignaciones/5
         [HttpDelete("{id}")]
+       
         public async Task<ActionResult<Asignaciones>> DeleteAsignaciones(int id)
         {
             Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
@@ -133,7 +134,7 @@ namespace SAEE_WEB.Controllers
         }
 
         //OFFLINE
-        [HttpDelete]
+       // [HttpDelete]
         [Route("DeleteAllAsignaciones")]
         public async Task<Boolean> DeleteAllAsignaciones()
         {
@@ -144,10 +145,13 @@ namespace SAEE_WEB.Controllers
             }
             try
             {
+                
                 var evaluaciones = await _context.Evaluaciones.Where(eva => eva.Profesor == profesor.Id).ToListAsync();
                 _context.Evaluaciones.RemoveRange(evaluaciones);
                 await _context.SaveChangesAsync();
-                var listaAsignaciones = await _context.Asignaciones.Where(x=>x.Profesor == profesor.Id).ToListAsync();
+
+                var listaAsignaciones = await _context.Asignaciones.Include(x=>x.NotificacionesCorreo)
+                    .Where(x => x.Profesor == profesor.Id).ToListAsync();
                 _context.Asignaciones.RemoveRange(listaAsignaciones);
                 await _context.SaveChangesAsync();
             }
