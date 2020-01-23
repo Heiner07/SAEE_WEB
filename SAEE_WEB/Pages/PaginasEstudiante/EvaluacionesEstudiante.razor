@@ -1,14 +1,306 @@
 ﻿@page "/evaluaciones-estudiante"
 @page "/evaluaciones-estudiante/{Saludo:bool}"
+@inject EvaluacionesServices ServicioEvaluaciones
+@inject CursosServices ServicioCursos
+@inject AsignacionesServices ServicioAsignaciones
+@inject GruposServices ServicioGrupos
+@inject ProfesoresServices ServicioProfesores
+@inject NavigationManager navigationManager
 
 <div class="container">
     <h3>Mis evaluaciones</h3>
-
+    @if (Evaluaciones == null)
+    {
+        <text>Cargando evaluaciones...</text>
+    }
+    else if (Evaluaciones.Length == 0)
+    {
+        <text>No hay evaluaciones</text>
+    }
+    else
+    {
+        <div class="btn-group">
+            <div class="container">
+                <label><strong>Grupo</strong></label>
+                <div class=@claseFiltroGrupo>
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            @onclick="()=> MostrarOpciones(ref claseFiltroGrupo, ref claseOpcionesGrupo)">
+                        @textoFiltroGrupo
+                    </button>
+                    <div class=@claseOpcionesGrupo aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroGrupo, ref claseFiltroGrupo, ref claseOpcionesGrupo))">
+                            Sin filtro
+                        </a>
+                        @foreach (string grupo in Grupos)
+                        {
+                            <a class="dropdown-item"
+                                @onclick="(() => OpcionSeleccionada(grupo, ref textoFiltroGrupo, ref claseFiltroGrupo, ref claseOpcionesGrupo))">
+                                @grupo
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <label><strong>Curso</strong></label>
+                <div class=@claseFiltroCurso>
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            @onclick="()=> MostrarOpciones(ref claseFiltroCurso, ref claseOpcionesCurso)">
+                        @textoFiltroCurso
+                    </button>
+                    <div class=@claseOpcionesCurso aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroCurso, ref claseFiltroCurso, ref claseOpcionesCurso))">
+                            Sin filtro
+                        </a>
+                        @foreach (string curso in Cursos)
+                        {
+                            <a class="dropdown-item"
+                                @onclick="(() => OpcionSeleccionada(curso, ref textoFiltroCurso, ref claseFiltroCurso, ref claseOpcionesCurso))">
+                                @curso
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <label><strong>Profesor</strong></label>
+                <div class=@claseFiltroProfesor>
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            @onclick="()=> MostrarOpciones(ref claseFiltroProfesor, ref claseOpcionesProfesor)">
+                        @textoFiltroProfesor
+                    </button>
+                    <div class=@claseOpcionesProfesor aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroProfesor, ref claseFiltroProfesor, ref claseOpcionesProfesor))">
+                            Sin filtro
+                        </a>
+                        @foreach (string profesor in Profesores)
+                        {
+                            <a class="dropdown-item"
+                                @onclick="(() => OpcionSeleccionada(profesor, ref textoFiltroProfesor, ref claseFiltroProfesor, ref claseOpcionesProfesor))">
+                                @profesor
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="btn-group">
+            <div class="container">
+                <label><strong>Asignación</strong></label>
+                <div class=@claseFiltroAsignacion>
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            @onclick="()=> MostrarOpciones(ref claseFiltroAsignacion, ref claseOpcionesAsignacion)">
+                        @textoFiltroAsignacion
+                    </button>
+                    <div class=@claseOpcionesAsignacion aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroAsignacion, ref claseFiltroAsignacion, ref claseOpcionesAsignacion))">
+                            Sin filtro
+                        </a>
+                        @foreach (string asignacion in Asignaciones)
+                        {
+                            <a class="dropdown-item"
+                                @onclick="(() => OpcionSeleccionada(asignacion, ref textoFiltroAsignacion, ref claseFiltroAsignacion, ref claseOpcionesAsignacion))">
+                                @asignacion
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <label><strong>Periodo</strong></label>
+                <div class=@claseFiltroPeriodo>
+                    <button class="btn btn-secondary dropdown-toggle"
+                            type="button" id="dropdownMenuButton"
+                            data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false"
+                            @onclick="()=> MostrarOpciones(ref claseFiltroPeriodo, ref claseOpcionesPeriodo)">
+                        @textoFiltroPeriodo
+                    </button>
+                    <div class=@claseOpcionesPeriodo aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item"
+                            @onclick="(() => OpcionSeleccionada(string.Empty, ref textoFiltroPeriodo, ref claseFiltroPeriodo, ref claseOpcionesPeriodo))">
+                            Sin filtro
+                        </a>
+                        @foreach (string periodo in Periodos)
+                        {
+                            <a class="dropdown-item"
+                                @onclick="(() => OpcionSeleccionada(periodo, ref textoFiltroPeriodo, ref claseFiltroPeriodo, ref claseOpcionesPeriodo))">
+                                @periodo
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Grupo</th>
+                        <th>Curso</th>
+                        <th>Profesor</th>
+                        <th>Asigación</th>
+                        <th>Periodo</th>
+                        <th>Puntos</th>
+                        <th>Porcentaje</th>
+                        <th>Nota</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var evaluacion in Evaluaciones)
+                    {
+                        @if ((textoFiltroGrupo.Equals("Sin filtro")
+                        || $"{evaluacion.Grupo.Grupo} | {evaluacion.Grupo.Anio}".StartsWith(textoFiltroGrupo))
+                        && (textoFiltroCurso.Equals("Sin filtro")
+                        | evaluacion.Curso.Nombre.StartsWith(textoFiltroCurso))
+                        && (textoFiltroProfesor.Equals("Sin filtro")
+                        | $"{evaluacion.Profesor.Nombre} {evaluacion.Profesor.PrimerApellido}".StartsWith(textoFiltroProfesor))
+                        && (textoFiltroAsignacion.Equals("Sin filtro")
+                        | evaluacion.Asignacion.Nombre.StartsWith(textoFiltroAsignacion))
+                        && (textoFiltroPeriodo.Equals("Sin filtro")
+                        | evaluacion.Periodo.ToString().StartsWith(textoFiltroPeriodo)))
+                        {
+                            <tr>
+                                <td>@evaluacion.Grupo.Grupo | @evaluacion.Grupo.Anio</td>
+                                <td>@evaluacion.Curso.Nombre</td>
+                                <td>@evaluacion.Profesor.Nombre @evaluacion.Profesor.PrimerApellido</td>
+                                <td>@evaluacion.Asignacion.Nombre</td>
+                                <td>@evaluacion.Periodo</td>
+                                <td>@evaluacion.Puntos</td>
+                                <td>@evaluacion.Porcentaje</td>
+                                <td>@evaluacion.Nota</td>
+                            </tr>
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
 </div>
-
+<MatSnackbar @bind-IsOpen="@Saludo">
+    <MatSnackbarContent>¡Bienvenido @NombreUsuario!</MatSnackbarContent>
+    <MatSnackbarActions>
+        <MatIcon Icon="mood" Style="color:blue"></MatIcon>
+    </MatSnackbarActions>
+</MatSnackbar>
 
 @code {
+    [CascadingParameter]
+    private Task<AuthenticationState> AuthenticationState { get; set; }
     [Parameter]
     public bool Saludo { get; set; }
 
+    EvaluacionesTodoInfo[] Evaluaciones = null;
+    string NombreUsuario = "";
+    int IdEstudiante = -1;
+    string textoFiltroGrupo = "Sin filtro", textoFiltroCurso = "Sin filtro", textoFiltroProfesor = "Sin filtro";
+    string textoFiltroAsignacion = "Sin filtro", textoFiltroPeriodo = "Sin filtro";
+
+    string claseFiltroGrupo = "dropdown", claseFiltroCurso = "dropdown", claseFiltroProfesor = "dropdown";
+    string claseFiltroAsignacion = "dropdown", claseFiltroPeriodo = "dropdown";
+
+    string claseOpcionesGrupo = "dropdown-menu", claseOpcionesCurso = "dropdown-menu", claseOpcionesProfesor = "dropdown-menu";
+    string claseOpcionesAsignacion = "dropdown-menu", claseOpcionesPeriodo = "dropdown-menu";
+
+    List<string> Grupos = new List<string>(), Cursos = new List<string>(), Profesores = new List<string>();
+    List<string> Asignaciones = new List<string>(), Periodos = new List<string>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AuthenticationState authState = await AuthenticationState;
+        var usuario = authState.User;
+        if (!usuario.Identity.IsAuthenticated)
+        {
+            navigationManager.NavigateTo("Inicio-Sesion");
+        }
+        else
+        {
+            if (Saludo)
+            {
+                NombreUsuario = $"{usuario.Identity.Name} {usuario.Claims.Where(U => U.Type.Equals("Ap1")).FirstOrDefault().Value}";
+            }
+            IdEstudiante = int.Parse(usuario.Claims.Where(U => U.Type.Equals("Id")).FirstOrDefault().Value);
+            await CargarEvaluaciones();
+        }
+    }
+
+    async Task CargarEvaluaciones()
+    {
+        Evaluaciones[] EvaluacionesTemp = await ServicioEvaluaciones.GetEvaluacionesEstudiante(IdEstudiante);
+        int largo = EvaluacionesTemp.Length;
+        Evaluaciones = new EvaluacionesTodoInfo[largo];
+        Evaluaciones evaluacionTemp;
+        for (int i = 0; i < largo; i++)
+        {
+            evaluacionTemp = EvaluacionesTemp[i];
+            Evaluaciones[i] = new EvaluacionesTodoInfo()
+            {
+                Id = evaluacionTemp.Id,
+                Periodo = evaluacionTemp.Periodo,
+                Puntos = evaluacionTemp.Puntos,
+                Porcentaje = evaluacionTemp.Porcentaje,
+                Nota = evaluacionTemp.Nota,
+                Asignacion = await ServicioAsignaciones.GetAsignaciones(evaluacionTemp.Asignacion)
+            };
+            Evaluaciones[i].Curso = await ServicioCursos.GetCursos(0, Evaluaciones[i].Asignacion.Curso);
+            Evaluaciones[i].Grupo = await ServicioGrupos.GetGrupo(Evaluaciones[i].Asignacion.Grupo);
+            Evaluaciones[i].Profesor = await ServicioProfesores.GetProfesores(evaluacionTemp.Profesor);
+            if (!Grupos.Contains($"{Evaluaciones[i].Grupo.Grupo} | {Evaluaciones[i].Grupo.Anio}"))
+            {
+                Grupos.Add($"{Evaluaciones[i].Grupo.Grupo} | {Evaluaciones[i].Grupo.Anio}");
+            }
+            if (!Cursos.Contains(Evaluaciones[i].Curso.Nombre))
+            {
+                Cursos.Add(Evaluaciones[i].Curso.Nombre);
+            }
+            if (!Asignaciones.Contains(Evaluaciones[i].Asignacion.Nombre))
+            {
+                Asignaciones.Add(Evaluaciones[i].Asignacion.Nombre);
+            }
+            if (!Profesores.Contains($"{Evaluaciones[i].Profesor.Nombre} {Evaluaciones[i].Profesor.PrimerApellido}"))
+            {
+                Profesores.Add($"{Evaluaciones[i].Profesor.Nombre} {Evaluaciones[i].Profesor.PrimerApellido}");
+            }
+        }
+        Periodos.Add("1");
+        Periodos.Add("2");
+        Periodos.Add("3");
+    }
+
+    private void MostrarOpciones(ref string claseFiltro, ref string claseFiltroOpciones)
+    {
+        if (claseFiltro.Equals("dropdown"))
+        {
+            claseFiltro = "dropdown show";
+            claseFiltroOpciones = "dropdown-menu show";
+        }
+        else
+        {
+            claseFiltro = "dropdown";
+            claseFiltroOpciones = "dropdown-menu";
+        }
+    }
+
+    private void OpcionSeleccionada(string valor, ref string textoFiltro,
+        ref string claseFiltro, ref string claseFiltroOpciones)
+    {
+        textoFiltro = string.IsNullOrEmpty(valor)? "Sin filtro" : valor;
+        MostrarOpciones(ref claseFiltro, ref claseFiltroOpciones);
+    }
 }

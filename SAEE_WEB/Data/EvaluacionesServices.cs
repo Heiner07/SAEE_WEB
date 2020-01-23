@@ -115,6 +115,11 @@ namespace SAEE_WEB.Data
             return await _context.Evaluaciones.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Evaluaciones[]> GetEvaluacionesEstudiante(int id)
+        {
+            return await _context.Evaluaciones.Where(x => x.Estudiante == id).ToArrayAsync();
+        }
+
         public async Task<Evaluaciones[]> GetEvaluacionesporAsignacion(int id)
         {
             return await _context.Evaluaciones.Where(x => x.Asignacion == id).ToArrayAsync();
