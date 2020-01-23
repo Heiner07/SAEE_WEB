@@ -58,29 +58,7 @@ namespace SAEE_WEB.Controllers
             return await _context.Evaluaciones.Where(evaluacion => evaluacion.Asignacion == asignacion && evaluacion.Periodo == periodo && evaluacion.Profesor == profesor.Id).ToArrayAsync();
         }
 
-     /*   // GET: api/Evaluaciones/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Evaluaciones>> GetEvaluaciones(int id)
-        {
-            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
-            {
-                return BadRequest();
-            }
-
-            var evaluacion = await _context.Evaluaciones.FindAsync(id);
-
-            if (evaluacion == null)
-            {
-                return NotFound();
-            }
-
-            return evaluacion;
-        }
-        */
-        // PUT: api/Evaluaciones/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+    
         [HttpPut("{id}")]
         public async Task<IActionResult> PutEvaluaciones(int id, Evaluaciones evaluacion)
         {

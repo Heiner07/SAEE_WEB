@@ -103,10 +103,8 @@ namespace SAEE_WEB.Controllers
                 return BadRequest();
             }
             asignacion.Profesor = profesor.Id;
-
             _context.Asignaciones.Add(asignacion);
             await _context.SaveChangesAsync();
-
             return CreatedAtAction("GetAsignaciones", new { id = asignacion.Id }, asignacion);
         }
 
@@ -135,7 +133,7 @@ namespace SAEE_WEB.Controllers
         }
 
         //OFFLINE
-     //   [HttpDelete("{id}")]
+        [HttpDelete]
         [Route("DeleteAllAsignaciones")]
         public async Task<Boolean> DeleteAllAsignaciones()
         {
@@ -146,6 +144,9 @@ namespace SAEE_WEB.Controllers
             }
             try
             {
+                var evaluaciones = await _context.Evaluaciones.Where(eva => eva.Profesor == profesor.Id).ToListAsync();
+                _context.Evaluaciones.RemoveRange(evaluaciones);
+                await _context.SaveChangesAsync();
                 var listaAsignaciones = await _context.Asignaciones.Where(x=>x.Profesor == profesor.Id).ToListAsync();
                 _context.Asignaciones.RemoveRange(listaAsignaciones);
                 await _context.SaveChangesAsync();
