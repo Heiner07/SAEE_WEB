@@ -143,7 +143,8 @@ namespace SAEE_WEB.Controllers
             }
             try
             {
-                var listaGrupos = await _context.Grupos.Where(grupo => grupo.IdProfesor == profesor.Id).Include(grupo => grupo.EstudiantesXgrupos)
+                int idProfesor = profesor.Id;
+                var listaGrupos = await _context.Grupos.Where(grupo => grupo.IdProfesor == idProfesor).Include(grupo => grupo.EstudiantesXgrupos)
                     .Include(x=>x.CursosGrupos).ToListAsync();
                 _context.Grupos.RemoveRange(listaGrupos);
                 await _context.SaveChangesAsync();
