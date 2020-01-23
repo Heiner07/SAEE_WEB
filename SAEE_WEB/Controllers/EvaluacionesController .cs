@@ -21,15 +21,16 @@ namespace SAEE_WEB.Controllers
         }
         // GET: api/Evaluaciones
         [HttpGet]
+        [Route("GetEvaluaciones")]
         public async Task<ActionResult<IEnumerable<Evaluaciones>>> GetEvaluaciones()
         {
-            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            if (profesor == null)
-            {
-                return BadRequest();
-            }
+            //Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            //if (profesor == null)
+            //{
+            //    return BadRequest();
+            //}
 
-            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Profesor == profesor.Id).ToListAsync();
+            return await _context.Evaluaciones.Where(evaluacion => evaluacion.Profesor == 1).ToListAsync();
         }
 
         // GET: api/Evaluaciones
