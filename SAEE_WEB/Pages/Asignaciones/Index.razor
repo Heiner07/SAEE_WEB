@@ -10,12 +10,18 @@
 <div class="container">
     @if (mostrarError)
     {
-        <div class="alert @tipoMsg alert-dismissible fade show" role="alert">
+        @*<div class="alert @tipoMsg alert-dismissible fade show" role="alert">
             <strong>@headerMsg</strong> @msjError
             <button type="button" class="close" data-dismiss="alert" aria-label="Close" @onclick="@(() => mostrarError = false)">
                 <span aria-hidden="true">&times;</span>
             </button>
-        </div>
+        </div>*@
+        <MatSnackbar @bind-IsOpen="@mostrarError">
+            <MatSnackbarContent>@msjError</MatSnackbarContent>
+            <MatSnackbarActions>
+                <MatIcon Icon="@IconoMsg" Style="@ColorIcono"></MatIcon>
+            </MatSnackbarActions>
+        </MatSnackbar>
     }
     <h3>Asignaciones</h3>
     <form class="form-inline">
@@ -247,12 +253,13 @@
     String MsgBoton = "Crear";
     Boolean Opcion = false;
     String tipoMsg = "alert-warning";
-    String msjError = "";
+    string msjError = "";
     Grupos grupoSelec { get; set; }
     Boolean mostrarBotonCancelar = false;
     Boolean mostrarFormulario = false;
     String TextoBotonAgregar = "Mostrar Formulario";
     String headerMsg = "ERROR!";
+    string IconoMsg = "check_circle", ColorIcono = "color:green;";
 
     //Notificaciones
     int diasNotificacion = 0;
@@ -311,7 +318,9 @@
         {
             tipoMsg = "alert-success";
             headerMsg = "HECHO!";
-            msjError = "Asignación eliminada satisfactoriamente";
+            msjError = "Borrado correctamente";
+            IconoMsg = "delete";
+            ColorIcono = "color:red;";
             mostrarError = true;
             await CargarAsignaciones();
         }
@@ -384,6 +393,8 @@
             tipoMsg = "alert-warning";
             headerMsg = "ERROR!";
             msjError = "Debe llenar y seleccionar todos los datos requeridos";
+            IconoMsg = "warning";
+            ColorIcono = "color:yellow;";
             mostrarError = true;
         }
         else
@@ -417,9 +428,11 @@
                 Boolean resultado = await ServicioAsignaciones.PutAsignaciones(asignacion);
                 if (resultado)
                 {
+                    IconoMsg = "save";
+                    ColorIcono = "color:blue;";
                     tipoMsg = "alert-success";
                     headerMsg = "HECHO!";
-                    msjError = "Asignación editada satisfactoriamente";
+                    msjError = "Guardado correctamente";
                     mostrarError = true;
                     await CargarAsignaciones();
                     mostrarBotonCancelar = false;
@@ -443,6 +456,8 @@
                     tipoMsg = "alert-warning";
                     headerMsg = "ALERTA!";
                     msjError = "Error al editar la asignación";
+                    IconoMsg = "cancel";
+                    ColorIcono = "color:red;";
                     mostrarError = true;
                     await ServicioAsignaciones.RollbackAsignaciones(asignacion);
                     await CargarAsignaciones();
@@ -461,7 +476,9 @@
                 {
                     tipoMsg = "alert-success";
                     headerMsg = "HECHO!";
-                    msjError = "Asignación agregada satisfactoriamente";
+                    msjError = "Agregado correctamente";
+                    IconoMsg = "check_circle";
+                    ColorIcono = "color:green;";
                     mostrarError = true;
                     asignacion = new Asignaciones();
                     asignacion.Profesor = idProfesor;
@@ -578,14 +595,14 @@
     {
         rubro = selection;
         asignacion.Tipo = selection;
-      /*  if (selection.Equals("Asistencia"))
-        {
-            MostrarCMBEstado = true;
-        }
-        else
-        {
-            MostrarCMBEstado = false;
-        }*/
+        /*  if (selection.Equals("Asistencia"))
+          {
+              MostrarCMBEstado = true;
+          }
+          else
+          {
+              MostrarCMBEstado = false;
+          }*/
     }
 }
 
