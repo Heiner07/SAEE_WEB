@@ -2,7 +2,7 @@
 @inject EstudiantesServices  estudiantesServices
 
     <MatDialog @bind-IsOpen="@dialogIsOpen" CanBeClosed="false">
-        <MatDialogTitle>Agregar grupos al curso</MatDialogTitle>
+        <MatDialogTitle>Agregar estudiantes al grupo</MatDialogTitle>
         <MatDialogContent  >
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Buscar nombre" @bind-value="@TextoBuscar" @bind-value:event="oninput" />
