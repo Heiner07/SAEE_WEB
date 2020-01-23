@@ -118,8 +118,10 @@ namespace SAEE_WEB.Controllers
             if (profesor == null)
             {
                 return BadRequest();
-            }
-
+            }                                                                    
+            var evaluaciones = await _context.Evaluaciones.Where(eva => eva.Asignacion == id).ToListAsync();
+            _context.Evaluaciones.RemoveRange(evaluaciones);
+            await _context.SaveChangesAsync();
             var asignacion = await _context.Asignaciones.Where(asig => asig.Id == id).FirstOrDefaultAsync();
             if (asignacion == null)
             {
@@ -133,7 +135,7 @@ namespace SAEE_WEB.Controllers
         }
 
         //OFFLINE
-        [HttpDelete("{id}")]
+     //   [HttpDelete("{id}")]
         [Route("DeleteAllAsignaciones")]
         public async Task<Boolean> DeleteAllAsignaciones()
         {
