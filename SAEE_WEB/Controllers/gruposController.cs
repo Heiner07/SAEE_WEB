@@ -119,12 +119,6 @@ namespace SAEE_WEB.Controllers
             {
                 return BadRequest();
             }
-            grupo.EstudiantesXgrupos = _context.EstudiantesXgrupos.Where(x => x.IdGrupo == grupo.Id).Include(z => z.IdEstudianteNavigation).ToList();
-            if (grupo == null)
-            {
-                return NotFound();
-            }
-
             _context.Grupos.Remove(grupo);
             await _context.SaveChangesAsync();
 
