@@ -112,17 +112,17 @@ namespace SAEE_WEB.Controllers
         // DELETE: api/Grupos/5
         [HttpDelete("{id}")]
         [Route("DeleteGrupos")]
-        public async Task<ActionResult<Grupos>> DeleteGrupos(Grupos grupo)
+        public async Task<Boolean> DeleteGrupos(Grupos grupo)
         {
             Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
             if (profesor == null)
             {
-                return BadRequest();
+                return false;
             }
             _context.Grupos.Remove(grupo);
             await _context.SaveChangesAsync();
 
-            return grupo;
+            return true;
         }
 
         //ELIMINAR TODOS LOS GRUPOS
