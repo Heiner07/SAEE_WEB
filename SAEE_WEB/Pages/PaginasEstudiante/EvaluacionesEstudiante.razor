@@ -290,10 +290,11 @@
             {
                 Profesores.Add($"{Evaluaciones[i].Profesor.Nombre} {Evaluaciones[i].Profesor.PrimerApellido}");
             }
+            if (!Periodos.Contains(Evaluaciones[i].Periodo.ToString()))
+            {
+                Periodos.Add(Evaluaciones[i].Periodo.ToString());
+            }
         }
-        Periodos.Add("1");
-        Periodos.Add("2");
-        Periodos.Add("3");
     }
 
     private void MostrarOpciones(ref string claseFiltro, ref string claseFiltroOpciones)
