@@ -111,7 +111,16 @@ namespace SAEE_WEB.Controllers
 
             return CreatedAtAction("GetCursos", new { id = cursos.Id }, cursos);
         }
-
+        public async Task<Boolean> DeleteAsignacionesC(Asignaciones asignacion)
+        {
+            Evaluaciones[] evaluaciones = await _context.Evaluaciones.Where(x => x.Asignacion == asignacion.Id).ToArrayAsync();
+            foreach (var i in evaluaciones)
+            {
+                _context.Evaluaciones.Remove(i);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
         // DELETE: api/Cursos/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cursos>> DeleteCursos(int id)
@@ -121,7 +130,13 @@ namespace SAEE_WEB.Controllers
             //{
             //    return BadRequest();
             //}
-
+            var listaAsignaciones = _context.Asignaciones.Include(z => z.NotificacionesCorreo).Where(x => x.Curso == id).ToList();
+            foreach (Asignaciones asignacion in listaAsignaciones)
+            {
+                await DeleteAsignacionesC(asignacion);
+            }
+            _context.Asignaciones.RemoveRange(listaAsignaciones);
+            await _context.SaveChangesAsync();
             var cursos = await _context.Cursos.Include(curso => curso.CursosGrupos)
                 .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation)
                 .Where(curso => curso.Id == id).FirstOrDefaultAsync();

@@ -56,7 +56,7 @@ namespace SAEE_WEB.Data
         }
         public async Task<Boolean> DeleteCursos(Cursos curso)
         {
-            var listaAsignaciones = _context.Asignaciones.Include(z=>z.NotificacionesCorreo).Where(x => x.Profesor == curso.IdProfesor).ToList();
+            var listaAsignaciones = _context.Asignaciones.Include(z=>z.NotificacionesCorreo).Where(x => x.Curso == curso.Id).ToList();
             foreach (Asignaciones asignacion in listaAsignaciones)
             {
                 await DeleteAsignacionesC(asignacion);

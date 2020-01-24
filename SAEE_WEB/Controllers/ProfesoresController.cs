@@ -158,6 +158,38 @@ namespace SAEE_WEB.Controllers
             return CreatedAtAction("GetProfesores", new { id = profesores.Id }, profesores);
         }
 
+        public async Task<Boolean> DeleteAsignacionesP(Asignaciones asignacion)
+        {
+            Evaluaciones[] evaluaciones = await _context.Evaluaciones.Where(x => x.Asignacion == asignacion.Id).ToArrayAsync();
+            foreach (var i in evaluaciones)
+            {
+                _context.Evaluaciones.Remove(i);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
+        private async Task<Profesores> GetProfesorCompleteData(int id)
+        {
+
+            var listaCursos = _context.Cursos.Include(curso => curso.CursosGrupos)
+                .ThenInclude(cursoGrupo => cursoGrupo.IdGrupoNavigation).Where(x => x.IdProfesor == id);
+            _context.RemoveRange(listaCursos);
+            await _context.SaveChangesAsync();
+            var listaAsignaciones = _context.Asignaciones.Include(z => z.NotificacionesCorreo).Where(x => x.Profesor == id).ToList();
+            foreach (Asignaciones asignacion in listaAsignaciones)
+            {
+                await DeleteAsignacionesP(asignacion);
+            }
+            _context.Asignaciones.RemoveRange(listaAsignaciones);
+            await _context.SaveChangesAsync();
+            var listaGrupos = _context.Grupos.Include(EG => EG.EstudiantesXgrupos)
+               .Where(x => x.IdProfesor == id);
+            _context.Grupos.RemoveRange(listaGrupos);
+            await _context.SaveChangesAsync();
+
+            return await _context.Profesores.Include(z => z.Estudiantes)
+                .FirstOrDefaultAsync(x => x.Id == id);
+        }
         // DELETE: api/Profesores/5
         [HttpDelete("{id}")]
         public async Task<ActionResult<Profesores>> DeleteProfesores(int id)
@@ -168,19 +200,18 @@ namespace SAEE_WEB.Controllers
                 return BadRequest();
             }
 
-            var profesores = await _context.Profesores.Include(profesor => profesor.Cursos)
-                .Include(profesor => profesor.EstudiantesXgrupos)
-                .Include(profesor => profesor.Estudiantes)
-                .FirstOrDefaultAsync(x => x.Id == id);
-            if (profesores == null)
+            var profesorborrar = await GetProfesorCompleteData(profesor.Id);
+           
+
+            if (profesorborrar == null)
             {
                 return NotFound();
             }
 
-            _context.Profesores.Remove(profesores);
+            _context.Profesores.Remove(profesorborrar);
             await _context.SaveChangesAsync();
 
-            return profesores;
+            return profesorborrar;
         }
 
         private bool ProfesoresExists(int id)
