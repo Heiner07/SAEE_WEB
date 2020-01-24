@@ -101,7 +101,10 @@ namespace SAEE_WEB.Controllers
             var listaAsignaciones = _context.Evaluaciones.Where(x => x.Estudiante == estudiante.Id).ToList();
             _context.Evaluaciones.RemoveRange(listaAsignaciones);
             await _context.SaveChangesAsync();
-            _context.Estudiantes.Remove(estudiante);
+            Estudiantes estudianteEliminar = _context.Estudiantes.Where(x => x.Id == estudiante.Id).Include(EG => EG.EstudiantesXgrupos)
+                    .FirstOrDefault();
+
+            _context.Remove(estudianteEliminar);
             await _context.SaveChangesAsync();
 
             return estudiante;
