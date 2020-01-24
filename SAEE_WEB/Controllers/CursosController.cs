@@ -125,11 +125,11 @@ namespace SAEE_WEB.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<Cursos>> DeleteCursos(int id)
         {
-            //Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
-            //if (profesor == null)
-            //{
-            //    return BadRequest();
-            //}
+            Profesores profesor = await ComprobacionSesion.ComprobarInicioSesion(HttpContext.Request.Headers, _context);
+            if (profesor == null)
+            {
+                return BadRequest();
+            }
             var listaAsignaciones = _context.Asignaciones.Include(z => z.NotificacionesCorreo).Where(x => x.Curso == id).ToList();
             foreach (Asignaciones asignacion in listaAsignaciones)
             {
