@@ -44,9 +44,25 @@ namespace SAEE_WEB.Data
 
             return await Task.FromResult(true);
         }
-
+        public async Task<Boolean> DeleteAsignacionesC(Asignaciones asignacion)
+        {
+            Evaluaciones[] evaluaciones = await _context.Evaluaciones.Where(x => x.Asignacion == asignacion.Id).ToArrayAsync();
+            foreach (var i in evaluaciones)
+            {
+                _context.Remove(i);
+                await _context.SaveChangesAsync();
+            }
+            return true;
+        }
         public async Task<Boolean> DeleteCursos(Cursos curso)
         {
+            var listaAsignaciones = _context.Asignaciones.Include(z=>z.NotificacionesCorreo).Where(x => x.Profesor == curso.IdProfesor).ToList();
+            foreach (Asignaciones asignacion in listaAsignaciones)
+            {
+                await DeleteAsignacionesC(asignacion);
+            }
+            _context.RemoveRange(listaAsignaciones);
+            await _context.SaveChangesAsync();
             _context.Remove(curso);
             await _context.SaveChangesAsync();
 
