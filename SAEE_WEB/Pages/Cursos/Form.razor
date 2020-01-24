@@ -10,8 +10,16 @@
             <ValidationMessage For="@(() => Curso.Nombre)" />
         </div>
         <div class="form-group">
-            <label for="InputCantidadPeriodos"><strong>Cantidad de periodos</strong></label>
-            <input class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
+            @if (Editando)
+            {
+                <label for="InputCantidadPeriodos"><strong>Cantidad de periodos</strong></label>
+                <input disabled class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
+            }
+            else
+            {
+                <label for="InputCantidadPeriodos"><strong>Cantidad de periodos (No se puede editar posteriormente)</strong></label>
+                <input class="form-control" type="number" placeholder="Cantidad de periodos" @bind="Curso.CantidadPeriodos" id="InputCantidadPeriodos" />
+            }
             <ValidationMessage For="@(() => Curso.CantidadPeriodos)" />
         </div>
         @if (Editando)
