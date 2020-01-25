@@ -147,7 +147,7 @@
                         </button>
                         <div class=@claseOpcionesNotificacion aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" @onclick="(() => NotificacionSeleccionada(0))">Sin notificación</a>
-                            @if ((asignacion.Fecha.Date - DateTime.Today.Date).Days >= 1)
+                            @if (asignacion.Fecha.Date.Subtract(DateTime.Today.Date).Days >= 1)
                             {
                                 <a class="dropdown-item" @onclick="(() => NotificacionSeleccionada(1))">Un día antes</a>
                             }
